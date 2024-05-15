@@ -99,6 +99,8 @@ export const WHALES = (token: Currency): string => {
       return '0x20918f71e99c09ae2ac3e33dbde33457d3be01f4';
     case DAI_ON(ChainId.SEPOLIA):
       return '0x67550Df3290415611F6C140c81Cd770Ff1742cb9';
+    case DAI_ON(ChainId.MODE):
+      return '0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3';
     case DAI_ON(ChainId.OPTIMISM):
       return '0x100bdc1431a9b09c61c0efc5776814285f8fb248';
     case DAI_ON(ChainId.ARBITRUM_ONE):

@@ -36,6 +36,7 @@ export const V3_CORE_FACTORY_ADDRESSES: AddressMap = {
     CHAIN_TO_ADDRESSES_MAP[ChainId.BASE_GOERLI].v3CoreFactoryAddress,
   [ChainId.BASE]: CHAIN_TO_ADDRESSES_MAP[ChainId.BASE].v3CoreFactoryAddress,
   [ChainId.BLAST]: CHAIN_TO_ADDRESSES_MAP[ChainId.BLAST].v3CoreFactoryAddress,
+  [ChainId.MODE]: CHAIN_TO_ADDRESSES_MAP[ChainId.MODE].v3CoreFactoryAddress,
   // TODO: Gnosis + Moonbeam contracts to be deployed
 };
 
@@ -56,6 +57,7 @@ export const QUOTER_V2_ADDRESSES: AddressMap = {
     CHAIN_TO_ADDRESSES_MAP[ChainId.BASE_GOERLI].quoterAddress,
   [ChainId.BASE]: CHAIN_TO_ADDRESSES_MAP[ChainId.BASE].quoterAddress,
   [ChainId.BLAST]: CHAIN_TO_ADDRESSES_MAP[ChainId.BLAST].quoterAddress,
+  [ChainId.MODE]: CHAIN_TO_ADDRESSES_MAP[ChainId.MODE].quoterAddress,
   // TODO: Gnosis + Moonbeam contracts to be deployed
 };
 
@@ -112,7 +114,7 @@ export const NONFUNGIBLE_POSITION_MANAGER_ADDRESS =
   CHAIN_TO_ADDRESSES_MAP[ChainId.MAINNET].nonfungiblePositionManagerAddress;
 export const V3_MIGRATOR_ADDRESS =
   CHAIN_TO_ADDRESSES_MAP[ChainId.MAINNET].v3MigratorAddress;
-export const MULTICALL2_ADDRESS = '0x5BA1e12693Dc8F9c48aAD8770482f4739bEeD696';
+export const MULTICALL2_ADDRESS = '0x338d2F65468A2Ac6D51Af94BE3A45858a21e6615';
 
 export type AddressMap = { [chainId: number]: string | undefined };
 

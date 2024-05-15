@@ -14,6 +14,7 @@ import {
   DAI_BNB,
   DAI_GOERLI,
   DAI_MAINNET,
+  DAI_MODE,
   DAI_OPTIMISM,
   DAI_OPTIMISM_GOERLI,
   DAI_OPTIMISM_SEPOLIA,
@@ -107,6 +108,7 @@ export const usdGasTokensByChain: { [chainId in ChainId]?: Token[] } = {
   ],
   [ChainId.BASE]: [USDC_BASE, USDC_NATIVE_BASE],
   [ChainId.BLAST]: [USDB_BLAST],
+  [ChainId.MODE]: [DAI_MODE],
 };
 
 export type L1ToL2GasCosts = {

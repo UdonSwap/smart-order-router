@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { ChainId, Currency, Ether, Token } from 'udonswap-core';
+import { ChainId, Currency, ETHER, Token } from 'udonswap-core';
 import { TokenList } from '@uniswap/token-lists';
 import { Pair } from 'udonswap-v2-sdk';
 import { encodeSqrtRatioX96, FeeAmount, Pool } from 'udonswap-v3';
@@ -466,12 +466,12 @@ export const FLAT_PORTION: Portion = {
 }
 
 export const GREENLIST_TOKEN_PAIRS: Array<[Currency, Currency]> = [
-  [Ether.onChain(ChainId.MAINNET), USDC],
+  [ETHER.onChain(ChainId.MAINNET), USDC],
   [WRAPPED_NATIVE_CURRENCY[ChainId.MAINNET], USDT],
   [DAI, WBTC],
 ];
 
 export const GREENLIST_CARVEOUT_PAIRS: Array<[Currency, Currency]> = [
   [USDC, DAI],
-  [WRAPPED_NATIVE_CURRENCY[ChainId.MAINNET], Ether.onChain(ChainId.MAINNET)],
+  [WRAPPED_NATIVE_CURRENCY[ChainId.MAINNET], ETHER.onChain(ChainId.MAINNET)],
 ];

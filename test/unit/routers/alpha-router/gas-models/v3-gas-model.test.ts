@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Ether } from 'udonswap-core';
+import { Currency, CurrencyAmount, ETHER } from 'udonswap-core';
 import { BigNumber } from 'ethers';
 import _ from 'lodash';
 import {
@@ -141,7 +141,7 @@ describe('v3 gas model tests', () => {
   });
 
   it('applies overhead when token in is native eth', async () => {
-    const amountToken = Ether.onChain(1) as Currency;
+    const amountToken = ETHER.onChain(1) as Currency;
     const quoteToken = USDC_MAINNET;
 
     const pools = await getPools(
@@ -204,7 +204,7 @@ describe('v3 gas model tests', () => {
 
   it('applies overhead when token out is native eth', async () => {
     const amountToken = USDC_MAINNET;
-    const quoteToken = Ether.onChain(1) as Currency;
+    const quoteToken = ETHER.onChain(1) as Currency;
 
     const pools = await getPools(
       amountToken,

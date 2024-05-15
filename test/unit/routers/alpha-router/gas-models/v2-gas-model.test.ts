@@ -1,4 +1,4 @@
-import { Currency, Ether } from 'udonswap-core';
+import { Currency, ETHER } from 'udonswap-core';
 import { BigNumber } from 'ethers';
 import { DAI_MAINNET, USDC_MAINNET, V2Route } from '../../../../../src';
 import {
@@ -49,7 +49,7 @@ describe('v2 gas model tests', () => {
   });
 
   it('applies overhead when token in is native eth', async () => {
-    const amountToken = Ether.onChain(1) as Currency;
+    const amountToken = ETHER.onChain(1) as Currency;
     const quoteToken = DAI_MAINNET;
 
     const v2GasModel = await v2GasModelFactory.buildGasModel({

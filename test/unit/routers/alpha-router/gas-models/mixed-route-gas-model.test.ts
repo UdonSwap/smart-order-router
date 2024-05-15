@@ -1,5 +1,5 @@
 import { partitionMixedRouteByProtocol } from 'udonswap-router';
-import { Currency, CurrencyAmount, Ether } from 'udonswap-core';
+import { Currency, CurrencyAmount, ETHER } from 'udonswap-core';
 import { Pair } from 'udonswap-v2-sdk';
 import { Pool } from 'udonswap-v3';
 import { BigNumber } from 'ethers';
@@ -113,7 +113,7 @@ describe('mixed route gas model tests', () => {
   });
 
   it('applies overhead when token in is native eth', async () => {
-    const amountToken = Ether.onChain(1) as Currency;
+    const amountToken = ETHER.onChain(1) as Currency;
     const quoteToken = DAI_MAINNET;
 
     const pools = await getPools(
@@ -162,7 +162,7 @@ describe('mixed route gas model tests', () => {
 
   it('applies overhead when token out is native eth', async () => {
     const amountToken = USDC_MAINNET;
-    const quoteToken = Ether.onChain(1) as Currency;
+    const quoteToken = ETHER.onChain(1) as Currency;
 
     const pools = await getPools(
       amountToken,
