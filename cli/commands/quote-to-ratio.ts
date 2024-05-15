@@ -1,6 +1,6 @@
 import { Logger } from '@ethersproject/logger';
 import { flags } from '@oclif/command';
-import { Currency, Ether, Fraction, Percent } from 'udonswap-core';
+import { Currency, ETHER, Fraction, Percent } from 'udonswap-core';
 import { Position } from 'udonswap-v3';
 import dotenv from 'dotenv';
 import {
@@ -69,11 +69,11 @@ export class QuoteToRatio extends BaseCommand {
     // TODO add support for polygon
     const token0: Currency =
       token0Str == 'ETH'
-        ? Ether.onChain(chainId)
+        ? ETHER.onChain(chainId)
         : tokenAccessor.getTokenByAddress(token0Str)!;
     const token1: Currency =
       token1Str == 'ETH'
-        ? Ether.onChain(chainId)
+        ? ETHER.onChain(chainId)
         : tokenAccessor.getTokenByAddress(token1Str)!;
 
     const token0Balance = parseAmount(token0BalanceStr, token0);
