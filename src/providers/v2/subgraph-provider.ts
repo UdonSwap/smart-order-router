@@ -74,6 +74,7 @@ export class V2SubgraphProvider implements IV2SubgraphProvider {
   ) {
     const subgraphUrl = this.subgraphUrlOverride ?? SUBGRAPH_URL_BY_CHAIN[this.chainId];
     if (!subgraphUrl) {
+      console.log('SUBGRAPH_URL_BY_CHAIN[this.chainId]',SUBGRAPH_URL_BY_CHAIN[this.chainId]);
       throw new Error(`No subgraph url for chain id: ${this.chainId}`);
     }
     this.client = new GraphQLClient(subgraphUrl);
