@@ -1,6 +1,6 @@
 import { Protocol } from 'udonswap-router';
 import { CurrencyAmount, TradeType } from 'udonswap-core';
-import { DAI_MAINNET as DAI, USDC_MAINNET as USDC, WBTC_MAINNET as WBTC } from '../../../../../build/main';
+import { DAI_MAINNET as DAI, USDC_MODE as USDC, WBTC_MODE as WBTC } from '../../../../../build/main';
 import { CachedRoutes, CacheMode } from '../../../../../src';
 import { InMemoryRouteCachingProvider } from './test-util/inmemory-route-caching-provider';
 import { getCachedRoutesStub } from './test-util/mocked-dependencies';

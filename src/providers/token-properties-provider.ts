@@ -47,7 +47,7 @@ export class TokenPropertiesProvider implements ITokenPropertiesProvider {
     private allowList = DEFAULT_ALLOWLIST,
     private positiveCacheEntryTTL = POSITIVE_CACHE_ENTRY_TTL,
     private negativeCacheEntryTTL = NEGATIVE_CACHE_ENTRY_TTL
-  ) {}
+  ) { }
 
   public async getTokensProperties(
     tokens: Token[],
@@ -56,8 +56,8 @@ export class TokenPropertiesProvider implements ITokenPropertiesProvider {
     const tokenToResult: TokenPropertiesMap = {};
 
     if (
-      !providerConfig?.enableFeeOnTransferFeeFetching ||
-      this.chainId !== ChainId.MAINNET
+      !providerConfig?.enableFeeOnTransferFeeFetching
+      // || true // this.chainId !== ChainId.MAINNET
     ) {
       return tokenToResult;
     }

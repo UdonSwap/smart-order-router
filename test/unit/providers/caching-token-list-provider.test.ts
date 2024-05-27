@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import {
   CachingTokenListProvider,
   NodeJSCache,
-  USDC_MAINNET as USDC,
+  USDC_MODE as USDC,
 } from '../../../src';
 import { mockTokenList } from '../../test-util/mock-data';
 

@@ -4,7 +4,7 @@ import {
   DAI_MAINNET,
   SimulationStatus,
   SwapRoute,
-  USDC_MAINNET,
+  USDC_MODE,
   V3HeuristicGasModelFactory,
   V3PoolProvider,
   V3Route,
@@ -62,7 +62,7 @@ describe('gas factory helpers tests', () => {
   describe('getHighestLiquidityV3NativePool', () => {
     it('should return the highest native liquidity pool', async () => {
       const nativeAmountPool = await getHighestLiquidityV3NativePool(
-        USDC_MAINNET,
+        USDC_MODE,
         mockPoolProvider as unknown as V3PoolProvider
       );
       expect(nativeAmountPool).toStrictEqual(USDC_WETH_HIGH_LIQ_HIGH);
@@ -74,7 +74,7 @@ describe('gas factory helpers tests', () => {
         buildMockV3PoolAccessor([USDC_DAI_LOW])
       );
       const nativeAmountPool = await getHighestLiquidityV3NativePool(
-        USDC_MAINNET,
+        USDC_MODE,
         mockPoolProvider as unknown as V3PoolProvider
       );
       expect(nativeAmountPool).toBeNull();
@@ -112,7 +112,7 @@ describe('gas factory helpers tests', () => {
 
       const amountToken = WRAPPED_NATIVE_CURRENCY[1];
       const quoteToken = DAI_MAINNET;
-      const gasToken = USDC_MAINNET;
+      const gasToken = USDC_MODE;
       const providerConfig = {
         gasToken
       }

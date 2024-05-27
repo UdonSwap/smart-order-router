@@ -2,10 +2,10 @@ import { Pair } from 'udonswap-v2-sdk';
 import { encodeSqrtRatioX96, FeeAmount, Pool } from 'udonswap-v3';
 import {
   CurrencyAmount,
-  DAI_MAINNET as DAI,
-  USDC_MAINNET as USDC,
-  USDT_MAINNET as USDT,
-  WBTC_MAINNET as WBTC,
+  DAI_MODE as DAI,
+  USDC_MODE as USDC,
+  USDT_MODE as USDT,
+  WBTC_MODE as WBTC,
   WRAPPED_NATIVE_CURRENCY,
 } from '../../../../../src';
 import {

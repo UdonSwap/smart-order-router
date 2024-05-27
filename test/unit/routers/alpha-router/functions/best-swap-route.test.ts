@@ -10,7 +10,7 @@ import {
   DAI_MAINNET,
   IGasModel,
   RouteWithValidQuote,
-  USDC_MAINNET as USDC,
+  USDC_MODE as USDC,
   V2Route,
   V2RouteWithValidQuote,
   V3PoolProvider,

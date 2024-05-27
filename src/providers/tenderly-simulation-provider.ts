@@ -22,7 +22,7 @@ import {
 import { Erc20__factory } from '../types/other/factories/Erc20__factory';
 import { Permit2__factory } from '../types/other/factories/Permit2__factory';
 import {
-  BEACON_CHAIN_DEPOSIT_ADDRESS,
+  // BEACON_CHAIN_DEPOSIT_ADDRESS,
   log,
   MAX_UINT160,
   SWAP_ROUTER_02_ADDRESSES,
@@ -33,7 +33,7 @@ import {
   initSwapRouteFromExisting,
 } from '../util/gas-factory-helpers';
 
-import { EthEstimateGasSimulator } from './eth-estimate-gas-provider';
+// import { EthEstimateGasSimulator } from './eth-estimate-gas-provider';
 import { IPortionProvider } from './portion-provider';
 import {
   SimulationResult,
@@ -96,17 +96,17 @@ const DEFAULT_ESTIMATE_MULTIPLIER = 1.3;
 
 export class FallbackTenderlySimulator extends Simulator {
   private tenderlySimulator: TenderlySimulator;
-  private ethEstimateGasSimulator: EthEstimateGasSimulator;
+  // private ethEstimateGasSimulator: EthEstimateGasSimulator;
   constructor(
     chainId: ChainId,
     provider: JsonRpcProvider,
     portionProvider: IPortionProvider,
     tenderlySimulator: TenderlySimulator,
-    ethEstimateGasSimulator: EthEstimateGasSimulator
+    // ethEstimateGasSimulator: EthEstimateGasSimulator
   ) {
     super(provider, portionProvider, chainId);
     this.tenderlySimulator = tenderlySimulator;
-    this.ethEstimateGasSimulator = ethEstimateGasSimulator;
+    // this.ethEstimateGasSimulator = ethEstimateGasSimulator;
   }
 
   protected async simulateTransaction(
@@ -117,30 +117,30 @@ export class FallbackTenderlySimulator extends Simulator {
   ): Promise<SwapRoute> {
     // Make call to eth estimate gas if possible
     // For erc20s, we must check if the token allowance is sufficient
-    const inputAmount = swapRoute.trade.inputAmount;
+    // const inputAmount = swapRoute.trade.inputAmount;
 
-    if (
-      (inputAmount.currency.isNative && this.chainId == ChainId.MAINNET) ||
-      (await this.checkTokenApproved(
-        fromAddress,
-        inputAmount,
-        swapOptions,
-        this.provider
-      ))
-    ) {
-      log.info(
-        'Simulating with eth_estimateGas since token is native or approved.'
-      );
+    // if (
+    //   (inputAmount.currency.isNative && this.chainId == ChainId.MAINNET) ||
+    //   (await this.checkTokenApproved(
+    //     fromAddress,
+    //     inputAmount,
+    //     swapOptions,
+    //     this.provider
+    //   ))
+    // ) {
+    //   log.info(
+    //     'Simulating with eth_estimateGas since token is native or approved.'
+    //   );
 
-      try {
-        const swapRouteWithGasEstimate =
-          await this.ethEstimateGasSimulator.ethEstimateGas(fromAddress, swapOptions, swapRoute, providerConfig);
-        return swapRouteWithGasEstimate;
-      } catch (err) {
-        log.info({ err: err }, 'Error simulating using eth_estimateGas');
-        return { ...swapRoute, simulationStatus: SimulationStatus.Failed };
-      }
-    }
+    //   try {
+    //     const swapRouteWithGasEstimate =
+    //       await this.ethEstimateGasSimulator.ethEstimateGas(fromAddress, swapOptions, swapRoute, providerConfig);
+    //     return swapRouteWithGasEstimate;
+    //   } catch (err) {
+    //     log.info({ err: err }, 'Error simulating using eth_estimateGas');
+    //     return { ...swapRoute, simulationStatus: SimulationStatus.Failed };
+    //   }
+    // }
 
     try {
       return await this.tenderlySimulator.simulateTransaction(fromAddress, swapOptions, swapRoute, providerConfig);
@@ -235,9 +235,9 @@ export class TenderlySimulator extends Simulator {
 
     if (swapOptions.type == SwapType.UNIVERSAL_ROUTER) {
       // simulating from beacon chain deposit address that should always hold **enough balance**
-      if (currencyIn.isNative && this.chainId == ChainId.MAINNET) {
-        fromAddress = BEACON_CHAIN_DEPOSIT_ADDRESS;
-      }
+      // if (currencyIn.isNative && this.chainId == ChainId.MAINNET) {
+      //   fromAddress = BEACON_CHAIN_DEPOSIT_ADDRESS;
+      // }
       // Do initial onboarding approval of Permit2.
       const erc20Interface = Erc20__factory.createInterface();
       const approvePermit2Calldata = erc20Interface.encodeFunctionData(
@@ -504,7 +504,7 @@ export class TenderlySimulator extends Simulator {
       estimatedGasUsedQuoteToken,
       estimatedGasUsedGasToken,
       quoteGasAdjusted,
-    } = await calculateGasUsed(chainId, swapRoute, estimatedGasUsed, this.v2PoolProvider, this.v3PoolProvider, this.provider, providerConfig);
+    } = await calculateGasUsed(chainId, swapRoute, estimatedGasUsed, this.v2PoolProvider, this.v3PoolProvider, providerConfig);
     return {
       ...initSwapRouteFromExisting(
         swapRoute,

@@ -7,15 +7,15 @@ import _ from 'lodash';
 import {
   AlphaRouterConfig,
   CurrencyAmount,
-  DAI_MAINNET as DAI,
+  DAI_MODE as DAI,
   TokenAccessor,
-  UNI_MAINNET,
-  USDC_MAINNET as USDC,
-  USDT_MAINNET as USDT,
+  // UNI_MAINNET,
+  USDC_MODE as USDC,
+  USDT_MODE as USDT,
   V2SubgraphPool,
   V3PoolAccessor,
   V3SubgraphPool,
-  WBTC_MAINNET as WBTC,
+  WBTC_MODE as WBTC,
   WRAPPED_NATIVE_CURRENCY,
 } from '../../src';
 import { V2PoolAccessor } from '../../src';
@@ -50,7 +50,7 @@ export const mockRoutingConfig: AlphaRouterConfig = {
 
 // Mock 0 decimal token
 export const MOCK_ZERO_DEC_TOKEN = new Token(
-  ChainId.MAINNET,
+  ChainId.MODE,
   '0x11fe4b6ae13d2a6055c8d9cf65c55bac32b5d844',
   0,
   'MOCK',
@@ -69,7 +69,7 @@ export const USDC_MOCK_LOW = new Pool(
 
 export const USDC_WETH_LOW = new Pool(
   USDC,
-  WRAPPED_NATIVE_CURRENCY[1]!,
+  WRAPPED_NATIVE_CURRENCY[919]!,
   FeeAmount.LOW,
   encodeSqrtRatioX96(1, 1),
   500,
@@ -78,7 +78,7 @@ export const USDC_WETH_LOW = new Pool(
 
 export const USDC_WETH_MEDIUM = new Pool(
   USDC,
-  WRAPPED_NATIVE_CURRENCY[1]!,
+  WRAPPED_NATIVE_CURRENCY[919]!,
   FeeAmount.MEDIUM,
   encodeSqrtRatioX96(1, 1),
   500,
@@ -89,7 +89,7 @@ export const USDC_WETH_MEDIUM = new Pool(
 
 export const USDC_WETH_LOW_LIQ_LOW = new Pool(
   USDC,
-  WRAPPED_NATIVE_CURRENCY[1]!,
+  WRAPPED_NATIVE_CURRENCY[919]!,
   FeeAmount.LOW,
   encodeSqrtRatioX96(1, 1),
   100,
@@ -98,7 +98,7 @@ export const USDC_WETH_LOW_LIQ_LOW = new Pool(
 
 export const USDC_WETH_MED_LIQ_MEDIUM = new Pool(
   USDC,
-  WRAPPED_NATIVE_CURRENCY[1]!,
+  WRAPPED_NATIVE_CURRENCY[919]!,
   FeeAmount.MEDIUM,
   encodeSqrtRatioX96(1, 1),
   500,
@@ -107,7 +107,7 @@ export const USDC_WETH_MED_LIQ_MEDIUM = new Pool(
 
 export const USDC_WETH_HIGH_LIQ_HIGH = new Pool(
   USDC,
-  WRAPPED_NATIVE_CURRENCY[1]!,
+  WRAPPED_NATIVE_CURRENCY[919]!,
   FeeAmount.HIGH,
   encodeSqrtRatioX96(1, 1),
   1000,
@@ -115,7 +115,7 @@ export const USDC_WETH_HIGH_LIQ_HIGH = new Pool(
 );
 
 export const WETH9_USDT_LOW = new Pool(
-  WRAPPED_NATIVE_CURRENCY[1]!,
+  WRAPPED_NATIVE_CURRENCY[919]!,
   USDT,
   FeeAmount.LOW,
   encodeSqrtRatioX96(1, 1),
@@ -165,7 +165,7 @@ export const DAI_USDT_MEDIUM = new Pool(
 );
 export const DAI_WETH_MEDIUM = new Pool(
   DAI,
-  WRAPPED_NATIVE_CURRENCY[1]!,
+  WRAPPED_NATIVE_CURRENCY[919]!,
   FeeAmount.MEDIUM,
   encodeSqrtRatioX96(1, 1),
   10,
@@ -180,21 +180,21 @@ export const WBTC_USDT_MEDIUM = new Pool(
   0
 );
 export const WBTC_WETH_MEDIUM = new Pool(
-  WRAPPED_NATIVE_CURRENCY[1]!,
+  WRAPPED_NATIVE_CURRENCY[919]!,
   WBTC,
   FeeAmount.MEDIUM,
   encodeSqrtRatioX96(1, 1),
   500,
   0
 );
-export const UNI_WETH_MEDIUM = new Pool(
-  WRAPPED_NATIVE_CURRENCY[1]!,
-  UNI_MAINNET,
-  FeeAmount.MEDIUM,
-  encodeSqrtRatioX96(1, 1),
-  500,
-  0
-);
+// export const UNI_WETH_MEDIUM = new Pool(
+//   WRAPPED_NATIVE_CURRENCY[1]!,
+//   UNI_MAINNET,
+//   FeeAmount.MEDIUM,
+//   encodeSqrtRatioX96(1, 1),
+//   500,
+//   0
+// );
 
 // Mock V2 Pools
 export const DAI_USDT = new Pair(
@@ -204,12 +204,12 @@ export const DAI_USDT = new Pair(
 
 export const DAI_WETH = new Pair(
   CurrencyAmount.fromRawAmount(DAI, 10000000000),
-  CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[1]!, 10000000000)
+  CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[919]!, 10000000000)
 );
 
 export const USDC_WETH = new Pair(
   CurrencyAmount.fromRawAmount(USDC, 10000000000),
-  CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[1]!, 10000000000)
+  CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[919]!, 10000000000)
 );
 
 export const USDC_USDT = new Pair(
@@ -219,7 +219,7 @@ export const USDC_USDT = new Pair(
 
 export const WETH_USDT = new Pair(
   CurrencyAmount.fromRawAmount(USDT, 10000000000),
-  CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[1]!, 10000000000)
+  CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[919]!, 10000000000)
 );
 
 export const USDC_DAI = new Pair(
@@ -229,12 +229,12 @@ export const USDC_DAI = new Pair(
 
 export const WETH_DAI = new Pair(
   CurrencyAmount.fromRawAmount(DAI, 10000000000),
-  CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[1]!, 10000000000)
+  CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[919]!, 10000000000)
 );
 
 export const WBTC_WETH = new Pair(
   CurrencyAmount.fromRawAmount(WBTC, 10000000000),
-  CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[1]!, 10000000000)
+  CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[919]!, 10000000000)
 );
 
 export const poolToV3SubgraphPool = (
@@ -385,61 +385,61 @@ export const mockTokenList: TokenList = {
 };
 
 export const BLAST_WITHOUT_TAX = new Token(
-    ChainId.MAINNET,
-    '0x3ed643e9032230f01c6c36060e305ab53ad3b482',
-    18,
-    'BLAST',
-    'BLAST',
+  ChainId.MODE,
+  '0x3ed643e9032230f01c6c36060e305ab53ad3b482',
+  18,
+  'BLAST',
+  'BLAST',
 )
 export const BLAST = new Token(
-    ChainId.MAINNET,
-    '0x3ed643e9032230f01c6c36060e305ab53ad3b482',
-    18,
-    'BLAST',
-    'BLAST',
-    false,
-    BigNumber.from(400),
-    BigNumber.from(10000)
+  ChainId.MODE,
+  '0x3ed643e9032230f01c6c36060e305ab53ad3b482',
+  18,
+  'BLAST',
+  'BLAST',
+  false,
+  BigNumber.from(400),
+  BigNumber.from(10000)
 )
 export const BULLET_WITHOUT_TAX = new Token(
-    ChainId.MAINNET,
-    '0x8ef32a03784c8Fd63bBf027251b9620865bD54B6',
-    8,
-    'BULLET',
-    'Bullet Game Betting Token',
-    false
+  ChainId.MODE,
+  '0x8ef32a03784c8Fd63bBf027251b9620865bD54B6',
+  8,
+  'BULLET',
+  'Bullet Game Betting Token',
+  false
 )
 export const BULLET = new Token(
-    ChainId.MAINNET,
-    '0x8ef32a03784c8Fd63bBf027251b9620865bD54B6',
-    8,
-    'BULLET',
-    'Bullet Game Betting Token',
-    false,
-    BigNumber.from(500),
-    BigNumber.from(500)
+  ChainId.MODE,
+  '0x8ef32a03784c8Fd63bBf027251b9620865bD54B6',
+  8,
+  'BULLET',
+  'Bullet Game Betting Token',
+  false,
+  BigNumber.from(500),
+  BigNumber.from(500)
 )
 export const STETH_WITHOUT_TAX = new Token(
-    ChainId.MAINNET,
-    '0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
-    18,
-    'stETH',
-    'stETH',
-    false
+  ChainId.MODE,
+  '0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
+  18,
+  'stETH',
+  'stETH',
+  false
 )
 // stETH is a special case (rebase token), that would make the token include buyFeeBps and sellFeeBps of 0 as always
 export const STETH = new Token(
-    ChainId.MAINNET,
-    '0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
-    18,
-    'stETH',
-    'stETH',
-    false,
-    BigNumber.from(0),
-    BigNumber.from(0)
+  ChainId.MODE,
+  '0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
+  18,
+  'stETH',
+  'stETH',
+  false,
+  BigNumber.from(0),
+  BigNumber.from(0)
 )
 export const BITBOY = new Token(
-  ChainId.MAINNET,
+  ChainId.MODE,
   '0x4a500ed6add5994569e66426588168705fcc9767',
   8,
   'BITBOY',
@@ -466,12 +466,12 @@ export const FLAT_PORTION: Portion = {
 }
 
 export const GREENLIST_TOKEN_PAIRS: Array<[Currency, Currency]> = [
-  [ETHER.onChain(ChainId.MAINNET), USDC],
-  [WRAPPED_NATIVE_CURRENCY[ChainId.MAINNET], USDT],
+  [ETHER.onChain(ChainId.MODE), USDC],
+  [WRAPPED_NATIVE_CURRENCY[ChainId.MODE], USDT],
   [DAI, WBTC],
 ];
 
 export const GREENLIST_CARVEOUT_PAIRS: Array<[Currency, Currency]> = [
   [USDC, DAI],
-  [WRAPPED_NATIVE_CURRENCY[ChainId.MAINNET], ETHER.onChain(ChainId.MAINNET)],
+  [WRAPPED_NATIVE_CURRENCY[ChainId.MODE], ETHER.onChain(ChainId.MODE)],
 ];

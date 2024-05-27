@@ -1,6 +1,6 @@
 import { Currency, ETHER } from 'udonswap-core';
 import { BigNumber } from 'ethers';
-import { DAI_MAINNET, USDC_MAINNET, V2Route } from '../../../../../src';
+import { DAI_MAINNET, USDC_MODE, V2Route } from '../../../../../src';
 import {
   BASE_SWAP_COST,
   COST_PER_EXTRA_HOP,
@@ -92,7 +92,7 @@ describe('v2 gas model tests', () => {
   it('returns gas estimate for specified gasToken', async () => {
     // copied from 'returns correct gas estimate for a v2 route | hops: 1'
     const quoteToken = DAI_MAINNET;
-    const gasToken = USDC_MAINNET
+    const gasToken = USDC_MODE
 
     const v2GasModel = await v2GasModelFactory.buildGasModel({
       chainId: chainId,

@@ -15,3 +15,4 @@ export interface ICache<T> {
 
   has(key: string): Promise<boolean>;
 }
+

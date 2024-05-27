@@ -90,9 +90,9 @@ export const GAS_ERROR_FAILURE_OVERRIDES = {
   ),
 };
 
-export const NETWORKS_WITH_SAME_SUCCESS_RATE_FAILURE_OVERRIDES = [
-  ChainId.POLYGON,
-];
+// export const NETWORKS_WITH_SAME_SUCCESS_RATE_FAILURE_OVERRIDES = [
+//   ChainId.POLYGON,
+// ];
 
 export function constructSameSuccessRateFailureOverridesMap<
   T extends FailureOverrides
@@ -100,14 +100,13 @@ export function constructSameSuccessRateFailureOverridesMap<
   successRateFailureOverrides: T,
   additionalNetworks: ChainId[] = []
 ): { [chainId: number]: T } {
-  return NETWORKS_WITH_SAME_SUCCESS_RATE_FAILURE_OVERRIDES.concat(
-    additionalNetworks
-  ).reduce<{
-    [chainId: number]: T;
-  }>((memo, chainId) => {
-    memo[chainId] = successRateFailureOverrides;
-    return memo;
-  }, {});
+  return additionalNetworks
+    .reduce<{
+      [chainId: number]: T;
+    }>((memo, chainId) => {
+      memo[chainId] = successRateFailureOverrides;
+      return memo;
+    }, {});
 }
 
 export const DEFAULT_SUCCESS_RATE_FAILURE_OVERRIDES: FailureOverrides = {

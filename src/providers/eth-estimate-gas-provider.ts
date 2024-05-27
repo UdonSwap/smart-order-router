@@ -8,7 +8,10 @@ import {
   SwapRoute,
   SwapType,
 } from '../routers';
-import { BEACON_CHAIN_DEPOSIT_ADDRESS, log } from '../util';
+import {
+  // BEACON_CHAIN_DEPOSIT_ADDRESS,
+  log
+} from '../util';
 import {
   calculateGasUsed,
   initSwapRouteFromExisting,
@@ -51,12 +54,12 @@ export class EthEstimateGasSimulator extends Simulator {
     const currencyIn = route.trade.inputAmount.currency;
     let estimatedGasUsed: BigNumber;
     if (swapOptions.type == SwapType.UNIVERSAL_ROUTER) {
-      if (currencyIn.isNative && this.chainId == ChainId.MAINNET) {
-        // w/o this gas estimate differs by a lot depending on if user holds enough native balance
-        // always estimate gas as if user holds enough balance
-        // so that gas estimate is consistent for UniswapX
-        fromAddress = BEACON_CHAIN_DEPOSIT_ADDRESS;
-      }
+      // if (currencyIn.isNative && this.chainId == ChainId.MAINNET) {
+      //   // w/o this gas estimate differs by a lot depending on if user holds enough native balance
+      //   // always estimate gas as if user holds enough balance
+      //   // so that gas estimate is consistent for UniswapX
+      //   fromAddress = BEACON_CHAIN_DEPOSIT_ADDRESS;
+      // }
       log.info(
         { addr: fromAddress, methodParameters: route.methodParameters },
         'Simulating using eth_estimateGas on Universal Router'
@@ -112,7 +115,7 @@ export class EthEstimateGasSimulator extends Simulator {
       estimatedGasUsedQuoteToken,
       estimatedGasUsedGasToken,
       quoteGasAdjusted,
-    } = await calculateGasUsed(route.quote.currency.chainId, route, estimatedGasUsed, this.v2PoolProvider, this.v3PoolProvider, this.provider, providerConfig);
+    } = await calculateGasUsed(route.quote.currency.chainId, route, estimatedGasUsed, this.v2PoolProvider, this.v3PoolProvider, providerConfig);
     return {
       ...initSwapRouteFromExisting(
         route,

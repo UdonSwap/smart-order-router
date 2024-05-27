@@ -16,7 +16,7 @@ import {
   SwapRoute,
   SwapType,
   TenderlySimulator,
-  USDC_MAINNET,
+  USDC_MODE,
   V2PoolProvider,
 } from '../../../src';
 import { IPortionProvider, PortionProvider } from '../../../src/providers/portion-provider';
@@ -75,11 +75,11 @@ const v3PoolProvider = {
 } as unknown as IV3PoolProvider;
 const portionProvider = new PortionProvider();
 const fromAddress = 'fromAddress';
-const amount = CurrencyAmount.fromRawAmount(USDC_MAINNET, 300);
+const amount = CurrencyAmount.fromRawAmount(USDC_MODE, 300);
 const trade = { inputAmount: amount, tradeType: TradeType.EXACT_INPUT };
 const route: RouteWithValidQuote[] = [];
 const quote = {
-  currency: USDC_MAINNET,
+  currency: USDC_MODE,
 } as unknown as CurrencyAmount;
 const blockNumber = BigNumber.from(0);
 const swapOptions: SwapOptions = {
@@ -195,7 +195,7 @@ describe('Fallback Tenderly simulator', () => {
         return BigNumber.from(0);
       },
     } as unknown as Erc20;
-    const ethInputAmount =  CurrencyAmount.fromRawAmount(nativeOnChain(1), 300)
+    const ethInputAmount = CurrencyAmount.fromRawAmount(nativeOnChain(1), 300)
     const swapRouteWithGasEstimate = await simulator.simulate(
       fromAddress,
       swapOptions,
@@ -437,7 +437,7 @@ describe('Eth estimate gas simulator', () => {
     sinon
       .stub(provider, <any>'getBalance')
       .resolves(BigNumber.from(325));
-    sinon.replace(provider, 'estimateGas', () => {throw new Error()})
+    sinon.replace(provider, 'estimateGas', () => { throw new Error() })
     const swapRouteWithGasEstimate = await simulator.simulate(
       fromAddress,
       swapOptions,

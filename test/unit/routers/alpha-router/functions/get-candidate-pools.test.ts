@@ -7,7 +7,7 @@ import {
   CachingTokenListProvider,
   DAI_MAINNET as DAI,
   TokenProvider,
-  USDC_MAINNET as USDC,
+  USDC_MODE as USDC,
   USDT_MAINNET as USDT,
   V3PoolProvider,
   V3SubgraphPool,

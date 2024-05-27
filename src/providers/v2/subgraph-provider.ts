@@ -37,8 +37,8 @@ type RawV2SubgraphPool = {
 };
 
 const SUBGRAPH_URL_BY_CHAIN: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]:
-    'https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v2-dev',
+  // [ChainId.MAINNET]:
+  //   'https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v2-dev',
   [ChainId.MODE]:
     'https://api.goldsky.com/api/public/project_clth71vucl2l701uu07ha0im7/subgraphs/udonswap/0.0.1/gn'
 };
@@ -74,7 +74,7 @@ export class V2SubgraphProvider implements IV2SubgraphProvider {
   ) {
     const subgraphUrl = this.subgraphUrlOverride ?? SUBGRAPH_URL_BY_CHAIN[this.chainId];
     if (!subgraphUrl) {
-      console.log('SUBGRAPH_URL_BY_CHAIN[this.chainId]',SUBGRAPH_URL_BY_CHAIN[this.chainId]);
+      console.log('SUBGRAPH_URL_BY_CHAIN[this.chainId]', SUBGRAPH_URL_BY_CHAIN[this.chainId]);
       throw new Error(`No subgraph url for chain id: ${this.chainId}`);
     }
     this.client = new GraphQLClient(subgraphUrl);
@@ -110,10 +110,9 @@ export class V2SubgraphProvider implements IV2SubgraphProvider {
     let pools: RawV2SubgraphPool[] = [];
 
     log.info(
-      `Getting V2 pools from the subgraph with page size ${this.pageSize}${
-        providerConfig?.blockNumber
-          ? ` as of block ${providerConfig?.blockNumber}`
-          : ''
+      `Getting V2 pools from the subgraph with page size ${this.pageSize}${providerConfig?.blockNumber
+        ? ` as of block ${providerConfig?.blockNumber}`
+        : ''
       }.`
     );
 

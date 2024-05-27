@@ -4,56 +4,59 @@ import { FeeAmount } from 'udonswap-v3';
 import _ from 'lodash';
 
 import {
-  DAI_OPTIMISM_SEPOLIA,
+  // DAI_OPTIMISM_SEPOLIA,
   ITokenListProvider,
   IV2SubgraphProvider,
-  USDC_ARBITRUM_SEPOLIA,
-  USDC_OPTIMISM_SEPOLIA,
-  USDT_OPTIMISM_SEPOLIA,
+  // USDC_ARBITRUM_SEPOLIA,
+  // USDC_OPTIMISM_SEPOLIA,
+  // USDT_OPTIMISM_SEPOLIA,
   V2SubgraphPool,
-  WBTC_OPTIMISM_SEPOLIA
+  // WBTC_OPTIMISM_SEPOLIA
 } from '../../../providers';
 import {
-  DAI_ARBITRUM,
-  DAI_AVAX,
-  DAI_BNB,
-  DAI_MAINNET,
+  // DAI_ARBITRUM,
+  // DAI_AVAX,
+  // DAI_BNB,
+  // DAI_MAINNET,
   DAI_MODE,
-  DAI_MOONBEAM,
-  DAI_OPTIMISM,
-  DAI_OPTIMISM_GOERLI,
-  DAI_POLYGON_MUMBAI,
-  DAI_SEPOLIA,
-  FEI_MAINNET,
+  USDC_MODE,
+  USDT_MODE,
+  WBTC_MODE,
+  // DAI_MOONBEAM,
+  // DAI_OPTIMISM,
+  // DAI_OPTIMISM_GOERLI,
+  // DAI_POLYGON_MUMBAI,
+  // DAI_SEPOLIA,
+  // FEI_MAINNET,
   ITokenProvider,
-  USDB_BLAST,
-  USDC_ARBITRUM,
-  USDC_ARBITRUM_GOERLI,
-  USDC_AVAX,
-  USDC_BASE,
-  USDC_BNB,
-  USDC_ETHEREUM_GNOSIS,
-  USDC_MAINNET,
-  USDC_MOONBEAM,
-  USDC_OPTIMISM,
-  USDC_OPTIMISM_GOERLI,
-  USDC_POLYGON,
-  USDC_SEPOLIA,
-  USDT_ARBITRUM,
-  USDT_BNB,
-  USDT_MAINNET,
-  USDT_OPTIMISM,
-  USDT_OPTIMISM_GOERLI,
-  WBTC_ARBITRUM,
-  WBTC_GNOSIS,
-  WBTC_MAINNET,
-  WBTC_MOONBEAM,
-  WBTC_OPTIMISM,
-  WBTC_OPTIMISM_GOERLI,
-  WGLMR_MOONBEAM,
-  WMATIC_POLYGON,
-  WMATIC_POLYGON_MUMBAI,
-  WXDAI_GNOSIS,
+  // USDB_BLAST,
+  // USDC_ARBITRUM,
+  // USDC_ARBITRUM_GOERLI,
+  // USDC_AVAX,
+  // USDC_BASE,
+  // USDC_BNB,
+  // USDC_ETHEREUM_GNOSIS,
+  // USDC_MAINNET,
+  // USDC_MOONBEAM,
+  // USDC_OPTIMISM,
+  // USDC_OPTIMISM_GOERLI,
+  // USDC_POLYGON,
+  // USDC_SEPOLIA,
+  // USDT_ARBITRUM,
+  // USDT_BNB,
+  // USDT_MAINNET,
+  // USDT_OPTIMISM,
+  // USDT_OPTIMISM_GOERLI,
+  // WBTC_ARBITRUM,
+  // WBTC_GNOSIS,
+  // WBTC_MAINNET,
+  // WBTC_MOONBEAM,
+  // WBTC_OPTIMISM,
+  // WBTC_OPTIMISM_GOERLI,
+  // WGLMR_MOONBEAM,
+  // WMATIC_POLYGON,
+  // WMATIC_POLYGON_MUMBAI,
+  // WXDAI_GNOSIS,
 } from '../../../providers/token-provider';
 import {
   IV2PoolProvider,
@@ -128,62 +131,62 @@ export type MixedRouteGetCandidatePoolsParams = {
 };
 
 const baseTokensByChain: { [chainId in ChainId]?: Token[] } = {
-  [ChainId.MAINNET]: [
-    USDC_MAINNET,
-    USDT_MAINNET,
-    WBTC_MAINNET,
-    DAI_MAINNET,
-    WRAPPED_NATIVE_CURRENCY[1]!,
-    FEI_MAINNET,
-  ],
-  [ChainId.OPTIMISM]: [
-    DAI_OPTIMISM,
-    USDC_OPTIMISM,
-    USDT_OPTIMISM,
-    WBTC_OPTIMISM,
-  ],
-  [ChainId.SEPOLIA]: [DAI_SEPOLIA, USDC_SEPOLIA],
-  [ChainId.OPTIMISM_GOERLI]: [
-    DAI_OPTIMISM_GOERLI,
-    USDC_OPTIMISM_GOERLI,
-    USDT_OPTIMISM_GOERLI,
-    WBTC_OPTIMISM_GOERLI,
-  ],
-  [ChainId.OPTIMISM_SEPOLIA]: [
-    DAI_OPTIMISM_SEPOLIA,
-    USDC_OPTIMISM_SEPOLIA,
-    USDT_OPTIMISM_SEPOLIA,
-    WBTC_OPTIMISM_SEPOLIA,
-  ],
-  [ChainId.ARBITRUM_ONE]: [
-    DAI_ARBITRUM,
-    USDC_ARBITRUM,
-    WBTC_ARBITRUM,
-    USDT_ARBITRUM,
-  ],
-  [ChainId.ARBITRUM_GOERLI]: [USDC_ARBITRUM_GOERLI],
-  [ChainId.ARBITRUM_SEPOLIA]: [USDC_ARBITRUM_SEPOLIA],
-  [ChainId.POLYGON]: [USDC_POLYGON, WMATIC_POLYGON],
-  [ChainId.POLYGON_MUMBAI]: [DAI_POLYGON_MUMBAI, WMATIC_POLYGON_MUMBAI],
-  [ChainId.GNOSIS]: [WBTC_GNOSIS, WXDAI_GNOSIS, USDC_ETHEREUM_GNOSIS],
-  [ChainId.MOONBEAM]: [
-    DAI_MOONBEAM,
-    USDC_MOONBEAM,
-    WBTC_MOONBEAM,
-    WGLMR_MOONBEAM,
-  ],
-  [ChainId.BNB]: [DAI_BNB, USDC_BNB, USDT_BNB],
-  [ChainId.AVALANCHE]: [DAI_AVAX, USDC_AVAX],
-  [ChainId.BASE]: [USDC_BASE],
-  [ChainId.BLAST]: [WRAPPED_NATIVE_CURRENCY[ChainId.BLAST]!, USDB_BLAST],
-  [ChainId.MODE]: [WRAPPED_NATIVE_CURRENCY[ChainId.MODE]!, DAI_MODE],
+  // [ChainId.MAINNET]: [
+  //   USDC_MAINNET,
+  //   USDT_MAINNET,
+  //   WBTC_MAINNET,
+  //   DAI_MAINNET,
+  //   WRAPPED_NATIVE_CURRENCY[1]!,
+  //   FEI_MAINNET,
+  // ],
+  // [ChainId.OPTIMISM]: [
+  //   DAI_OPTIMISM,
+  //   USDC_OPTIMISM,
+  //   USDT_OPTIMISM,
+  //   WBTC_OPTIMISM,
+  // ],
+  // [ChainId.SEPOLIA]: [DAI_SEPOLIA, USDC_SEPOLIA],
+  // [ChainId.OPTIMISM_GOERLI]: [
+  //   DAI_OPTIMISM_GOERLI,
+  //   USDC_OPTIMISM_GOERLI,
+  //   USDT_OPTIMISM_GOERLI,
+  //   WBTC_OPTIMISM_GOERLI,
+  // ],
+  // [ChainId.OPTIMISM_SEPOLIA]: [
+  //   DAI_OPTIMISM_SEPOLIA,
+  //   USDC_OPTIMISM_SEPOLIA,
+  //   USDT_OPTIMISM_SEPOLIA,
+  //   WBTC_OPTIMISM_SEPOLIA,
+  // ],
+  // [ChainId.ARBITRUM_ONE]: [
+  //   DAI_ARBITRUM,
+  //   USDC_ARBITRUM,
+  //   WBTC_ARBITRUM,
+  //   USDT_ARBITRUM,
+  // ],
+  // [ChainId.ARBITRUM_GOERLI]: [USDC_ARBITRUM_GOERLI],
+  // [ChainId.ARBITRUM_SEPOLIA]: [USDC_ARBITRUM_SEPOLIA],
+  // [ChainId.POLYGON]: [USDC_POLYGON, WMATIC_POLYGON],
+  // [ChainId.POLYGON_MUMBAI]: [DAI_POLYGON_MUMBAI, WMATIC_POLYGON_MUMBAI],
+  // [ChainId.GNOSIS]: [WBTC_GNOSIS, WXDAI_GNOSIS, USDC_ETHEREUM_GNOSIS],
+  // [ChainId.MOONBEAM]: [
+  //   DAI_MOONBEAM,
+  //   USDC_MOONBEAM,
+  //   WBTC_MOONBEAM,
+  //   WGLMR_MOONBEAM,
+  // ],
+  // [ChainId.BNB]: [DAI_BNB, USDC_BNB, USDT_BNB],
+  // [ChainId.AVALANCHE]: [DAI_AVAX, USDC_AVAX],
+  // [ChainId.BASE]: [USDC_BASE],
+  // [ChainId.BLAST]: [WRAPPED_NATIVE_CURRENCY[ChainId.BLAST]!, USDB_BLAST],
+  [ChainId.MODE]: [WRAPPED_NATIVE_CURRENCY[ChainId.MODE]!, DAI_MODE, USDC_MODE, USDT_MODE, WBTC_MODE],
 };
 
 class SubcategorySelectionPools<SubgraphPool> {
   constructor(
     public pools: SubgraphPool[],
     public readonly poolsNeeded: number
-  ) {}
+  ) { }
 
   public hasEnoughPools(): boolean {
     return this.pools.length >= this.poolsNeeded;
@@ -376,13 +379,14 @@ export async function getV3CandidatePools({
   let top2EthQuoteTokenPool: V3SubgraphPool[] = [];
   if (
     (WRAPPED_NATIVE_CURRENCY[chainId]?.symbol ==
-      WRAPPED_NATIVE_CURRENCY[ChainId.MAINNET]?.symbol &&
+      WRAPPED_NATIVE_CURRENCY[ChainId.MODE]?.symbol &&
       tokenOut.symbol != 'WETH' &&
       tokenOut.symbol != 'WETH9' &&
-      tokenOut.symbol != 'ETH') ||
-    (WRAPPED_NATIVE_CURRENCY[chainId]?.symbol == WMATIC_POLYGON.symbol &&
-      tokenOut.symbol != 'MATIC' &&
-      tokenOut.symbol != 'WMATIC')
+      tokenOut.symbol != 'ETH')
+    //   ||
+    // (WRAPPED_NATIVE_CURRENCY[chainId]?.symbol == WMATIC_POLYGON.symbol &&
+    //   tokenOut.symbol != 'MATIC' &&
+    //   tokenOut.symbol != 'WMATIC')
   ) {
     top2EthQuoteTokenPool = _(subgraphPoolsSorted)
       .filter((subgraphPool) => {
@@ -527,8 +531,7 @@ export async function getV3CandidatePools({
   });
 
   const printV3SubgraphPool = (s: V3SubgraphPool) =>
-    `${tokenAccessor.getTokenByAddress(s.token0.id)?.symbol ?? s.token0.id}/${
-      tokenAccessor.getTokenByAddress(s.token1.id)?.symbol ?? s.token1.id
+    `${tokenAccessor.getTokenByAddress(s.token0.id)?.symbol ?? s.token0.id}/${tokenAccessor.getTokenByAddress(s.token1.id)?.symbol ?? s.token1.id
     }/${s.feeTier}`;
 
   log.info(
@@ -567,10 +570,8 @@ export async function getV3CandidatePools({
 
     if (!tokenA || !tokenB) {
       log.info(
-        `Dropping candidate pool for ${subgraphPool.token0.id}/${
-          subgraphPool.token1.id
-        }/${fee} because ${
-          tokenA ? subgraphPool.token1.id : subgraphPool.token0.id
+        `Dropping candidate pool for ${subgraphPool.token0.id}/${subgraphPool.token1.id
+        }/${fee} because ${tokenA ? subgraphPool.token1.id : subgraphPool.token0.id
         } not found by token provider`
       );
       return undefined;
@@ -1146,8 +1147,7 @@ export async function getV2CandidatePools({
   });
 
   const printV2SubgraphPool = (s: V2SubgraphPool) =>
-    `${tokenAccessor.getTokenByAddress(s.token0.id)?.symbol ?? s.token0.id}/${
-      tokenAccessor.getTokenByAddress(s.token1.id)?.symbol ?? s.token1.id
+    `${tokenAccessor.getTokenByAddress(s.token0.id)?.symbol ?? s.token0.id}/${tokenAccessor.getTokenByAddress(s.token1.id)?.symbol ?? s.token1.id
     }`;
 
   log.info(
@@ -1358,10 +1358,8 @@ export async function getMixedRouteCandidatePools({
 
     if (!tokenA || !tokenB) {
       log.info(
-        `Dropping candidate pool for ${subgraphPool.token0.id}/${
-          subgraphPool.token1.id
-        }/${fee} because ${
-          tokenA ? subgraphPool.token1.id : subgraphPool.token0.id
+        `Dropping candidate pool for ${subgraphPool.token0.id}/${subgraphPool.token1.id
+        }/${fee} because ${tokenA ? subgraphPool.token1.id : subgraphPool.token0.id
         } not found by token provider`
       );
       return undefined;

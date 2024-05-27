@@ -64,7 +64,7 @@ import { OnChainTokenFeeFetcher } from '../../providers/token-fee-fetcher';
 import { ITokenProvider, TokenProvider } from '../../providers/token-provider';
 import {
   ITokenValidatorProvider,
-  TokenValidatorProvider,
+  // TokenValidatorProvider,
 } from '../../providers/token-validator-provider';
 import {
   IV2PoolProvider,
@@ -72,7 +72,7 @@ import {
 } from '../../providers/v2/pool-provider';
 import {
   ArbitrumGasData,
-  ArbitrumGasDataProvider,
+  // ArbitrumGasDataProvider,
   IL2GasDataProvider,
 } from '../../providers/v3/gas-data-provider';
 import {
@@ -86,7 +86,7 @@ import { CurrencyAmount } from '../../util/amounts';
 import {
   ID_TO_CHAIN_ID,
   ID_TO_NETWORK_NAME,
-  V2_SUPPORTED,
+  // V2_SUPPORTED,
 } from '../../util/chains';
 import {
   getHighestLiquidityV3NativePool,
@@ -439,9 +439,8 @@ export type AlphaRouterConfig = {
 
 export class AlphaRouter
   implements
-    IRouter<AlphaRouterConfig>,
-    ISwapToRatio<AlphaRouterConfig, SwapAndAddConfig>
-{
+  IRouter<AlphaRouterConfig>,
+  ISwapToRatio<AlphaRouterConfig, SwapAndAddConfig> {
   protected chainId: ChainId;
   protected provider: BaseProvider;
   protected multicall2Provider: UniswapMulticallProvider;
@@ -488,7 +487,7 @@ export class AlphaRouter
     mixedRouteGasModelFactory,
     swapRouterProvider,
     tokenValidatorProvider,
-    arbitrumGasDataProvider,
+    // arbitrumGasDataProvider,
     simulator,
     routeCachingProvider,
     tokenPropertiesProvider,
@@ -514,113 +513,113 @@ export class AlphaRouter
       this.onChainQuoteProvider = onChainQuoteProvider;
     } else {
       switch (chainId) {
-        case ChainId.OPTIMISM:
-        case ChainId.OPTIMISM_GOERLI:
-        case ChainId.OPTIMISM_SEPOLIA:
-          this.onChainQuoteProvider = new OnChainQuoteProvider(
-            chainId,
-            provider,
-            this.multicall2Provider,
-            {
-              retries: 2,
-              minTimeout: 100,
-              maxTimeout: 1000,
-            },
-            (_) => {
-              return {
-                multicallChunk: 110,
-                gasLimitPerCall: 1_200_000,
-                quoteMinSuccessRate: 0.1,
-              }
-            },
-            {
-              gasLimitOverride: 3_000_000,
-              multicallChunk: 45,
-            },
-            {
-              gasLimitOverride: 3_000_000,
-              multicallChunk: 45,
-            },
-            {
-              baseBlockOffset: -10,
-              rollback: {
-                enabled: true,
-                attemptsBeforeRollback: 1,
-                rollbackBlockOffset: -10,
-              },
-            }
-          );
-          break;
-        case ChainId.BASE:
-        case ChainId.BLAST:
-        case ChainId.BASE_GOERLI:
-          this.onChainQuoteProvider = new OnChainQuoteProvider(
-            chainId,
-            provider,
-            this.multicall2Provider,
-            {
-              retries: 2,
-              minTimeout: 100,
-              maxTimeout: 1000,
-            },
-            (_) => {
-              return {
-                multicallChunk: 80,
-                gasLimitPerCall: 1_200_000,
-                quoteMinSuccessRate: 0.1,
-              }
-            },
-            {
-              gasLimitOverride: 3_000_000,
-              multicallChunk: 45,
-            },
-            {
-              gasLimitOverride: 3_000_000,
-              multicallChunk: 45,
-            },
-            {
-              baseBlockOffset: -10,
-              rollback: {
-                enabled: true,
-                attemptsBeforeRollback: 1,
-                rollbackBlockOffset: -10,
-              },
-            }
-          );
-          break;
-        case ChainId.ARBITRUM_ONE:
-        case ChainId.ARBITRUM_GOERLI:
-        case ChainId.ARBITRUM_SEPOLIA:
-          this.onChainQuoteProvider = new OnChainQuoteProvider(
-            chainId,
-            provider,
-            this.multicall2Provider,
-            {
-              retries: 2,
-              minTimeout: 100,
-              maxTimeout: 1000,
-            },
-            (_) => {
-              return {
-                multicallChunk: 10,
-                gasLimitPerCall: 12_000_000,
-                quoteMinSuccessRate: 0.1,
-              }
-            },
-            {
-              gasLimitOverride: 30_000_000,
-              multicallChunk: 6,
-            },
-            {
-              gasLimitOverride: 30_000_000,
-              multicallChunk: 6,
-            }
-          );
-          break;
-        case ChainId.POLYGON_MUMBAI:
-        case ChainId.SEPOLIA:
-        case ChainId.MAINNET:
-        case ChainId.POLYGON:
+        // case ChainId.OPTIMISM:
+        // case ChainId.OPTIMISM_GOERLI:
+        // case ChainId.OPTIMISM_SEPOLIA:
+        //   this.onChainQuoteProvider = new OnChainQuoteProvider(
+        //     chainId,
+        //     provider,
+        //     this.multicall2Provider,
+        //     {
+        //       retries: 2,
+        //       minTimeout: 100,
+        //       maxTimeout: 1000,
+        //     },
+        //     (_) => {
+        //       return {
+        //         multicallChunk: 110,
+        //         gasLimitPerCall: 1_200_000,
+        //         quoteMinSuccessRate: 0.1,
+        //       }
+        //     },
+        //     {
+        //       gasLimitOverride: 3_000_000,
+        //       multicallChunk: 45,
+        //     },
+        //     {
+        //       gasLimitOverride: 3_000_000,
+        //       multicallChunk: 45,
+        //     },
+        //     {
+        //       baseBlockOffset: -10,
+        //       rollback: {
+        //         enabled: true,
+        //         attemptsBeforeRollback: 1,
+        //         rollbackBlockOffset: -10,
+        //       },
+        //     }
+        //   );
+        //   break;
+        // case ChainId.BASE:
+        // case ChainId.BLAST:
+        // case ChainId.BASE_GOERLI:
+        //   this.onChainQuoteProvider = new OnChainQuoteProvider(
+        //     chainId,
+        //     provider,
+        //     this.multicall2Provider,
+        //     {
+        //       retries: 2,
+        //       minTimeout: 100,
+        //       maxTimeout: 1000,
+        //     },
+        //     (_) => {
+        //       return {
+        //         multicallChunk: 80,
+        //         gasLimitPerCall: 1_200_000,
+        //         quoteMinSuccessRate: 0.1,
+        //       }
+        //     },
+        //     {
+        //       gasLimitOverride: 3_000_000,
+        //       multicallChunk: 45,
+        //     },
+        //     {
+        //       gasLimitOverride: 3_000_000,
+        //       multicallChunk: 45,
+        //     },
+        //     {
+        //       baseBlockOffset: -10,
+        //       rollback: {
+        //         enabled: true,
+        //         attemptsBeforeRollback: 1,
+        //         rollbackBlockOffset: -10,
+        //       },
+        //     }
+        //   );
+        //   break;
+        // case ChainId.ARBITRUM_ONE:
+        // case ChainId.ARBITRUM_GOERLI:
+        // case ChainId.ARBITRUM_SEPOLIA:
+        //   this.onChainQuoteProvider = new OnChainQuoteProvider(
+        //     chainId,
+        //     provider,
+        //     this.multicall2Provider,
+        //     {
+        //       retries: 2,
+        //       minTimeout: 100,
+        //       maxTimeout: 1000,
+        //     },
+        //     (_) => {
+        //       return {
+        //         multicallChunk: 10,
+        //         gasLimitPerCall: 12_000_000,
+        //         quoteMinSuccessRate: 0.1,
+        //       }
+        //     },
+        //     {
+        //       gasLimitOverride: 30_000_000,
+        //       multicallChunk: 6,
+        //     },
+        //     {
+        //       gasLimitOverride: 30_000_000,
+        //       multicallChunk: 6,
+        //     }
+        //   );
+        //   break;
+        // case ChainId.POLYGON_MUMBAI:
+        // case ChainId.SEPOLIA:
+        // case ChainId.MAINNET:
+        // case ChainId.POLYGON:
         case ChainId.MODE:
           this.onChainQuoteProvider = new OnChainQuoteProvider(
             chainId,
@@ -650,13 +649,14 @@ export class AlphaRouter
 
     if (tokenValidatorProvider) {
       this.tokenValidatorProvider = tokenValidatorProvider;
-    } else if (this.chainId === ChainId.MAINNET) {
-      this.tokenValidatorProvider = new TokenValidatorProvider(
-        this.chainId,
-        this.multicall2Provider,
-        new NodeJSCache(new NodeCache({ stdTTL: 30000, useClones: false }))
-      );
     }
+    // else if (this.chainId === ChainId.MAINNET) {
+    //   this.tokenValidatorProvider = new TokenValidatorProvider(
+    //     this.chainId,
+    //     this.multicall2Provider,
+    //     new NodeJSCache(new NodeCache({ stdTTL: 30000, useClones: false }))
+    //   );
+    // }
     if (tokenPropertiesProvider) {
       this.tokenPropertiesProvider = tokenPropertiesProvider;
     } else {
@@ -763,9 +763,9 @@ export class AlphaRouter
         )
       );
     this.v3GasModelFactory =
-      v3GasModelFactory ?? new V3HeuristicGasModelFactory(this.provider);
+      v3GasModelFactory ?? new V3HeuristicGasModelFactory();
     this.v2GasModelFactory =
-      v2GasModelFactory ?? new V2HeuristicGasModelFactory(this.provider);
+      v2GasModelFactory ?? new V2HeuristicGasModelFactory();
     this.mixedRouteGasModelFactory =
       mixedRouteGasModelFactory ?? new MixedRouteHeuristicGasModelFactory();
 
@@ -773,14 +773,14 @@ export class AlphaRouter
       swapRouterProvider ??
       new SwapRouterProvider(this.multicall2Provider, this.chainId);
 
-    if (
-      chainId === ChainId.ARBITRUM_ONE ||
-      chainId === ChainId.ARBITRUM_GOERLI
-    ) {
-      this.l2GasDataProvider =
-        arbitrumGasDataProvider ??
-        new ArbitrumGasDataProvider(chainId, this.provider);
-    }
+    // if (
+    //   chainId === ChainId.ARBITRUM_ONE ||
+    //   chainId === ChainId.ARBITRUM_GOERLI
+    // ) {
+    //   this.l2GasDataProvider =
+    //     arbitrumGasDataProvider ??
+    //     new ArbitrumGasDataProvider(chainId, this.provider);
+    // }
 
     // Initialize the Quoters.
     // Quoters are an abstraction encapsulating the business logic of fetching routes and quotes.
@@ -818,7 +818,7 @@ export class AlphaRouter
       this.tokenValidatorProvider
     );
 
-    this.v2Supported = v2Supported ?? V2_SUPPORTED;
+    this.v2Supported = v2Supported ?? [];
   }
 
   public async routeToRatio(
@@ -828,7 +828,7 @@ export class AlphaRouter
     swapAndAddConfig: SwapAndAddConfig,
     swapAndAddOptions?: SwapAndAddOptions,
     routingConfig: Partial<AlphaRouterConfig> = DEFAULT_ROUTING_CONFIG_BY_CHAIN(
-      this.chainId
+      // this.chainId
     )
   ): Promise<SwapToRatioResponse> {
     if (
@@ -897,7 +897,9 @@ export class AlphaRouter
         TradeType.EXACT_INPUT,
         undefined,
         {
-          ...DEFAULT_ROUTING_CONFIG_BY_CHAIN(this.chainId),
+          ...DEFAULT_ROUTING_CONFIG_BY_CHAIN(
+            // this.chainId
+          ),
           ...routingConfig,
           /// @dev We do not want to query for mixedRoutes for routeToRatio as they are not supported
           /// [Protocol.V3, Protocol.V2] will make sure we only query for V3 and V2
@@ -1036,8 +1038,8 @@ export class AlphaRouter
         [tokenOut],
         partialRoutingConfig
       );
-      const buyFeeBps = tokenOutProperties[tokenOut.address.toLowerCase()]?.tokenFeeResult?.buyFeeBps;
-      const tokenOutHasFot = buyFeeBps && buyFeeBps.gt(0);
+    const buyFeeBps = tokenOutProperties[tokenOut.address.toLowerCase()]?.tokenFeeResult?.buyFeeBps;
+    const tokenOutHasFot = buyFeeBps && buyFeeBps.gt(0);
 
     if (tradeType === TradeType.EXACT_OUTPUT) {
       const portionAmount = this.portionProvider.getPortionAmount(
@@ -1084,7 +1086,9 @@ export class AlphaRouter
         writeToCachedRoutes: true,
         optimisticCachedRoutes: false,
       },
-      DEFAULT_ROUTING_CONFIG_BY_CHAIN(this.chainId),
+      DEFAULT_ROUTING_CONFIG_BY_CHAIN(
+        // this.chainId
+      ),
       partialRoutingConfig,
       { blockNumber }
     );
@@ -1102,8 +1106,8 @@ export class AlphaRouter
     // const gasTokenAccessor = await this.tokenProvider.getTokens([routingConfig.gasToken!]);
     const gasToken = routingConfig.gasToken
       ? (
-          await this.tokenProvider.getTokens([routingConfig.gasToken])
-        ).getTokenByAddress(routingConfig.gasToken)
+        await this.tokenProvider.getTokens([routingConfig.gasToken])
+      ).getTokenByAddress(routingConfig.gasToken)
       : undefined;
 
     const providerConfig: GasModelProviderConfig = {
@@ -1232,7 +1236,7 @@ export class AlphaRouter
         v3GasModel,
         mixedRouteGasModel,
         gasPriceWei,
-        v2GasModel,
+        // v2GasModel,
         swapConfig
       );
     }
@@ -1509,17 +1513,17 @@ export class AlphaRouter
         ),
         `Starting simulation`
       );
-      const fromAddress = swapConfig.simulate.fromAddress;
+      // const fromAddress = swapConfig.simulate.fromAddress;
       const beforeSimulate = Date.now();
       const swapRouteWithSimulation = await this.simulator.simulate(
-        fromAddress,
-        swapConfig,
-        swapRoute,
-        amount,
+        // fromAddress,
+        // swapConfig,
+        swapRoute
+        // amount,
         // Quote will be in WETH even if quoteCurrency is ETH
         // So we init a new CurrencyAmount object here
-        CurrencyAmount.fromRawAmount(quoteCurrency, quote.quotient.toString()),
-        providerConfig
+        // CurrencyAmount.fromRawAmount(quoteCurrency, quote.quotient.toString()),
+        // providerConfig
       );
       metric.putMetric(
         'SimulateTransaction',
@@ -1542,7 +1546,7 @@ export class AlphaRouter
     v3GasModel: IGasModel<V3RouteWithValidQuote>,
     mixedRouteGasModel: IGasModel<MixedRouteWithValidQuote>,
     gasPriceWei: BigNumber,
-    v2GasModel?: IGasModel<V2RouteWithValidQuote>,
+    // v2GasModel?: IGasModel<V2RouteWithValidQuote>,
     swapConfig?: SwapOptions
   ): Promise<BestSwapRoute | null> {
     log.info(
@@ -1701,8 +1705,8 @@ export class AlphaRouter
       this.chainId,
       routingConfig,
       this.portionProvider,
-      v2GasModel,
-      v3GasModel,
+      // v2GasModel,
+      // v3GasModel,
       swapConfig
     );
   }
@@ -1736,9 +1740,9 @@ export class AlphaRouter
     const shouldQueryMixedProtocol =
       protocols.includes(Protocol.MIXED) ||
       (noProtocolsSpecified && v2SupportedInChain);
-    const mixedProtocolAllowed =
-      [ChainId.MAINNET, ChainId.GOERLI].includes(this.chainId) &&
-      tradeType === TradeType.EXACT_INPUT;
+    const mixedProtocolAllowed = false
+    // [ChainId.MAINNET, ChainId.GOERLI].includes(this.chainId) &&
+    // tradeType === TradeType.EXACT_INPUT;
 
     const beforeGetCandidates = Date.now();
 
@@ -1946,8 +1950,8 @@ export class AlphaRouter
       this.chainId,
       routingConfig,
       this.portionProvider,
-      v2GasModel,
-      v3GasModel,
+      // v2GasModel,
+      // v3GasModel,
       swapConfig
     );
 
@@ -2028,31 +2032,31 @@ export class AlphaRouter
     const nativeCurrency = WRAPPED_NATIVE_CURRENCY[this.chainId];
     const nativeAndQuoteTokenV3PoolPromise = !quoteToken.equals(nativeCurrency)
       ? getHighestLiquidityV3NativePool(
-          quoteToken,
-          this.v3PoolProvider,
-          providerConfig
-        )
+        quoteToken,
+        this.v3PoolProvider,
+        providerConfig
+      )
       : Promise.resolve(null);
     const nativeAndAmountTokenV3PoolPromise = !amountToken.equals(
       nativeCurrency
     )
       ? getHighestLiquidityV3NativePool(
-          amountToken,
-          this.v3PoolProvider,
-          providerConfig
-        )
+        amountToken,
+        this.v3PoolProvider,
+        providerConfig
+      )
       : Promise.resolve(null);
 
     // If a specific gas token is specified in the provider config
     // fetch the highest liq V3 pool with it and the native currency
     const nativeAndSpecifiedGasTokenV3PoolPromise =
       providerConfig?.gasToken &&
-      !providerConfig?.gasToken.equals(nativeCurrency)
+        !providerConfig?.gasToken.equals(nativeCurrency)
         ? getHighestLiquidityV3NativePool(
-            providerConfig?.gasToken,
-            this.v3PoolProvider,
-            providerConfig
-          )
+          providerConfig?.gasToken,
+          this.v3PoolProvider,
+          providerConfig
+        )
         : Promise.resolve(null);
 
     const [
@@ -2076,13 +2080,13 @@ export class AlphaRouter
 
     const v2GasModelPromise = this.v2Supported?.includes(this.chainId)
       ? this.v2GasModelFactory.buildGasModel({
-          chainId: this.chainId,
-          gasPriceWei,
-          poolProvider: this.v2PoolProvider,
-          token: quoteToken,
-          l2GasDataProvider: this.l2GasDataProvider,
-          providerConfig: providerConfig,
-        }).catch(_ => undefined) // If v2 model throws uncaught exception, we return undefined v2 gas model, so there's a chance v3 route can go through
+        chainId: this.chainId,
+        gasPriceWei,
+        poolProvider: this.v2PoolProvider,
+        token: quoteToken,
+        l2GasDataProvider: this.l2GasDataProvider,
+        providerConfig: providerConfig,
+      }).catch(_ => undefined) // If v2 model throws uncaught exception, we return undefined v2 gas model, so there's a chance v3 route can go through
       : Promise.resolve(undefined);
 
     const v3GasModelPromise = this.v3GasModelFactory.buildGasModel({

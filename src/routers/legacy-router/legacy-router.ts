@@ -8,9 +8,10 @@ import _ from 'lodash';
 import { IOnChainQuoteProvider, RouteWithQuotes } from '../../providers';
 import { IMulticallProvider } from '../../providers/multicall-provider';
 import {
-  DAI_MAINNET,
+  // DAI_MAINNET,
+  DAI_MODE, USDC_MODE,
   ITokenProvider,
-  USDC_MAINNET,
+  // USDC_MAINNET,
 } from '../../providers/token-provider';
 import { IV3PoolProvider } from '../../providers/v3/pool-provider';
 import { SWAP_ROUTER_02_ADDRESSES } from '../../util';
@@ -21,9 +22,9 @@ import { V3RouteWithValidQuote } from '../alpha-router';
 import { SwapOptionsSwapRouter02, SwapRoute, V3Route } from '../router';
 
 import {
-  ADDITIONAL_BASES,
+  // ADDITIONAL_BASES,
   BASES_TO_CHECK_TRADES_AGAINST,
-  CUSTOM_BASES,
+  // CUSTOM_BASES,
 } from './bases';
 
 export type LegacyRouterParams = {
@@ -131,7 +132,7 @@ export class LegacyRouter {
         1
       ),
       estimatedGasUsedUSD: CurrencyAmount.fromFractionalAmount(
-        DAI_MAINNET!,
+        DAI_MODE!,
         0,
         1
       ),
@@ -139,9 +140,9 @@ export class LegacyRouter {
       trade,
       methodParameters: swapConfig
         ? {
-            ...this.buildMethodParameters(trade, swapConfig),
-            to: SWAP_ROUTER_02_ADDRESSES(this.chainId),
-          }
+          ...this.buildMethodParameters(trade, swapConfig),
+          to: SWAP_ROUTER_02_ADDRESSES(this.chainId),
+        }
         : undefined,
       blockNumber: BigNumber.from(0),
     };
@@ -186,7 +187,7 @@ export class LegacyRouter {
         1
       ),
       estimatedGasUsedUSD: CurrencyAmount.fromFractionalAmount(
-        DAI_MAINNET,
+        DAI_MODE,
         0,
         1
       ),
@@ -194,9 +195,9 @@ export class LegacyRouter {
       trade,
       methodParameters: swapConfig
         ? {
-            ...this.buildMethodParameters(trade, swapConfig),
-            to: SWAP_ROUTER_02_ADDRESSES(this.chainId),
-          }
+          ...this.buildMethodParameters(trade, swapConfig),
+          to: SWAP_ROUTER_02_ADDRESSES(this.chainId),
+        }
         : undefined,
       blockNumber: BigNumber.from(0),
     };
@@ -265,8 +266,7 @@ export class LegacyRouter {
     routeType: TradeType
   ): Promise<V3RouteWithValidQuote | null> {
     log.debug(
-      `Got ${
-        _.filter(quotesRaw, ([_, quotes]) => !!quotes[0]).length
+      `Got ${_.filter(quotesRaw, ([_, quotes]) => !!quotes[0]).length
       } valid quotes from ${routes.length} possible routes.`
     );
 
@@ -309,7 +309,7 @@ export class LegacyRouter {
         gasModel: {
           estimateGasCost: () => ({
             gasCostInToken: CurrencyAmount.fromRawAmount(quoteToken, 0),
-            gasCostInUSD: CurrencyAmount.fromRawAmount(USDC_MAINNET, 0),
+            gasCostInUSD: CurrencyAmount.fromRawAmount(USDC_MODE, 0),
             gasEstimate: BigNumber.from(0),
           }),
         },
@@ -371,22 +371,22 @@ export class LegacyRouter {
   ): Promise<[Token, Token, FeeAmount][]> {
     const common =
       BASES_TO_CHECK_TRADES_AGAINST(this.tokenProvider)[this.chainId] ?? [];
-    const additionalA =
-      (await ADDITIONAL_BASES(this.tokenProvider))[this.chainId]?.[
-        tokenIn.address
-      ] ?? [];
-    const additionalB =
-      (await ADDITIONAL_BASES(this.tokenProvider))[this.chainId]?.[
-        tokenOut.address
-      ] ?? [];
-    const bases = [...common, ...additionalA, ...additionalB];
+    // const additionalA =
+    //   (await ADDITIONAL_BASES(this.tokenProvider))[this.chainId]?.[
+    //     tokenIn.address
+    //   ] ?? [];
+    // const additionalB =
+    //   (await ADDITIONAL_BASES(this.tokenProvider))[this.chainId]?.[
+    //     tokenOut.address
+    //   ] ?? [];
+    const bases = [...common];
 
     const basePairs: [Token, Token][] = _.flatMap(
       bases,
       (base): [Token, Token][] => bases.map((otherBase) => [base, otherBase])
     );
 
-    const customBases = (await CUSTOM_BASES(this.tokenProvider))[this.chainId];
+    // const customBases = (await CUSTOM_BASES(this.tokenProvider))[this.chainId];
 
     const allPairs: [Token, Token, FeeAmount][] = _([
       // the direct pair
@@ -405,16 +405,16 @@ export class LegacyRouter {
         ([tokenA, tokenB]) =>
           tokenA.address !== tokenB.address && !tokenA.equals(tokenB)
       )
-      .filter(([tokenA, tokenB]) => {
-        const customBasesA: Token[] | undefined = customBases?.[tokenA.address];
-        const customBasesB: Token[] | undefined = customBases?.[tokenB.address];
+      .filter(() => {
+        // const customBasesA: Token[] | undefined = customBases?.[tokenA.address];
+        // const customBasesB: Token[] | undefined = customBases?.[tokenB.address];
 
-        if (!customBasesA && !customBasesB) return true;
+        // if (!customBasesA && !customBasesB) return true;
 
-        if (customBasesA && !customBasesA.find((base) => tokenB.equals(base)))
-          return false;
-        if (customBasesB && !customBasesB.find((base) => tokenA.equals(base)))
-          return false;
+        // if (customBasesA && !customBasesA.find((base) => tokenB.equals(base)))
+        //   return false;
+        // if (customBasesB && !customBasesB.find((base) => tokenA.equals(base)))
+        //   return false;
 
         return true;
       })

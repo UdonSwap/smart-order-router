@@ -24,7 +24,7 @@ import {
   SINGLE_HOP_OVERHEAD,
   TOKEN_OVERHEAD,
 } from './gas-costs';
-import { BaseProvider } from '@ethersproject/providers';
+// import { BaseProvider } from '@ethersproject/providers';
 
 /**
  * Computes a gas estimate for a V3 swap using heuristics.
@@ -45,11 +45,13 @@ import { BaseProvider } from '@ethersproject/providers';
  * @class V3HeuristicGasModelFactory
  */
 export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
-  private provider: BaseProvider;
+  // private provider: BaseProvider;
 
-  constructor(provider: BaseProvider) {
+  constructor(
+    // provider: BaseProvider
+  ) {
     super();
-    this.provider = provider;
+    // this.provider = provider;
   }
 
   public async buildGasModel({
@@ -58,19 +60,19 @@ export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
     pools,
     amountToken,
     quoteToken,
-    l2GasDataProvider,
+    // l2GasDataProvider,
     providerConfig,
   }: BuildOnChainGasModelFactoryType): Promise<
     IGasModel<V3RouteWithValidQuote>
   > {
-    const l2GasData = l2GasDataProvider
-      ? await l2GasDataProvider.getGasData(providerConfig)
-      : undefined;
+    // const l2GasData = l2GasDataProvider
+    //   ? await l2GasDataProvider.getGasData(providerConfig)
+    //   : undefined;
 
     const usdPool: Pool = pools.usdPool;
 
     const calculateL1GasFees = async (
-      route: V3RouteWithValidQuote[]
+      // route: V3RouteWithValidQuote[]
     ): Promise<{
       gasUsedL1: BigNumber;
       gasUsedL1OnL2: BigNumber;
@@ -78,13 +80,13 @@ export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
       gasCostL1QuoteToken: CurrencyAmount;
     }> => {
       return await calculateL1GasFeesHelper(
-        route,
+        // route,
         chainId,
         usdPool,
         quoteToken,
         pools.nativeAndQuoteTokenV3Pool,
-        this.provider,
-        l2GasData
+        // this.provider,
+        // l2GasData
       );
     };
 
@@ -276,7 +278,7 @@ export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
     // Some tokens have extremely expensive transferFrom functions, which causes
     // us to underestimate them by a large amount. For known tokens, we apply an
     // adjustment.
-    const tokenOverhead = TOKEN_OVERHEAD(chainId, routeWithValidQuote.route);
+    const tokenOverhead = TOKEN_OVERHEAD();
 
     const tickGasUse = COST_PER_INIT_TICK(chainId).mul(
       totalInitializedTicksCrossed

@@ -8,7 +8,7 @@ import {
   DAI_MAINNET,
   MixedRoute,
   MixedRouteWithValidQuote,
-  USDC_MAINNET,
+  USDC_MODE,
   WRAPPED_NATIVE_CURRENCY,
 } from '../../../../../src';
 import { MixedRouteHeuristicGasModelFactory } from '../../../../../src/routers/alpha-router/gas-models/mixedRoute/mixed-route-heuristic-gas-model';
@@ -81,7 +81,7 @@ describe('mixed route gas model tests', () => {
   }
 
   it('returns correct gas estimate for a mixed route | hops: 2 | ticks 1', async () => {
-    const amountToken = USDC_MAINNET;
+    const amountToken = USDC_MODE;
     const quoteToken = DAI_MAINNET;
 
     const pools = await getPools(
@@ -161,7 +161,7 @@ describe('mixed route gas model tests', () => {
   });
 
   it('applies overhead when token out is native eth', async () => {
-    const amountToken = USDC_MAINNET;
+    const amountToken = USDC_MODE;
     const quoteToken = ETHER.onChain(1) as Currency;
 
     const pools = await getPools(
@@ -193,7 +193,7 @@ describe('mixed route gas model tests', () => {
       mixedRouteGasModel: mixedGasModel,
       route: new MixedRoute(
         [USDC_DAI_MEDIUM, WETH_DAI],
-        USDC_MAINNET,
+        USDC_MODE,
         WRAPPED_NATIVE_CURRENCY[1]
       ),
       quoteToken: WRAPPED_NATIVE_CURRENCY[1],

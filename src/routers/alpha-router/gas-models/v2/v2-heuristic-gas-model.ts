@@ -20,7 +20,7 @@ import {
   IV2GasModelFactory,
   usdGasTokensByChain,
 } from '../gas-model';
-import { BaseProvider } from '@ethersproject/providers';
+// import { BaseProvider } from '@ethersproject/providers';
 
 // Constant cost for doing any swap regardless of pools.
 export const BASE_SWAP_COST = BigNumber.from(135000); // 115000, bumped up by 20_000 @eric 7/8/2022
@@ -46,11 +46,13 @@ export const COST_PER_EXTRA_HOP = BigNumber.from(50000); // 20000, bumped up by 
  * @class V2HeuristicGasModelFactory
  */
 export class V2HeuristicGasModelFactory extends IV2GasModelFactory {
-  private provider: BaseProvider;
+  // private provider: BaseProvider;
 
-  constructor(provider: BaseProvider) {
+  constructor(
+    // provider: BaseProvider
+  ) {
     super();
-    this.provider = provider;
+    // this.provider = provider;
   }
 
   public async buildGasModel({
@@ -58,12 +60,12 @@ export class V2HeuristicGasModelFactory extends IV2GasModelFactory {
     gasPriceWei,
     poolProvider,
     token,
-    l2GasDataProvider,
+    // l2GasDataProvider,
     providerConfig,
   }: BuildV2GasModelFactoryType): Promise<IGasModel<V2RouteWithValidQuote>> {
-    const l2GasData = l2GasDataProvider
-      ? await l2GasDataProvider.getGasData(providerConfig)
-      : undefined;
+    // const l2GasData = l2GasDataProvider
+    //   ? await l2GasDataProvider.getGasData(providerConfig)
+    //   : undefined;
 
     const usdPoolPromise: Promise<Pair> = this.getHighestLiquidityUSDPool(
       chainId,
@@ -74,13 +76,13 @@ export class V2HeuristicGasModelFactory extends IV2GasModelFactory {
     // Only fetch the native gasToken pool if specified by the config AND the gas token is not the native currency.
     const nativeAndSpecifiedGasTokenPoolPromise =
       providerConfig?.gasToken &&
-      !providerConfig?.gasToken.equals(WRAPPED_NATIVE_CURRENCY[chainId]!)
+        !providerConfig?.gasToken.equals(WRAPPED_NATIVE_CURRENCY[chainId]!)
         ? this.getEthPool(
-            chainId,
-            providerConfig.gasToken,
-            poolProvider,
-            providerConfig
-          )
+          chainId,
+          providerConfig.gasToken,
+          poolProvider,
+          providerConfig
+        )
         : Promise.resolve(null);
 
     const [usdPool, nativeAndSpecifiedGasTokenPool] = await Promise.all([
@@ -104,7 +106,7 @@ export class V2HeuristicGasModelFactory extends IV2GasModelFactory {
         : usdPool.token0;
 
     const calculateL1GasFees = async (
-      route: V2RouteWithValidQuote[]
+      // route: V2RouteWithValidQuote[]
     ): Promise<{
       gasUsedL1: BigNumber;
       gasUsedL1OnL2: BigNumber;
@@ -116,13 +118,13 @@ export class V2HeuristicGasModelFactory extends IV2GasModelFactory {
         : null;
 
       return await calculateL1GasFeesHelper(
-        route,
+        // route,
         chainId,
         usdPool,
         token,
         nativePool,
-        this.provider,
-        l2GasData
+        // this.provider,
+        // l2GasData
       );
     };
 

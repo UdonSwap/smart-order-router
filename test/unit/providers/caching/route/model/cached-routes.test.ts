@@ -1,7 +1,7 @@
 import { Protocol } from 'udonswap-router';
 import { ChainId, TradeType } from 'udonswap-core';
 import { V3RouteWithValidQuote } from '../../../../../../build/main';
-import { CachedRoutes, DAI_MAINNET as DAI, USDC_MAINNET as USDC } from '../../../../../../src';
+import { CachedRoutes, DAI_MAINNET as DAI, USDC_MODE as USDC } from '../../../../../../src';
 import { getV3RouteWithValidQuoteStub } from '../test-util/mocked-dependencies';
 
 describe('CachedRoutes', () => {

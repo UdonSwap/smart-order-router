@@ -1,11 +1,11 @@
 import { Protocol } from 'udonswap-router';
-import { DAI_MAINNET, MixedRoute, USDC_MAINNET, V2Route, V3Route } from '../../../../../../build/main';
+import { DAI_MAINNET, MixedRoute, USDC_MODE, V2Route, V3Route } from '../../../../../../build/main';
 import { CachedRoute } from '../../../../../../src';
 import { USDC_DAI, USDC_DAI_MEDIUM, WETH_DAI } from '../../../../../test-util/mock-data';
 
 describe('CachedRoute', () => {
   it('creates an instance given a route object and percent', () => {
-    const v3Route = new V3Route([USDC_DAI_MEDIUM], USDC_MAINNET, DAI_MAINNET);
+    const v3Route = new V3Route([USDC_DAI_MEDIUM], USDC_MODE, DAI_MAINNET);
     const cachedRoute = new CachedRoute({ route: v3Route, percent: 100 });
 
     expect(cachedRoute).toBeInstanceOf(CachedRoute<V3Route>);
@@ -13,21 +13,21 @@ describe('CachedRoute', () => {
 
   describe('protocol obtained from route', () => {
     it('is correctly V3 when using V3Route', () => {
-      const route = new V3Route([USDC_DAI_MEDIUM], USDC_MAINNET, DAI_MAINNET);
+      const route = new V3Route([USDC_DAI_MEDIUM], USDC_MODE, DAI_MAINNET);
       const cachedRoute = new CachedRoute({ route: route, percent: 100 });
 
       expect(cachedRoute.protocol).toEqual(Protocol.V3);
     });
 
     it('is correctly V2 when using V2Route', () => {
-      const route = new V2Route([USDC_DAI], USDC_MAINNET, DAI_MAINNET);
+      const route = new V2Route([USDC_DAI], USDC_MODE, DAI_MAINNET);
       const cachedRoute = new CachedRoute({ route: route, percent: 100 });
 
       expect(cachedRoute.protocol).toEqual(Protocol.V2);
     });
 
     it('is correctly MIXED when using MixedRoute', () => {
-      const route = new MixedRoute([USDC_DAI_MEDIUM, WETH_DAI], USDC_MAINNET, DAI_MAINNET);
+      const route = new MixedRoute([USDC_DAI_MEDIUM, WETH_DAI], USDC_MODE, DAI_MAINNET);
       const cachedRoute = new CachedRoute({ route: route, percent: 100 });
 
       expect(cachedRoute.protocol).toEqual(Protocol.MIXED);
@@ -36,7 +36,7 @@ describe('CachedRoute', () => {
 
   describe('#routePath', () => {
     it('is correctly returned when using V3Route', () => {
-      const route = new V3Route([USDC_DAI_MEDIUM], USDC_MAINNET, DAI_MAINNET);
+      const route = new V3Route([USDC_DAI_MEDIUM], USDC_MODE, DAI_MAINNET);
       const cachedRoute = new CachedRoute({ route: route, percent: 100 });
 
       expect(cachedRoute.routePath)
@@ -44,7 +44,7 @@ describe('CachedRoute', () => {
     });
 
     it('is correctly returned when using V2Route', () => {
-      const route = new V2Route([USDC_DAI], USDC_MAINNET, DAI_MAINNET);
+      const route = new V2Route([USDC_DAI], USDC_MODE, DAI_MAINNET);
       const cachedRoute = new CachedRoute({ route: route, percent: 100 });
 
       expect(cachedRoute.routePath)
@@ -52,7 +52,7 @@ describe('CachedRoute', () => {
     });
 
     it('is correctly returned when using MixedRoute', () => {
-      const route = new MixedRoute([USDC_DAI_MEDIUM, WETH_DAI], USDC_MAINNET, DAI_MAINNET);
+      const route = new MixedRoute([USDC_DAI_MEDIUM, WETH_DAI], USDC_MODE, DAI_MAINNET);
       const cachedRoute = new CachedRoute({ route: route, percent: 100 });
 
       expect(cachedRoute.routePath)
@@ -63,21 +63,21 @@ describe('CachedRoute', () => {
 
   describe('#routeId', () => {
     it('is correctly returned when using V3Route', () => {
-      const route = new V3Route([USDC_DAI_MEDIUM], USDC_MAINNET, DAI_MAINNET);
+      const route = new V3Route([USDC_DAI_MEDIUM], USDC_MODE, DAI_MAINNET);
       const cachedRoute = new CachedRoute({ route: route, percent: 100 });
 
       expect(cachedRoute.routeId).toEqual(610157808);
     });
 
     it('is correctly returned when using V2Route', () => {
-      const route = new V2Route([USDC_DAI], USDC_MAINNET, DAI_MAINNET);
+      const route = new V2Route([USDC_DAI], USDC_MODE, DAI_MAINNET);
       const cachedRoute = new CachedRoute({ route: route, percent: 100 });
 
       expect(cachedRoute.routeId).toEqual(783252763);
     });
 
     it('is correctly returned when using MixedRoute', () => {
-      const route = new MixedRoute([USDC_DAI_MEDIUM, WETH_DAI], USDC_MAINNET, DAI_MAINNET);
+      const route = new MixedRoute([USDC_DAI_MEDIUM, WETH_DAI], USDC_MODE, DAI_MAINNET);
       const cachedRoute = new CachedRoute({ route: route, percent: 100 });
 
       expect(cachedRoute.routeId).toEqual(-882458629);

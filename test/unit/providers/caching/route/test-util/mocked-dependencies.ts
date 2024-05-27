@@ -2,19 +2,19 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { Protocol } from 'udonswap-router';
 import { ChainId, TradeType } from 'udonswap-core';
 import {
-  DAI_MAINNET,
-  USDC_MAINNET,
+  DAI_MODE,
+  USDC_MODE,
   V3Route,
   V3RouteWithValidQuote,
 } from '../../../../../../build/main';
 import {
   CachedRoutes,
   CurrencyAmount,
-  DAI_MAINNET as DAI,
+  DAI_MODE as DAI,
   MixedRoute,
   MixedRouteWithValidQuote,
   MixedRouteWithValidQuoteParams,
-  USDC_MAINNET as USDC,
+  USDC_MODE as USDC,
   V2Route,
   V2RouteWithValidQuote,
   V2RouteWithValidQuoteParams,
@@ -37,7 +37,7 @@ import {
 export function getV2RouteWithValidQuoteStub(
   overrides?: Partial<V2RouteWithValidQuoteParams>
 ): V2RouteWithValidQuote {
-  const route = new V2Route([USDC_DAI], USDC_MAINNET, DAI_MAINNET);
+  const route = new V2Route([USDC_DAI], USDC_MODE, DAI_MODE);
 
   return new V2RouteWithValidQuote({
     amount: CurrencyAmount.fromRawAmount(USDC, 100),
@@ -55,7 +55,7 @@ export function getV2RouteWithValidQuoteStub(
 export function getV3RouteWithValidQuoteStub(
   overrides?: Partial<V3RouteWithValidQuoteParams>
 ): V3RouteWithValidQuote {
-  const route = new V3Route([USDC_DAI_MEDIUM], USDC_MAINNET, DAI_MAINNET);
+  const route = new V3Route([USDC_DAI_MEDIUM], USDC_MODE, DAI_MODE);
 
   return new V3RouteWithValidQuote({
     amount: CurrencyAmount.fromRawAmount(USDC, 100),
@@ -79,8 +79,8 @@ export function getMixedRouteWithValidQuoteStub(
   const route = new MixedRoute(
     // v3 USDC -> WETH , v2 WETH -> DAI
     [USDC_WETH_MEDIUM, WETH_DAI],
-    USDC_MAINNET,
-    DAI_MAINNET
+    USDC_MODE,
+    DAI_MODE
   );
 
   return new MixedRouteWithValidQuote({
@@ -105,7 +105,7 @@ export function getCachedRoutesStub(
 ): CachedRoutes | undefined {
   return CachedRoutes.fromRoutesWithValidQuotes(
     [getV3RouteWithValidQuoteStub()],
-    ChainId.MAINNET,
+    ChainId.MODE,
     USDC,
     DAI,
     [Protocol.V2, Protocol.V3, Protocol.MIXED],
