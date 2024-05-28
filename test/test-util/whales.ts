@@ -6,7 +6,7 @@ import {
   nativeOnChain,
   UNI_GOERLI,
   UNI_MAINNET,
-  USDC_MODE,
+  USDC_MAINNET,
   USDC_NATIVE_ARBITRUM,
   USDC_NATIVE_AVAX,
   USDC_NATIVE_BASE,
@@ -39,7 +39,7 @@ export const WHALES = (token: Currency): string => {
       return '0x8894E0a0c962CB723c1976a4421c95949bE2D4E3';
     case nativeOnChain(ChainId.OPTIMISM):
       return '0x12478d1a60a910C9CbFFb90648766a2bDD5918f5';
-    case WETH9[919]:
+    case WETH9[1]:
       return '0x2fEb1512183545f48f6b9C5b4EbfCaF49CfCa6F3';
     case WNATIVE_ON(ChainId.MAINNET):
       return '0xf04a5cc80b1e94c69b48f5ee68a08cd2f09a7c3e';
@@ -57,7 +57,7 @@ export const WHALES = (token: Currency): string => {
       return '0x59d779BED4dB1E734D3fDa3172d45bc3063eCD69';
     case WNATIVE_ON(ChainId.AVALANCHE):
       return '0xba12222222228d8ba445958a75a0704d566bf2c8';
-    case USDC_MODE:
+    case USDC_MAINNET:
       return '0x8eb8a3b98659cce290402893d0123abb75e3ab28';
     case UNI_MAINNET:
     case DAI_MAINNET:

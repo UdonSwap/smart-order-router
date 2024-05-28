@@ -62,7 +62,7 @@ describe('compute all v3 routes', () => {
       WETH9_USDT_LOW,
       DAI_USDT_LOW,
     ];
-    const routes = computeAllV3Routes(USDC, WRAPPED_NATIVE_CURRENCY[1]!, pools, 4);
+    const routes = computeAllV3Routes(USDC, WRAPPED_NATIVE_CURRENCY[919]!, pools, 4);
 
     routes.forEach((route) => {
       expect(route.pools).not.toEqual([USDC_DAI_MEDIUM, USDC_DAI_LOW, USDC_WETH_LOW]);
@@ -157,7 +157,7 @@ describe('compute all mixed routes', () => {
       WETH9_USDT_LOW,
       DAI_USDT_LOW,
     ];
-    const routes = computeAllMixedRoutes(USDC, WRAPPED_NATIVE_CURRENCY[1]!, pools, 4);
+    const routes = computeAllMixedRoutes(USDC, WRAPPED_NATIVE_CURRENCY[919]!, pools, 4);
 
     routes.forEach((route) => {
       expect(route.pools).not.toEqual([USDC_DAI, USDC_DAI_LOW, USDC_WETH]);
@@ -209,7 +209,7 @@ describe('compute all v2 routes', () => {
 
   test('succeeds to compute all routes with 5 hops. ignoring arbitrage opportunities', async () => {
     const pools = [DAI_USDT, USDC_DAI, USDC_USDT, USDC_WETH, WETH_USDT, WBTC_WETH];
-    const routes = computeAllV2Routes(USDC, WRAPPED_NATIVE_CURRENCY[1]!, pools, 5);
+    const routes = computeAllV2Routes(USDC, WRAPPED_NATIVE_CURRENCY[919]!, pools, 5);
 
     routes.forEach((route) => {
       expect(route.pairs).not.toEqual([USDC_USDT, DAI_USDT, USDC_DAI, USDC_WETH]);

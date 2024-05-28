@@ -188,7 +188,7 @@ export const WBTC_WETH_MEDIUM = new Pool(
   0
 );
 // export const UNI_WETH_MEDIUM = new Pool(
-//   WRAPPED_NATIVE_CURRENCY[1]!,
+//   WRAPPED_NATIVE_CURRENCY[919]!,
 //   UNI_MAINNET,
 //   FeeAmount.MEDIUM,
 //   encodeSqrtRatioX96(1, 1),
@@ -342,27 +342,27 @@ export const mockTokenList: TokenList = {
   keywords: ['uniswap'],
   tokens: [
     {
-      name: 'USD//C',
-      address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+      name: 'USDC_MODE',
+      address: '0x22198B46C84Cf43831E65D32a9403A194D617a61',
       symbol: 'USDC',
       decimals: 6,
-      chainId: 1,
+      chainId: 919,
       logoURI: '',
     },
     {
       name: 'USDT',
-      address: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+      address: '0x4557D5f50828302DB39D9530F6d3648d48bEC04A',
       symbol: 'USDT',
       decimals: 6,
-      chainId: 1,
+      chainId: 919,
       logoURI: '',
     },
     {
       name: 'DAI',
-      address: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+      address: '0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3',
       symbol: 'DAI',
       decimals: 18,
-      chainId: 1,
+      chainId: 919,
       logoURI: '',
     },
     {

@@ -47,7 +47,7 @@ describe('TokenPropertiesProvider', () => {
       const underlyingCache: NodeCache = new NodeCache({ stdTTL: 3600, useClones: false })
       const tokenPropertiesResultCache: NodeJSCache<TokenPropertiesResult> = new NodeJSCache(underlyingCache);
       const tokenPropertiesProvider = new TokenPropertiesProvider(
-        ChainId.MAINNET,
+        ChainId.MODE,
         tokenPropertiesResultCache,
         mockTokenFeeFetcher,
       )
@@ -55,24 +55,24 @@ describe('TokenPropertiesProvider', () => {
       const token = USDC_MODE
       const currentEpochTimeInSeconds = Math.floor(Date.now() / 1000);
 
-      expect(await tokenPropertiesResultCache.get(CACHE_KEY(ChainId.MAINNET, token.address.toLowerCase()))).toBeUndefined();
+      expect(await tokenPropertiesResultCache.get(CACHE_KEY(ChainId.MODE, token.address.toLowerCase()))).toBeUndefined();
       const tokenPropertiesMap = await tokenPropertiesProvider.getTokensProperties([token], { enableFeeOnTransferFeeFetching: true });
       expect(tokenPropertiesMap[token.address.toLowerCase()]).toBeDefined();
       assertExpectedTokenProperties(tokenPropertiesMap[token.address.toLowerCase()], BigNumber.from(213), BigNumber.from(800), TokenValidationResult.FOT);
 
-      const cachedTokenProperties = await tokenPropertiesResultCache.get(CACHE_KEY(ChainId.MAINNET, token.address.toLowerCase()))
+      const cachedTokenProperties = await tokenPropertiesResultCache.get(CACHE_KEY(ChainId.MODE, token.address.toLowerCase()))
       expect(cachedTokenProperties).toBeDefined();
       assertExpectedTokenProperties(cachedTokenProperties, BigNumber.from(213), BigNumber.from(800), TokenValidationResult.FOT);
 
-      underlyingCache.getTtl(CACHE_KEY(ChainId.MAINNET, token.address.toLowerCase()))
-      expect(Math.floor((underlyingCache.getTtl(CACHE_KEY(ChainId.MAINNET, token.address.toLowerCase())) ?? 0) / 1000)).toEqual(currentEpochTimeInSeconds + POSITIVE_CACHE_ENTRY_TTL);
+      underlyingCache.getTtl(CACHE_KEY(ChainId.MODE, token.address.toLowerCase()))
+      expect(Math.floor((underlyingCache.getTtl(CACHE_KEY(ChainId.MODE, token.address.toLowerCase())) ?? 0) / 1000)).toEqual(currentEpochTimeInSeconds + POSITIVE_CACHE_ENTRY_TTL);
     })
 
     it('succeeds to get token fee cache hit and second token fee fetcher call is skipped', async function () {
       const underlyingCache: NodeCache = new NodeCache({ stdTTL: 3600, useClones: false })
       const tokenPropertiesResultCache: NodeJSCache<TokenPropertiesResult> = new NodeJSCache(underlyingCache);
       const tokenPropertiesProvider = new TokenPropertiesProvider(
-        ChainId.MAINNET,
+        ChainId.MODE,
         tokenPropertiesResultCache,
         mockTokenFeeFetcher,
       )
@@ -80,26 +80,26 @@ describe('TokenPropertiesProvider', () => {
       const token = USDC_MODE
       const currentEpochTimeInSeconds = Math.floor(Date.now() / 1000);
 
-      expect(await tokenPropertiesResultCache.get(CACHE_KEY(ChainId.MAINNET, token.address.toLowerCase()))).toBeUndefined();
+      expect(await tokenPropertiesResultCache.get(CACHE_KEY(ChainId.MODE, token.address.toLowerCase()))).toBeUndefined();
       const tokenPropertiesMap = await tokenPropertiesProvider.getTokensProperties([token], { enableFeeOnTransferFeeFetching: true });
       expect(tokenPropertiesMap[token.address.toLowerCase()]).toBeDefined();
       assertExpectedTokenProperties(tokenPropertiesMap[token.address.toLowerCase()], BigNumber.from(213), BigNumber.from(800), TokenValidationResult.FOT);
       sinon.assert.calledOnce(mockTokenFeeFetcher.fetchFees)
 
-      const cachedTokenProperties = await tokenPropertiesResultCache.get(CACHE_KEY(ChainId.MAINNET, token.address.toLowerCase()))
+      const cachedTokenProperties = await tokenPropertiesResultCache.get(CACHE_KEY(ChainId.MODE, token.address.toLowerCase()))
       expect(cachedTokenProperties).toBeDefined();
       assertExpectedTokenProperties(cachedTokenProperties, BigNumber.from(213), BigNumber.from(800), TokenValidationResult.FOT);
       sinon.assert.calledOnce(mockTokenFeeFetcher.fetchFees)
 
-      underlyingCache.getTtl(CACHE_KEY(ChainId.MAINNET, token.address.toLowerCase()))
-      expect(Math.floor((underlyingCache.getTtl(CACHE_KEY(ChainId.MAINNET, token.address.toLowerCase())) ?? 0) / 1000)).toEqual(currentEpochTimeInSeconds + POSITIVE_CACHE_ENTRY_TTL);
+      underlyingCache.getTtl(CACHE_KEY(ChainId.MODE, token.address.toLowerCase()))
+      expect(Math.floor((underlyingCache.getTtl(CACHE_KEY(ChainId.MODE, token.address.toLowerCase())) ?? 0) / 1000)).toEqual(currentEpochTimeInSeconds + POSITIVE_CACHE_ENTRY_TTL);
     });
 
     it('succeeds to get token allowlist with no on-chain calls nor caching', async function () {
       const underlyingCache: NodeCache = new NodeCache({ stdTTL: 3600, useClones: false })
       const tokenPropertiesResultCache: NodeJSCache<TokenPropertiesResult> = new NodeJSCache(underlyingCache);
       const tokenPropertiesProvider = new TokenPropertiesProvider(
-        ChainId.MAINNET,
+        ChainId.MODE,
         tokenPropertiesResultCache,
         mockTokenFeeFetcher,
       )
@@ -111,14 +111,14 @@ describe('TokenPropertiesProvider', () => {
       expect(tokenPropertiesMap[allowListToken.address.toLowerCase()]?.tokenFeeResult).toBeUndefined();
       assertExpectedTokenProperties(tokenPropertiesMap[allowListToken.address.toLowerCase()], undefined, undefined, TokenValidationResult.UNKN);
 
-      expect(await tokenPropertiesResultCache.get(CACHE_KEY(ChainId.MAINNET, allowListToken.address.toLowerCase()))).toBeUndefined();
+      expect(await tokenPropertiesResultCache.get(CACHE_KEY(ChainId.MODE, allowListToken.address.toLowerCase()))).toBeUndefined();
     });
 
     it('succeeds to get token properties in a single batch', async function () {
       const underlyingCache: NodeCache = new NodeCache({ stdTTL: 3600, useClones: false })
       const tokenPropertiesResultCache: NodeJSCache<TokenPropertiesResult> = new NodeJSCache(underlyingCache);
       const tokenPropertiesProvider = new TokenPropertiesProvider(
-        ChainId.MAINNET,
+        ChainId.MODE,
         tokenPropertiesResultCache,
         mockTokenFeeFetcher,
       )
@@ -152,12 +152,12 @@ describe('TokenPropertiesProvider', () => {
         const expectedSellFeeBps = tokenPropertiesMap[address]?.tokenFeeResult?.sellFeeBps
         assertExpectedTokenProperties(tokenPropertiesMap[address], expectedBuyFeeBps, expectedSellFeeBps, TokenValidationResult.FOT);
 
-        const cachedTokenProperties = await tokenPropertiesResultCache.get(CACHE_KEY(ChainId.MAINNET, token.address.toLowerCase()))
+        const cachedTokenProperties = await tokenPropertiesResultCache.get(CACHE_KEY(ChainId.MODE, token.address.toLowerCase()))
         expect(cachedTokenProperties).toBeDefined();
         assertExpectedTokenProperties(cachedTokenProperties, expectedBuyFeeBps, expectedSellFeeBps, TokenValidationResult.FOT);
 
-        underlyingCache.getTtl(CACHE_KEY(ChainId.MAINNET, token.address.toLowerCase()))
-        expect(Math.floor((underlyingCache.getTtl(CACHE_KEY(ChainId.MAINNET, token.address.toLowerCase())) ?? 0) / 1000)).toEqual(currentEpochTimeInSeconds + POSITIVE_CACHE_ENTRY_TTL);
+        underlyingCache.getTtl(CACHE_KEY(ChainId.MODE, token.address.toLowerCase()))
+        expect(Math.floor((underlyingCache.getTtl(CACHE_KEY(ChainId.MODE, token.address.toLowerCase())) ?? 0) / 1000)).toEqual(currentEpochTimeInSeconds + POSITIVE_CACHE_ENTRY_TTL);
       }
     });
 
@@ -165,7 +165,7 @@ describe('TokenPropertiesProvider', () => {
       const underlyingCache: NodeCache = new NodeCache({ stdTTL: 3600, useClones: false })
       const tokenPropertiesResultCache: NodeJSCache<TokenPropertiesResult> = new NodeJSCache(underlyingCache);
       const tokenPropertiesProvider = new TokenPropertiesProvider(
-        ChainId.MAINNET,
+        ChainId.MODE,
         tokenPropertiesResultCache,
         mockTokenFeeFetcher,
       )
@@ -187,18 +187,18 @@ describe('TokenPropertiesProvider', () => {
         expect(tokenPropertiesMap[address]?.tokenFeeResult).toBeUndefined();
         expect(tokenPropertiesMap[address]?.tokenValidationResult).toBeUndefined();
 
-        const cachedTokenProperties = await tokenPropertiesResultCache.get(CACHE_KEY(ChainId.MAINNET, token.address.toLowerCase()))
+        const cachedTokenProperties = await tokenPropertiesResultCache.get(CACHE_KEY(ChainId.MODE, token.address.toLowerCase()))
         expect(cachedTokenProperties).toBeDefined();
         expect(cachedTokenProperties?.tokenFeeResult).toBeUndefined();
         expect(cachedTokenProperties?.tokenValidationResult).toBeUndefined();
 
-        underlyingCache.getTtl(CACHE_KEY(ChainId.MAINNET, token.address.toLowerCase()))
-        expect(Math.floor((underlyingCache.getTtl(CACHE_KEY(ChainId.MAINNET, token.address.toLowerCase())) ?? 0) / 1000)).toEqual(currentEpochTimeInSeconds + NEGATIVE_CACHE_ENTRY_TTL);
+        underlyingCache.getTtl(CACHE_KEY(ChainId.MODE, token.address.toLowerCase()))
+        expect(Math.floor((underlyingCache.getTtl(CACHE_KEY(ChainId.MODE, token.address.toLowerCase())) ?? 0) / 1000)).toEqual(currentEpochTimeInSeconds + NEGATIVE_CACHE_ENTRY_TTL);
       }
     });
 
     it('real ETH and BITBOY token fee fetch, only BITBOY fetched', async function () {
-      const chain = ChainId.MAINNET;
+      const chain = ChainId.MODE;
       const chainProvider = ID_TO_PROVIDER(chain);
       const provider = new JsonRpcProvider(chainProvider, chain);
       const tokenFeeFetcher = new OnChainTokenFeeFetcher(chain, provider);
@@ -206,19 +206,19 @@ describe('TokenPropertiesProvider', () => {
       const underlyingCache: NodeCache = new NodeCache({ stdTTL: 3600, useClones: false })
       const tokenPropertiesResultCache: NodeJSCache<TokenPropertiesResult> = new NodeJSCache(underlyingCache);
       const tokenPropertiesProvider = new TokenPropertiesProvider(
-        ChainId.MAINNET,
+        ChainId.MODE,
         tokenPropertiesResultCache,
         tokenFeeFetcher,
       )
       const currentEpochTimeInSeconds = Math.floor(Date.now() / 1000);
 
-      const tokens = [WETH9[ChainId.MAINNET]!, BITBOY]
+      const tokens = [WETH9[ChainId.MODE]!, BITBOY]
 
       const tokenPropertiesMap = await tokenPropertiesProvider.getTokensProperties(tokens, { enableFeeOnTransferFeeFetching: true });
 
-      expect(tokenPropertiesMap[WETH9[ChainId.MAINNET]!.address.toLowerCase()]).toBeDefined()
-      expect(tokenPropertiesMap[WETH9[ChainId.MAINNET]!.address.toLowerCase()]?.tokenFeeResult).toBeUndefined()
-      expect(tokenPropertiesMap[WETH9[ChainId.MAINNET]!.address.toLowerCase()]?.tokenValidationResult).toBeUndefined()
+      expect(tokenPropertiesMap[WETH9[ChainId.MODE]!.address.toLowerCase()]).toBeDefined()
+      expect(tokenPropertiesMap[WETH9[ChainId.MODE]!.address.toLowerCase()]?.tokenFeeResult).toBeUndefined()
+      expect(tokenPropertiesMap[WETH9[ChainId.MODE]!.address.toLowerCase()]?.tokenValidationResult).toBeUndefined()
 
       expect(tokenPropertiesMap[BITBOY.address.toLowerCase()]).toBeDefined();
       expect(tokenPropertiesMap[BITBOY.address.toLowerCase()]?.tokenFeeResult).toBeDefined();
@@ -228,15 +228,15 @@ describe('TokenPropertiesProvider', () => {
         BITBOY?.sellFeeBps,
         TokenValidationResult.FOT);
 
-      const cachedTokenProperties = await tokenPropertiesResultCache.get(CACHE_KEY(ChainId.MAINNET, BITBOY.address.toLowerCase()))
+      const cachedTokenProperties = await tokenPropertiesResultCache.get(CACHE_KEY(ChainId.MODE, BITBOY.address.toLowerCase()))
       expect(cachedTokenProperties).toBeDefined();
       assertExpectedTokenProperties(cachedTokenProperties, BITBOY?.buyFeeBps, BITBOY?.sellFeeBps, TokenValidationResult.FOT);
 
-      underlyingCache.getTtl(CACHE_KEY(ChainId.MAINNET, BITBOY.address.toLowerCase()))
+      underlyingCache.getTtl(CACHE_KEY(ChainId.MODE, BITBOY.address.toLowerCase()))
 
       const ttlUpperBoundBuffer = 1 // in seconds
-      expect(Math.floor((underlyingCache.getTtl(CACHE_KEY(ChainId.MAINNET, BITBOY.address.toLowerCase())) ?? 0) / 1000)).toBeGreaterThanOrEqual(currentEpochTimeInSeconds + POSITIVE_CACHE_ENTRY_TTL);
-      expect(Math.floor((underlyingCache.getTtl(CACHE_KEY(ChainId.MAINNET, BITBOY.address.toLowerCase())) ?? 0) / 1000)).toBeLessThanOrEqual(currentEpochTimeInSeconds + POSITIVE_CACHE_ENTRY_TTL + ttlUpperBoundBuffer);
+      expect(Math.floor((underlyingCache.getTtl(CACHE_KEY(ChainId.MODE, BITBOY.address.toLowerCase())) ?? 0) / 1000)).toBeGreaterThanOrEqual(currentEpochTimeInSeconds + POSITIVE_CACHE_ENTRY_TTL);
+      expect(Math.floor((underlyingCache.getTtl(CACHE_KEY(ChainId.MODE, BITBOY.address.toLowerCase())) ?? 0) / 1000)).toBeLessThanOrEqual(currentEpochTimeInSeconds + POSITIVE_CACHE_ENTRY_TTL + ttlUpperBoundBuffer);
     });
   });
 

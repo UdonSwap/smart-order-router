@@ -7,7 +7,7 @@ import _ from 'lodash';
 import sinon from 'sinon';
 import {
   CurrencyAmount,
-  DAI_MAINNET,
+  DAI_MODE,
   IGasModel,
   RouteWithValidQuote,
   USDC_MODE as USDC,
@@ -44,30 +44,30 @@ import {
 const v3Route1 = new V3Route(
   [USDC_DAI_LOW, DAI_USDT_LOW, WETH9_USDT_LOW],
   USDC,
-  WRAPPED_NATIVE_CURRENCY[1]
+  WRAPPED_NATIVE_CURRENCY[919]
 );
-const v3Route2 = new V3Route([USDC_WETH_LOW], USDC, WRAPPED_NATIVE_CURRENCY[1]);
+const v3Route2 = new V3Route([USDC_WETH_LOW], USDC, WRAPPED_NATIVE_CURRENCY[919]);
 const v3Route3 = new V3Route(
   [USDC_DAI_MEDIUM, DAI_USDT_MEDIUM, WBTC_USDT_MEDIUM, WBTC_WETH_MEDIUM],
   USDC,
-  WRAPPED_NATIVE_CURRENCY[1]
+  WRAPPED_NATIVE_CURRENCY[919]
 );
 const v3Route4 = new V3Route(
   [USDC_WETH_MEDIUM],
   USDC,
-  WRAPPED_NATIVE_CURRENCY[1]
+  WRAPPED_NATIVE_CURRENCY[919]
 );
 
 const v2Route1 = new V2Route(
   [USDC_DAI, DAI_USDT, WETH_USDT],
   USDC,
-  WRAPPED_NATIVE_CURRENCY[1]
+  WRAPPED_NATIVE_CURRENCY[919]
 );
-const v2Route2 = new V2Route([USDC_WETH], USDC, WRAPPED_NATIVE_CURRENCY[1]);
+const v2Route2 = new V2Route([USDC_WETH], USDC, WRAPPED_NATIVE_CURRENCY[919]);
 const v2Route3 = new V2Route(
   [USDC_DAI, DAI_USDT, WETH_USDT, WBTC_WETH],
   USDC,
-  WRAPPED_NATIVE_CURRENCY[1]!
+  WRAPPED_NATIVE_CURRENCY[919]!
 );
 
 const mockPools = [
@@ -264,7 +264,7 @@ describe('get best swap route', () => {
       percents,
       routesWithQuotes,
       TradeType.EXACT_INPUT,
-      ChainId.MAINNET,
+      ChainId.MODE,
       { ...mockRoutingConfig, distributionPercent: 25 },
       portionProvider
     )!;
@@ -286,7 +286,7 @@ describe('get best swap route', () => {
     ).toBeTruthy();
     expect(
       estimatedGasUsedQuoteToken.equalTo(
-        CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[1]!, 0)
+        CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[919]!, 0)
       )
     ).toBeTruthy();
     expect(routes).toHaveLength(1);
@@ -325,7 +325,7 @@ describe('get best swap route', () => {
       percents,
       routesWithQuotes,
       TradeType.EXACT_INPUT,
-      ChainId.MAINNET,
+      ChainId.MODE,
       { ...mockRoutingConfig, distributionPercent: 25 },
       portionProvider
     )!;
@@ -347,7 +347,7 @@ describe('get best swap route', () => {
     ).toBeTruthy();
     expect(
       estimatedGasUsedQuoteToken.equalTo(
-        CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[1]!, 0)
+        CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[919]!, 0)
       )
     ).toBeTruthy();
     expect(routes).toHaveLength(2);
@@ -386,7 +386,7 @@ describe('get best swap route', () => {
       percents,
       routesWithQuotes,
       TradeType.EXACT_INPUT,
-      ChainId.MAINNET,
+      ChainId.MODE,
       { ...mockRoutingConfig, distributionPercent: 25 },
       portionProvider
     )!;
@@ -408,7 +408,7 @@ describe('get best swap route', () => {
     ).toBeTruthy();
     expect(
       estimatedGasUsedQuoteToken.equalTo(
-        CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[1]!, 0)
+        CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[919]!, 0)
       )
     ).toBeTruthy();
     expect(routes).toHaveLength(3);
@@ -454,7 +454,7 @@ describe('get best swap route', () => {
       percents,
       routesWithQuotes,
       TradeType.EXACT_INPUT,
-      ChainId.MAINNET,
+      ChainId.MODE,
       { ...mockRoutingConfig, distributionPercent: 25 },
       portionProvider
     )!;
@@ -476,7 +476,7 @@ describe('get best swap route', () => {
     ).toBeTruthy();
     expect(
       estimatedGasUsedQuoteToken.equalTo(
-        CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[1]!, 0)
+        CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[919]!, 0)
       )
     ).toBeTruthy();
     expect(routes).toHaveLength(4);
@@ -488,11 +488,11 @@ describe('get best swap route', () => {
 
     // Check that even though the pools in these routes use the same tokens,
     // since they are on different protocols we are fine to route in them.
-    const v2Route = new V2Route([USDC_WETH], USDC, WRAPPED_NATIVE_CURRENCY[1]!);
+    const v2Route = new V2Route([USDC_WETH], USDC, WRAPPED_NATIVE_CURRENCY[919]!);
     const v3Route = new V3Route(
       [USDC_WETH_LOW],
       USDC,
-      WRAPPED_NATIVE_CURRENCY[1]!
+      WRAPPED_NATIVE_CURRENCY[919]!
     );
 
     const routesWithQuotes: RouteWithValidQuote[] = [
@@ -524,7 +524,7 @@ describe('get best swap route', () => {
       percents,
       routesWithQuotes,
       TradeType.EXACT_INPUT,
-      ChainId.MAINNET,
+      ChainId.MODE,
       { ...mockRoutingConfig, distributionPercent: 25 },
       portionProvider
     )!;
@@ -546,7 +546,7 @@ describe('get best swap route', () => {
     ).toBeTruthy();
     expect(
       estimatedGasUsedQuoteToken.equalTo(
-        CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[1]!, 0)
+        CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[919]!, 0)
       )
     ).toBeTruthy();
     expect(routes).toHaveLength(2);
@@ -593,7 +593,7 @@ describe('get best swap route', () => {
       percents,
       routesWithQuotes,
       TradeType.EXACT_INPUT,
-      ChainId.MAINNET,
+      ChainId.MODE,
       { ...mockRoutingConfig, distributionPercent: 25 },
       portionProvider
     )!;
@@ -615,7 +615,7 @@ describe('get best swap route', () => {
     ).toBeTruthy();
     expect(
       estimatedGasUsedQuoteToken.equalTo(
-        CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[1]!, 0)
+        CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[919]!, 0)
       )
     ).toBeTruthy();
     expect(routes).toHaveLength(3);
@@ -662,7 +662,7 @@ describe('get best swap route', () => {
       percents,
       routesWithQuotes,
       TradeType.EXACT_INPUT,
-      ChainId.MAINNET,
+      ChainId.MODE,
       {
         ...mockRoutingConfig,
         distributionPercent: 25,
@@ -689,7 +689,7 @@ describe('get best swap route', () => {
     ).toBeTruthy();
     expect(
       estimatedGasUsedQuoteToken.equalTo(
-        CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[1]!, 0)
+        CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[919]!, 0)
       )
     ).toBeTruthy();
     expect(routes).toHaveLength(3);
@@ -740,7 +740,7 @@ describe('get best swap route', () => {
       percents,
       routesWithQuotes,
       TradeType.EXACT_INPUT,
-      ChainId.MAINNET,
+      ChainId.MODE,
       { ...mockRoutingConfig, distributionPercent: 25 },
       portionProvider
     )!;
@@ -761,7 +761,7 @@ describe('get best swap route', () => {
     expect(estimatedGasUsedUSD.quotient.toString()).toEqual('10000000000000');
     expect(
       estimatedGasUsedQuoteToken.equalTo(
-        CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[1]!, 10)
+        CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[919]!, 10)
       )
     ).toBeTruthy();
     expect(routes).toHaveLength(1);
@@ -778,7 +778,7 @@ describe('get best swap route', () => {
           JSBI.multiply(JSBI.BigInt(10), JSBI.BigInt(hops))
         ),
         gasCostInUSD: CurrencyAmount.fromRawAmount(
-          DAI_MAINNET,
+          DAI_MODE,
           JSBI.multiply(JSBI.BigInt(10), JSBI.BigInt(hops))
         ),
       };
@@ -812,7 +812,7 @@ describe('get best swap route', () => {
       percents,
       routesWithQuotes,
       TradeType.EXACT_INPUT,
-      ChainId.MAINNET,
+      ChainId.MODE,
       { ...mockRoutingConfig, distributionPercent: 25 },
       portionProvider
     )!;
@@ -833,7 +833,7 @@ describe('get best swap route', () => {
     expect(estimatedGasUsedUSD.quotient.toString()).toEqual('10');
     expect(
       estimatedGasUsedQuoteToken.equalTo(
-        CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[1]!, 10)
+        CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[919]!, 10)
       )
     ).toBeTruthy();
     expect(routes).toHaveLength(1);

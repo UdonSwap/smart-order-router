@@ -104,7 +104,7 @@ export abstract class BaseCommand extends Command {
     chainId: flags.integer({
       char: 'c',
       required: false,
-      default: ChainId.MAINNET,
+      default: ChainId.MODE,
       options: CHAIN_IDS_LIST,
     }),
     tokenListURI: flags.string({
@@ -325,7 +325,7 @@ export abstract class BaseCommand extends Command {
         provider,
         portionProvider,
         tenderlySimulator,
-        ethEstimateGasSimulator
+        // ethEstimateGasSimulator
       );
 
       const router = new AlphaRouter({
@@ -386,7 +386,7 @@ export abstract class BaseCommand extends Command {
         Math.min(estimatedGasUsedUSD.currency.decimals, 6)
       )}`
     );
-    if(estimatedGasUsedGasToken) {
+    if (estimatedGasUsedGasToken) {
       this.logger.info(
         `Gas Used gas token: ${estimatedGasUsedGasToken.toFixed(
           Math.min(estimatedGasUsedGasToken.currency.decimals, 6)

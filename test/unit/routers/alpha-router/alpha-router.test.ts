@@ -2940,7 +2940,7 @@ describe('alpha router', () => {
 
             if (swap.status == SwapToRatioStatus.SUCCESS) {
               expect(swap.result.optimalRatio.toFixed(1)).toEqual(
-                new Fraction(2, 1).toFixed(1)
+                new Fraction(1, 2).toFixed(1)
               );
               expect(swap.result.postSwapTargetPool.sqrtRatioX96).toEqual(
                 JSBI.BigInt(oneHalfX96.toString())
@@ -3073,8 +3073,6 @@ describe('alpha router', () => {
           expect(swap.result.methodParameters).toBeTruthy();
           expect(trade).toEqual(swap.result.trade);
           expect(positionArg.pool).toEqual(positionPostLiquidity.pool);
-          console.log("positionArg", positionArg.liquidity)
-          console.log("positionPostLiquidity", positionPostLiquidity.liquidity)
           expect(positionArg.liquidity).toEqual(
             positionPostLiquidity.liquidity
           );

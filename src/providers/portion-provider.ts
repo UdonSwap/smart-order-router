@@ -129,7 +129,7 @@ export class PortionProvider implements IPortionProvider {
       case TradeType.EXACT_INPUT:
         if (
           swapConfigUniversalRouter.fee &&
-          swapConfigUniversalRouter.fee.fee.greaterThan(ZERO)
+          swapConfigUniversalRouter.fee.fee.greaterThan(ZERO.toString())
         ) {
           return tokenOutAmount.multiply(swapConfigUniversalRouter.fee.fee);
         }

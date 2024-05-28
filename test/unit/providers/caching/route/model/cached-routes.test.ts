@@ -1,7 +1,7 @@
 import { Protocol } from 'udonswap-router';
 import { ChainId, TradeType } from 'udonswap-core';
 import { V3RouteWithValidQuote } from '../../../../../../build/main';
-import { CachedRoutes, DAI_MAINNET as DAI, USDC_MODE as USDC } from '../../../../../../src';
+import { CachedRoutes, DAI_MODE as DAI, USDC_MODE as USDC } from '../../../../../../src';
 import { getV3RouteWithValidQuoteStub } from '../test-util/mocked-dependencies';
 
 describe('CachedRoutes', () => {
@@ -16,7 +16,7 @@ describe('CachedRoutes', () => {
     it('creates the instance', () => {
       const cachedRoutes = CachedRoutes.fromRoutesWithValidQuotes(
         [v3RouteWithValidQuote],
-        ChainId.MAINNET,
+        ChainId.MODE,
         USDC,
         DAI,
         [Protocol.V2, Protocol.V3, Protocol.MIXED],
@@ -31,7 +31,7 @@ describe('CachedRoutes', () => {
     it('returns undefined when routes are empty', () => {
       const cachedRoutes = CachedRoutes.fromRoutesWithValidQuotes(
         [],
-        ChainId.MAINNET,
+        ChainId.MODE,
         USDC,
         DAI,
         [Protocol.V2, Protocol.V3, Protocol.MIXED],
@@ -50,7 +50,7 @@ describe('CachedRoutes', () => {
     beforeEach(() => {
       cachedRoutes = CachedRoutes.fromRoutesWithValidQuotes(
         [v3RouteWithValidQuote],
-        ChainId.MAINNET,
+        ChainId.MODE,
         USDC,
         DAI,
         [Protocol.V2, Protocol.V3, Protocol.MIXED],

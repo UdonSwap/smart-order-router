@@ -17,7 +17,7 @@ describe('caching token list provider', () => {
     mockCache = sinon.createStubInstance(NodeJSCache);
 
     cachingTokenListProvider = await CachingTokenListProvider.fromTokenList(
-      ChainId.MAINNET,
+      ChainId.MODE,
       mockTokenList,
       mockCache
     );
@@ -38,7 +38,7 @@ describe('caching token list provider', () => {
     test('fails to get token that is in token list but not on the selected chain', async () => {
       const nonMainnetToken = _.filter(
         mockTokenList.tokens,
-        (token) => token.chainId != ChainId.MAINNET
+        (token) => token.chainId != ChainId.MODE
       )![0];
       const address = nonMainnetToken!.address;
 

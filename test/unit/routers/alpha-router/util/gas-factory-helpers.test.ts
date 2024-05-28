@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 import {
   CurrencyAmount,
-  DAI_MAINNET,
+  DAI_MODE,
   SimulationStatus,
   SwapRoute,
   USDC_MODE,
@@ -13,10 +13,10 @@ import {
 } from '../../../../../src';
 import {
   calculateGasUsed,
-  getArbitrumBytes,
+  // getArbitrumBytes,
   getHighestLiquidityV3NativePool,
   getHighestLiquidityV3USDPool,
-  getL2ToL1GasUsed,
+  // getL2ToL1GasUsed,
 } from '../../../../../src/util/gas-factory-helpers';
 import {
   buildMockV3PoolAccessor,
@@ -28,11 +28,11 @@ import {
 } from '../../../../test-util/mock-data';
 import { BigNumber } from 'ethers';
 import { getMockedV2PoolProvider, getMockedV3PoolProvider } from '../gas-models/test-util/mocked-dependencies';
-import { ChainId, TradeType } from 'udonswap-core';
+import { TradeType } from 'udonswap-core';
 import { Trade } from 'udonswap-router';
 import { Route } from 'udonswap-v3';
 import { getPools } from '../gas-models/test-util/helpers';
-import { BaseProvider } from '@ethersproject/providers';
+// import { BaseProvider } from '@ethersproject/providers';
 
 const mockUSDCNativePools = [
   USDC_WETH_LOW_LIQ_LOW,
@@ -46,7 +46,7 @@ const mockGasTokenNativePools = [
 
 describe('gas factory helpers tests', () => {
   const gasPriceWei = BigNumber.from(1000000000); // 1 gwei
-  const chainId = 1;
+  const chainId = 919;
   let mockPoolProvider: sinon.SinonStubbedInstance<V3PoolProvider>;
 
   beforeEach(() => {
@@ -84,7 +84,7 @@ describe('gas factory helpers tests', () => {
   describe('getHighestLiquidityV3USDPool', () => {
     it('should return the highest usd liquidity pool', async () => {
       const usdPool = await getHighestLiquidityV3USDPool(
-        1,
+        919,
         mockPoolProvider as unknown as V3PoolProvider
       );
       expect(usdPool).toStrictEqual(USDC_WETH_HIGH_LIQ_HIGH);
@@ -97,11 +97,11 @@ describe('gas factory helpers tests', () => {
       );
       await expect(
         getHighestLiquidityV3USDPool(
-          1,
+          919,
           mockPoolProvider as unknown as V3PoolProvider
         )
       ).rejects.toThrowError(
-        `Could not find a USD/${WRAPPED_NATIVE_CURRENCY[1].symbol} pool for computing gas costs.`
+        `Could not find a USD/${WRAPPED_NATIVE_CURRENCY[919].symbol} pool for computing gas costs.`
       );
     });
   });
@@ -110,8 +110,8 @@ describe('gas factory helpers tests', () => {
     it('should return correct estimated gas values and quoteGasAdjusted', async () => {
       const mockPoolProvider = getMockedV3PoolProvider();
 
-      const amountToken = WRAPPED_NATIVE_CURRENCY[1];
-      const quoteToken = DAI_MAINNET;
+      const amountToken = WRAPPED_NATIVE_CURRENCY[919];
+      const quoteToken = DAI_MODE;
       const gasToken = USDC_MODE;
       const providerConfig = {
         gasToken
@@ -125,14 +125,14 @@ describe('gas factory helpers tests', () => {
         gasToken
       );
 
-      const v3GasModel = await (new V3HeuristicGasModelFactory(sinon.createStubInstance(BaseProvider))).buildGasModel({
+      const v3GasModel = await (new V3HeuristicGasModelFactory()).buildGasModel({
         chainId: chainId,
         gasPriceWei,
         pools,
         amountToken,
         quoteToken,
         v2poolProvider: getMockedV2PoolProvider(),
-        l2GasDataProvider: undefined,
+        // l2GasDataProvider: undefined,
         providerConfig
       });
 
@@ -184,7 +184,7 @@ describe('gas factory helpers tests', () => {
         estimatedGasUsedUSD,
         estimatedGasUsedGasToken,
         quoteGasAdjusted
-      } = await calculateGasUsed(chainId, mockSwapRoute, simulatedGasUsed, getMockedV2PoolProvider(), mockPoolProvider, sinon.createStubInstance(BaseProvider), providerConfig);
+      } = await calculateGasUsed(chainId, mockSwapRoute, simulatedGasUsed, getMockedV2PoolProvider(), mockPoolProvider, providerConfig);
 
       expect(estimatedGasUsedQuoteToken.currency.equals(quoteToken)).toBe(true);
       expect(estimatedGasUsedQuoteToken.toExact()).not.toEqual('0');
@@ -198,7 +198,7 @@ describe('gas factory helpers tests', () => {
         estimatedGasUsedUSD: estimatedGasUsedUSDArb,
         estimatedGasUsedGasToken: estimatedGasUsedGasTokenArb,
         quoteGasAdjusted: quoteGasAdjustedArb
-      } = await calculateGasUsed(chainId, mockSwapRoute, simulatedGasUsed, getMockedV2PoolProvider(), mockPoolProvider, sinon.createStubInstance(BaseProvider), providerConfig);
+      } = await calculateGasUsed(chainId, mockSwapRoute, simulatedGasUsed, getMockedV2PoolProvider(), mockPoolProvider, providerConfig);
 
       // Arbitrum gas data should not affect the quote gas or USD amounts
       expect(estimatedGasUsedQuoteTokenArb.currency.equals(quoteToken)).toBe(true);
@@ -208,14 +208,14 @@ describe('gas factory helpers tests', () => {
     })
   })
 
-  describe('getL2ToL1GasUsed', () => {
-    for (const chainId of [ChainId.ARBITRUM_ONE]) {
-      it('should return the gas costs for the compressed bytes', async () => {
-        const calldata = '0x24856bc30000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000020b000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000de0b6b3a7640000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000de0b6b3a764000000000000000000000000000000000000000000000000003fc10e65473c5939c700000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002b82af49447d8a07e3bd95bd0d56f35241523fbab1000bb8912ce59144191c1204e64559fe8253a0e49e6548000000000000000000000000000000000000000000';
-        const compressedBytes = getArbitrumBytes(calldata);
-        const gasUsed = getL2ToL1GasUsed(calldata, chainId);
-        expect(gasUsed).toEqual(compressedBytes.mul(16));
-      });
-    }
-  })
+  // describe('getL2ToL1GasUsed', () => {
+  //   for (const chainId of [ChainId.ARBITRUM_ONE]) {
+  //     it('should return the gas costs for the compressed bytes', async () => {
+  //       const calldata = '0x24856bc30000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000020b000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000de0b6b3a7640000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000de0b6b3a764000000000000000000000000000000000000000000000000003fc10e65473c5939c700000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002b82af49447d8a07e3bd95bd0d56f35241523fbab1000bb8912ce59144191c1204e64559fe8253a0e49e6548000000000000000000000000000000000000000000';
+  //       const compressedBytes = getArbitrumBytes(calldata);
+  //       const gasUsed = getL2ToL1GasUsed(calldata, chainId);
+  //       expect(gasUsed).toEqual(compressedBytes.mul(16));
+  //     });
+  //   }
+  // })
 });

@@ -5,7 +5,7 @@ import { Pool } from 'udonswap-v3';
 import { BigNumber } from 'ethers';
 import _ from 'lodash';
 import {
-  DAI_MAINNET,
+  DAI_MODE,
   MixedRoute,
   MixedRouteWithValidQuote,
   USDC_MODE,
@@ -40,7 +40,7 @@ import { getPools } from './test-util/helpers';
 
 describe('mixed route gas model tests', () => {
   const gasPriceWei = BigNumber.from(1000000000);
-  const chainId = 1;
+  const chainId = 919;
   const mixedGasModelFactory = new MixedRouteHeuristicGasModelFactory();
 
   const mockedV3PoolProvider = getMockedV3PoolProvider();
@@ -82,7 +82,7 @@ describe('mixed route gas model tests', () => {
 
   it('returns correct gas estimate for a mixed route | hops: 2 | ticks 1', async () => {
     const amountToken = USDC_MODE;
-    const quoteToken = DAI_MAINNET;
+    const quoteToken = DAI_MODE;
 
     const pools = await getPools(
       amountToken,
@@ -113,8 +113,8 @@ describe('mixed route gas model tests', () => {
   });
 
   it('applies overhead when token in is native eth', async () => {
-    const amountToken = ETHER.onChain(1) as Currency;
-    const quoteToken = DAI_MAINNET;
+    const amountToken = ETHER.onChain(919) as Currency;
+    const quoteToken = DAI_MODE;
 
     const pools = await getPools(
       amountToken.wrapped,
@@ -145,10 +145,10 @@ describe('mixed route gas model tests', () => {
       mixedRouteGasModel: mixedGasModel,
       route: new MixedRoute(
         [USDC_WETH_MEDIUM, USDC_DAI],
-        WRAPPED_NATIVE_CURRENCY[1],
-        DAI_MAINNET
+        WRAPPED_NATIVE_CURRENCY[919],
+        DAI_MODE
       ),
-      quoteToken: DAI_MAINNET,
+      quoteToken: DAI_MODE,
       initializedTicksCrossedList: [1],
     });
 
@@ -162,7 +162,7 @@ describe('mixed route gas model tests', () => {
 
   it('applies overhead when token out is native eth', async () => {
     const amountToken = USDC_MODE;
-    const quoteToken = ETHER.onChain(1) as Currency;
+    const quoteToken = ETHER.onChain(919) as Currency;
 
     const pools = await getPools(
       amountToken,
@@ -194,9 +194,9 @@ describe('mixed route gas model tests', () => {
       route: new MixedRoute(
         [USDC_DAI_MEDIUM, WETH_DAI],
         USDC_MODE,
-        WRAPPED_NATIVE_CURRENCY[1]
+        WRAPPED_NATIVE_CURRENCY[919]
       ),
-      quoteToken: WRAPPED_NATIVE_CURRENCY[1],
+      quoteToken: WRAPPED_NATIVE_CURRENCY[919],
       initializedTicksCrossedList: [1],
     });
 

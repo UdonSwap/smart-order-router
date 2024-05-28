@@ -14,7 +14,7 @@ describe('TokenFeeFetcher', () => {
   let tokenFeeFetcher: ITokenFeeFetcher;
 
   beforeAll(async () => {
-    const chain = ChainId.MAINNET;
+    const chain = ChainId.MODE;
     const chainProvider = ID_TO_PROVIDER(chain);
     const provider = new JsonRpcProvider(chainProvider, chain);
 
@@ -22,8 +22,8 @@ describe('TokenFeeFetcher', () => {
   });
 
   it('Fetch WETH and BITBOY, should only return BITBOY', async () => {
-    const tokenFeeMap = await tokenFeeFetcher.fetchFees([WETH9[ChainId.MAINNET]!.address, BITBOY.address])
-    expect(tokenFeeMap).not.toContain(WETH9[ChainId.MAINNET]!.address)
+    const tokenFeeMap = await tokenFeeFetcher.fetchFees([WETH9[ChainId.MODE]!.address, BITBOY.address])
+    expect(tokenFeeMap).not.toContain(WETH9[ChainId.MODE]!.address)
     expect(tokenFeeMap[BITBOY.address]).toBeDefined()
     expect(tokenFeeMap[BITBOY.address]?.buyFeeBps).toEqual(BITBOY.buyFeeBps)
     expect(tokenFeeMap[BITBOY.address]?.sellFeeBps).toEqual(BITBOY.sellFeeBps)

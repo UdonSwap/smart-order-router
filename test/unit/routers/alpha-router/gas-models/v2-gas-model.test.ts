@@ -1,6 +1,6 @@
 import { Currency, ETHER } from 'udonswap-core';
 import { BigNumber } from 'ethers';
-import { DAI_MAINNET, USDC_MODE, V2Route } from '../../../../../src';
+import { DAI_MODE, USDC_MODE, V2Route } from '../../../../../src';
 import {
   BASE_SWAP_COST,
   COST_PER_EXTRA_HOP,
@@ -13,18 +13,18 @@ import {
 import { WETH_DAI } from '../../../../test-util/mock-data';
 import { getV2RouteWithValidQuoteStub } from '../../../providers/caching/route/test-util/mocked-dependencies';
 import { getMockedV2PoolProvider } from './test-util/mocked-dependencies';
-import sinon from 'sinon';
-import { BaseProvider } from '@ethersproject/providers';
+// import sinon from 'sinon';
+// import { BaseProvider } from '@ethersproject/providers';
 
 describe('v2 gas model tests', () => {
   const gasPriceWei = BigNumber.from(1000000000);
-  const chainId = 1;
-  const v2GasModelFactory = new V2HeuristicGasModelFactory(sinon.createStubInstance(BaseProvider));
+  const chainId = 919;
+  const v2GasModelFactory = new V2HeuristicGasModelFactory();
 
   const mockedV2PoolProvider = getMockedV2PoolProvider();
 
   it('returns correct gas estimate for a v2 route | hops: 1', async () => {
-    const quoteToken = DAI_MAINNET;
+    const quoteToken = DAI_MODE;
 
     const v2GasModel = await v2GasModelFactory.buildGasModel({
       chainId: chainId,
@@ -49,8 +49,8 @@ describe('v2 gas model tests', () => {
   });
 
   it('applies overhead when token in is native eth', async () => {
-    const amountToken = ETHER.onChain(1) as Currency;
-    const quoteToken = DAI_MAINNET;
+    const amountToken = ETHER.onChain(919) as Currency;
+    const quoteToken = DAI_MODE;
 
     const v2GasModel = await v2GasModelFactory.buildGasModel({
       chainId: chainId,
@@ -91,7 +91,7 @@ describe('v2 gas model tests', () => {
 
   it('returns gas estimate for specified gasToken', async () => {
     // copied from 'returns correct gas estimate for a v2 route | hops: 1'
-    const quoteToken = DAI_MAINNET;
+    const quoteToken = DAI_MODE;
     const gasToken = USDC_MODE
 
     const v2GasModel = await v2GasModelFactory.buildGasModel({

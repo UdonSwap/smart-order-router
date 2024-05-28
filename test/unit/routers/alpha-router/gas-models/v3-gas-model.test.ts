@@ -2,8 +2,8 @@ import { Currency, CurrencyAmount, ETHER } from 'udonswap-core';
 import { BigNumber } from 'ethers';
 import _ from 'lodash';
 import {
-  DAI_MAINNET,
-  UNI_MAINNET,
+  DAI_MODE,
+  // UNI_MAINNET,
   USDC_MODE,
   V3HeuristicGasModelFactory,
   V3Route,
@@ -31,20 +31,20 @@ import {
   getMockedV3PoolProvider,
 } from './test-util/mocked-dependencies';
 import { getPools } from './test-util/helpers';
-import sinon from 'sinon';
-import { BaseProvider } from '@ethersproject/providers';
+// import sinon from 'sinon';
+// import { BaseProvider } from '@ethersproject/providers';
 
 describe('v3 gas model tests', () => {
   const gasPriceWei = BigNumber.from(1000000000);
-  const chainId = 1;
-  const v3GasModelFactory = new V3HeuristicGasModelFactory(sinon.createStubInstance(BaseProvider));
+  const chainId = 919;
+  const v3GasModelFactory = new V3HeuristicGasModelFactory();
 
   const mockedV3PoolProvider = getMockedV3PoolProvider();
   const mockedV2PoolProvider = getMockedV2PoolProvider();
 
   it('returns correct gas estimate for a v3 route | hops: 1 | ticks 1', async () => {
     const amountToken = USDC_MODE;
-    const quoteToken = DAI_MAINNET;
+    const quoteToken = DAI_MODE;
 
     const pools = await getPools(
       amountToken,
@@ -89,7 +89,7 @@ describe('v3 gas model tests', () => {
 
   it('returns correct gas estimate for a v3 route | hops: 2 | ticks 1', async () => {
     const amountToken = USDC_MODE;
-    const quoteToken = DAI_MAINNET;
+    const quoteToken = DAI_MODE;
 
     const pools = await getPools(
       amountToken,
@@ -114,7 +114,7 @@ describe('v3 gas model tests', () => {
       route: new V3Route(
         [USDC_USDT_MEDIUM, DAI_USDT_LOW],
         USDC_MODE,
-        DAI_MAINNET
+        DAI_MODE
       ),
       sqrtPriceX96AfterList: [BigNumber.from(100), BigNumber.from(100)],
       initializedTicksCrossedList: [0, 1],
@@ -141,7 +141,7 @@ describe('v3 gas model tests', () => {
   });
 
   it('applies overhead when token in is native eth', async () => {
-    const amountToken = ETHER.onChain(1) as Currency;
+    const amountToken = ETHER.onChain(919) as Currency;
     const quoteToken = USDC_MODE;
 
     const pools = await getPools(
@@ -173,7 +173,7 @@ describe('v3 gas model tests', () => {
       gasModel: v3GasModel,
       route: new V3Route(
         [USDC_WETH_MEDIUM],
-        WRAPPED_NATIVE_CURRENCY[1],
+        WRAPPED_NATIVE_CURRENCY[919],
         USDC_MODE
       ),
       quoteToken: USDC_MODE,
@@ -204,7 +204,7 @@ describe('v3 gas model tests', () => {
 
   it('applies overhead when token out is native eth', async () => {
     const amountToken = USDC_MODE;
-    const quoteToken = ETHER.onChain(1) as Currency;
+    const quoteToken = ETHER.onChain(919) as Currency;
 
     const pools = await getPools(
       amountToken,
@@ -236,9 +236,9 @@ describe('v3 gas model tests', () => {
       route: new V3Route(
         [USDC_WETH_MEDIUM],
         USDC_MODE,
-        WRAPPED_NATIVE_CURRENCY[1]
+        WRAPPED_NATIVE_CURRENCY[919]
       ),
-      quoteToken: WRAPPED_NATIVE_CURRENCY[1],
+      quoteToken: WRAPPED_NATIVE_CURRENCY[919],
       initializedTicksCrossedList: [1],
     });
 
@@ -268,7 +268,7 @@ describe('v3 gas model tests', () => {
   //   // copied from `returns correct gas estimate for a v3 route | hops: 1 | ticks 1` test above
 
   //   const amountToken = USDC_MODE;
-  //   const quoteToken = DAI_MAINNET;
+  //   const quoteToken = DAI_MODE;
   //   const gasToken = UNI_MAINNET
   //   const providerConfig = {
   //     gasToken
@@ -324,8 +324,8 @@ describe('v3 gas model tests', () => {
   it('if gasToken == quoteToken returned values are equal', async () => {
     // copied from `returns correct gas estimate for a v3 route | hops: 1 | ticks 1` test above
     const amountToken = USDC_MODE;
-    const quoteToken = DAI_MAINNET;
-    const gasToken = DAI_MAINNET // same as quoteToken
+    const quoteToken = DAI_MODE;
+    const gasToken = DAI_MODE // same as quoteToken
     const providerConfig = {
       gasToken
     }

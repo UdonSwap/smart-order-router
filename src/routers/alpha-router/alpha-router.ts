@@ -7,7 +7,7 @@ import {
   Currency,
   Fraction,
   Token,
-  TradeType,
+  TradeType
 } from 'udonswap-core';
 import { TokenList } from '@uniswap/token-lists';
 import { Pool, Position, SqrtPriceMath, TickMath } from 'udonswap-v3';
@@ -957,7 +957,7 @@ export class AlphaRouter
           position.pool.token1,
           position.pool.fee,
           targetPoolPriceUpdate,
-          position.pool.liquidity,
+          position.pool.liquidity.toString(),
           TickMath.getTickAtSqrtRatio(targetPoolPriceUpdate),
           position.pool.tickDataProvider
         );
@@ -1048,7 +1048,7 @@ export class AlphaRouter
         tokenOutHasFot,
         swapConfig
       );
-      if (portionAmount && portionAmount.greaterThan(ZERO)) {
+      if (portionAmount && portionAmount.greaterThan(ZERO.toString())) {
         // In case of exact out swap, before we route, we need to make sure that the
         // token out amount accounts for flat portion, and token in amount after the best swap route contains the token in equivalent of portion.
         // In other words, in case a pool's LP fee bps is lower than the portion bps (0.01%/0.05% for v3), a pool can go insolvency.
@@ -2362,13 +2362,13 @@ export class AlphaRouter
         upperSqrtRatioX96,
         precision,
         true
-      ),
+      ).toString(),
       SqrtPriceMath.getAmount1Delta(
         sqrtRatioX96,
         lowerSqrtRatioX96,
         precision,
         true
-      )
+      ).toString()
     );
     if (!zeroForOne) optimalRatio = optimalRatio.invert();
     return optimalRatio;
@@ -2407,7 +2407,7 @@ export class AlphaRouter
     const denominatorAbs = JSBI.lessThan(fraction.denominator, JSBI.BigInt(0))
       ? JSBI.unaryMinus(fraction.denominator)
       : fraction.denominator;
-    return new Fraction(numeratorAbs, denominatorAbs);
+    return new Fraction(numeratorAbs.toString(), denominatorAbs.toString());
   }
 
   private getBlockNumberPromise(): number | Promise<number> {
