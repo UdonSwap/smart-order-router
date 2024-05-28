@@ -345,7 +345,7 @@ export const mockTokenList: TokenList = {
       name: 'USDC_MODE',
       address: '0x22198B46C84Cf43831E65D32a9403A194D617a61',
       symbol: 'USDC',
-      decimals: 6,
+      decimals: 8,
       chainId: 919,
       logoURI: '',
     },
@@ -409,12 +409,13 @@ export const BULLET_WITHOUT_TAX = new Token(
   'Bullet Game Betting Token',
   false
 )
+// try with pix
 export const BULLET = new Token(
   ChainId.MODE,
-  '0x8ef32a03784c8Fd63bBf027251b9620865bD54B6',
-  8,
-  'BULLET',
-  'Bullet Game Betting Token',
+  '0x4Bd692dbA81074BC2FA9abDcffE7324680d7A1c1',//'0x8ef32a03784c8Fd63bBf027251b9620865bD54B6',
+  18,
+  'PIX',
+  'Pixar Peeps',
   false,
   BigNumber.from(500),
   BigNumber.from(500)
@@ -438,12 +439,13 @@ export const STETH = new Token(
   BigNumber.from(0),
   BigNumber.from(0)
 )
+//need to change here (try with lamp)
 export const BITBOY = new Token(
   ChainId.MODE,
-  '0x4a500ed6add5994569e66426588168705fcc9767',
-  8,
-  'BITBOY',
-  'BitBoy Fund',
+  '0xF7ca2401709BC01Eba07d46c8d59e865C983e1AC',//'0x4a500ed6add5994569e66426588168705fcc9767',
+  18,
+  'LAMP',
+  'Pixar Lamps',
   false,
   BigNumber.from(300),
   BigNumber.from(300)

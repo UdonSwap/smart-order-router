@@ -65,6 +65,8 @@ describe('CachedRoute', () => {
     it('is correctly returned when using V3Route', () => {
       const route = new V3Route([USDC_DAI_MEDIUM], USDC_MODE, DAI_MODE);
       const cachedRoute = new CachedRoute({ route: route, percent: 100 });
+      console.log('dekh le mera full chached Route.........====>>>>>>', cachedRoute);
+      console.log('dekh le mera id.........====>>>>>>', cachedRoute.routeId);
 
       expect(cachedRoute.routeId).toEqual(610157808);
     });

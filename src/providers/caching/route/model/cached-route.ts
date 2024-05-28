@@ -1,5 +1,5 @@
-import { Protocol } from 'udonswap-router';
 import { Token } from 'udonswap-core';
+import { Protocol } from 'udonswap-router';
 import { Pool } from 'udonswap-v3';
 
 import { MixedRoute, V2Route, V3Route } from '../../../../routers';
