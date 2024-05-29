@@ -1513,17 +1513,17 @@ export class AlphaRouter
         ),
         `Starting simulation`
       );
-      // const fromAddress = swapConfig.simulate.fromAddress;
+      const fromAddress = swapConfig.simulate.fromAddress;
       const beforeSimulate = Date.now();
       const swapRouteWithSimulation = await this.simulator.simulate(
-        // fromAddress,
-        // swapConfig,
-        swapRoute
-        // amount,
+        fromAddress,
+        swapConfig,
+        swapRoute,
+        amount,
         // Quote will be in WETH even if quoteCurrency is ETH
         // So we init a new CurrencyAmount object here
-        // CurrencyAmount.fromRawAmount(quoteCurrency, quote.quotient.toString()),
-        // providerConfig
+        CurrencyAmount.fromRawAmount(quoteCurrency, quote.quotient.toString()),
+        providerConfig
       );
       metric.putMetric(
         'SimulateTransaction',

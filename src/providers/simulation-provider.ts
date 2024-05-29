@@ -57,44 +57,44 @@ export abstract class Simulator {
   }
 
   public async simulate(
-    // fromAddress: string,
-    // swapOptions: SwapOptions,
+    fromAddress: string,
+    swapOptions: SwapOptions,
     swapRoute: SwapRoute,
-    // amount: CurrencyAmount,
-    // quote: CurrencyAmount,
-    // providerConfig?: GasModelProviderConfig
+    amount: CurrencyAmount,
+    quote: CurrencyAmount,
+    providerConfig?: GasModelProviderConfig
   ): Promise<SwapRoute> {
     // const neededBalance =
     //   swapRoute.trade.tradeType == TradeType.EXACT_INPUT ? amount : quote;
-    // if (
-    //   (neededBalance.currency.isNative && this.chainId == ChainId.MAINNET) ||
-    //   (await this.userHasSufficientBalance(
-    //     fromAddress,
-    //     swapRoute.trade.tradeType,
-    //     amount,
-    //     quote
-    //   ))
-    // ) {
-    //   log.info(
-    //     'User has sufficient balance to simulate. Simulating transaction.'
-    //   );
-    //   try {
-    //     return this.simulateTransaction(fromAddress, swapOptions, swapRoute, providerConfig);
-    //   } catch (e) {
-    //     log.error({ e }, 'Error simulating transaction');
-    //     return {
-    //       ...swapRoute,
-    //       simulationStatus: SimulationStatus.Failed,
-    //     };
-    //   }
-    // } else {
-    log.error('User does not have sufficient balance to simulate.');
-    return {
-      ...swapRoute,
-      simulationStatus: SimulationStatus.InsufficientBalance,
-    };
+    if (
+      // (neededBalance.currency.isNative && this.chainId == ChainId.MAINNET) ||
+      (await this.userHasSufficientBalance(
+        fromAddress,
+        swapRoute.trade.tradeType,
+        amount,
+        quote
+      ))
+    ) {
+      log.info(
+        'User has sufficient balance to simulate. Simulating transaction.'
+      );
+      try {
+        return this.simulateTransaction(fromAddress, swapOptions, swapRoute, providerConfig);
+      } catch (e) {
+        log.error({ e }, 'Error simulating transaction');
+        return {
+          ...swapRoute,
+          simulationStatus: SimulationStatus.Failed,
+        };
+      }
+    } else {
+      log.error('User does not have sufficient balance to simulate.');
+      return {
+        ...swapRoute,
+        simulationStatus: SimulationStatus.InsufficientBalance,
+      };
+    }
   }
-  // }
 
   protected abstract simulateTransaction(
     fromAddress: string,

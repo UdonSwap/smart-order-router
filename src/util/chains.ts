@@ -35,7 +35,6 @@ export const SUPPORTED_CHAINS: ChainId[] = [
 //   ChainId.BASE,
 //   ChainId.BNB,
 //   ChainId.AVALANCHE,
-//   ChainId.MODE,
 // ];
 
 // export const HAS_L1_FEE = [

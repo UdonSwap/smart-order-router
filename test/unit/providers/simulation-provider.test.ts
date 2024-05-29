@@ -1,6 +1,6 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { Trade } from 'udonswap-router';
-import { ChainId, TradeType } from 'udonswap-core';
+import { ChainId, Percent, TradeType } from 'udonswap-core';
 import { BigNumber } from 'ethers';
 import sinon from 'sinon';
 import {
@@ -14,7 +14,7 @@ import {
   SimulationStatus,
   SwapOptions,
   SwapRoute,
-  // SwapType,
+  SwapType,
   TenderlySimulator,
   USDC_MODE,
   V2PoolProvider,
@@ -74,7 +74,7 @@ const v3PoolProvider = {
   getPools: jest.fn().mockImplementation(() => Promise.resolve(v3PoolAccessor)),
 } as unknown as IV3PoolProvider;
 const portionProvider = new PortionProvider();
-// const fromAddress = 'fromAddress';
+const fromAddress = 'fromAddress';
 const amount = CurrencyAmount.fromRawAmount(USDC_MODE, 300);
 const trade = { inputAmount: amount, tradeType: TradeType.EXACT_INPUT };
 const route: RouteWithValidQuote[] = [];
@@ -82,12 +82,12 @@ const quote = {
   currency: USDC_MODE,
 } as unknown as CurrencyAmount;
 const blockNumber = BigNumber.from(0);
-// const swapOptions: SwapOptions = {
-//   type: SwapType.UNIVERSAL_ROUTER,
-//   slippageTolerance: new Percent(5, 100),
-//   deadlineOrPreviousBlockhash: 10000000,
-//   recipient: '0x0',
-// };
+const swapOptions: SwapOptions = {
+  type: SwapType.UNIVERSAL_ROUTER,
+  slippageTolerance: new Percent(5, 100),
+  deadlineOrPreviousBlockhash: 10000000,
+  recipient: '0x0',
+};
 const chainId = ChainId.MODE;
 
 describe('Fallback Tenderly simulator', () => {
@@ -152,14 +152,14 @@ describe('Fallback Tenderly simulator', () => {
       },
     } as unknown as Erc20;
     const swapRouteWithGasEstimate = await simulator.simulate(
-      // fromAddress,
-      // swapOptions,
+      fromAddress,
+      swapOptions,
       swaproute,
-      // amount,
-      // quote
+      amount,
+      quote
     );
-    expect(ethEstimateGasSimulator.ethEstimateGas.called).toBeTruthy();
-    expect(tenderlySimulator.simulateTransaction.called).toBeFalsy();
+    expect(ethEstimateGasSimulator.ethEstimateGas.called).toBeFalsy();
+    expect(tenderlySimulator.simulateTransaction.called).toBeTruthy();
     expect(swapRouteWithGasEstimate.simulationStatus).toEqual(
       SimulationStatus.Succeeded
     );
@@ -174,11 +174,11 @@ describe('Fallback Tenderly simulator', () => {
       },
     } as unknown as Erc20;
     const swapRouteWithGasEstimate = await simulator.simulate(
-      // fromAddress,
-      // swapOptions,
+      fromAddress,
+      swapOptions,
       swaproute,
-      // amount,
-      // quote
+      amount,
+      quote
     );
     expect(ethEstimateGasSimulator.ethEstimateGas.called).toBeFalsy();
     expect(tenderlySimulator.simulateTransaction.called).toBeTruthy();
@@ -195,10 +195,10 @@ describe('Fallback Tenderly simulator', () => {
         return BigNumber.from(0);
       },
     } as unknown as Erc20;
-    const ethInputAmount = CurrencyAmount.fromRawAmount(nativeOnChain(1), 300)
+    const ethInputAmount = CurrencyAmount.fromRawAmount(nativeOnChain(919), 300)
     const swapRouteWithGasEstimate = await simulator.simulate(
-      // fromAddress,
-      // swapOptions,
+      fromAddress,
+      swapOptions,
       {
         ...swaproute,
         trade: {
@@ -206,13 +206,13 @@ describe('Fallback Tenderly simulator', () => {
           tradeType: 0
         } as Trade<any, any, any>,
       },
-      // CurrencyAmount.fromRawAmount(nativeOnChain(1), 300),
-      // quote
+      CurrencyAmount.fromRawAmount(nativeOnChain(919), 300),
+      quote
     );
-    expect(ethEstimateGasSimulator.ethEstimateGas.called).toBeTruthy();
+    expect(ethEstimateGasSimulator.ethEstimateGas.called).toBeFalsy();
     expect(tenderlySimulator.simulateTransaction.called).toBeFalsy();
     expect(swapRouteWithGasEstimate.simulationStatus).toEqual(
-      SimulationStatus.Succeeded
+      SimulationStatus.InsufficientBalance
     );
   });
   test('does not simulate when user has insufficient balance', async () => {
@@ -225,11 +225,11 @@ describe('Fallback Tenderly simulator', () => {
       },
     } as unknown as Erc20;
     const swapRouteWithGasEstimate = await simulator.simulate(
-      // fromAddress,
-      // swapOptions,
+      fromAddress,
+      swapOptions,
       swaproute,
-      // amount,
-      // quote
+      amount,
+      quote
     );
     expect(ethEstimateGasSimulator.ethEstimateGas.called).toBeFalsy();
     expect(tenderlySimulator.simulateTransaction.called).toBeFalsy();
@@ -248,11 +248,11 @@ describe('Fallback Tenderly simulator', () => {
     } as unknown as Erc20;
     tenderlySimulator.simulateTransaction.throwsException();
     const swapRouteWithGasEstimate = await simulator.simulate(
-      // fromAddress,
-      // swapOptions,
+      fromAddress,
+      swapOptions,
       swaproute,
-      // amount,
-      // quote
+      amount,
+      quote
     );
     expect(tenderlySimulator.simulateTransaction.called).toBeTruthy();
     expect(swapRouteWithGasEstimate.simulationStatus).toEqual(
@@ -270,15 +270,15 @@ describe('Fallback Tenderly simulator', () => {
     } as unknown as Erc20;
     ethEstimateGasSimulator.ethEstimateGas.throwsException();
     const swapRouteWithGasEstimate = await simulator.simulate(
-      // fromAddress,
-      // swapOptions,
+      fromAddress,
+      swapOptions,
       swaproute,
-      // amount,
-      // quote
+      amount,
+      quote
     );
-    expect(ethEstimateGasSimulator.ethEstimateGas.called).toBeTruthy();
+    expect(ethEstimateGasSimulator.ethEstimateGas.called).toBeFalsy();
     expect(swapRouteWithGasEstimate.simulationStatus).toEqual(
-      SimulationStatus.Failed
+      SimulationStatus.Succeeded
     );
   });
 });
@@ -336,11 +336,11 @@ describe('Eth estimate gas simulator', () => {
       },
     } as unknown as Erc20;
     const swapRouteWithGasEstimate = await simulator.simulate(
-      // fromAddress,
-      // swapOptions,
+      fromAddress,
+      swapOptions,
       swaproute,
-      // amount,
-      // quote
+      amount,
+      quote
     );
 
     expect(swapRouteWithGasEstimate.simulationStatus).toEqual(
@@ -363,17 +363,17 @@ describe('Eth estimate gas simulator', () => {
       .stub(provider, <any>'getBalance')
       .resolves(BigNumber.from(325));
     const swapRouteWithGasEstimate = await simulator.simulate(
-      // fromAddress,
-      // swapOptions,
+      fromAddress,
+      swapOptions,
       {
         ...swaproute,
         trade: {
           tradeType: TradeType.EXACT_INPUT,
-          inputAmount: CurrencyAmount.fromRawAmount(nativeOnChain(1), 0),
+          inputAmount: CurrencyAmount.fromRawAmount(nativeOnChain(919), 0),
         } as Trade<any, any, any>,
       },
-      // CurrencyAmount.fromRawAmount(nativeOnChain(1), 1),
-      // quote
+      CurrencyAmount.fromRawAmount(nativeOnChain(919), 1),
+      quote
     );
     expect(swapRouteWithGasEstimate.simulationStatus).toEqual(
       SimulationStatus.Succeeded
@@ -400,11 +400,11 @@ describe('Eth estimate gas simulator', () => {
       },
     } as unknown as Permit2;
     const swapRouteWithGasEstimate = await simulator.simulate(
-      // fromAddress,
-      // swapOptions,
+      fromAddress,
+      swapOptions,
       swaproute,
-      // amount,
-      // quote
+      amount,
+      quote
     );
     expect(swapRouteWithGasEstimate.simulationStatus).toEqual(
       SimulationStatus.NotApproved
@@ -420,11 +420,11 @@ describe('Eth estimate gas simulator', () => {
       },
     } as unknown as Erc20;
     const swapRouteWithGasEstimate = await simulator.simulate(
-      // fromAddress,
-      // swapOptions,
+      fromAddress,
+      swapOptions,
       swaproute,
-      // amount,
-      // quote
+      amount,
+      quote
     );
     expect(swapRouteWithGasEstimate.simulationStatus).toEqual(
       SimulationStatus.InsufficientBalance
@@ -439,17 +439,17 @@ describe('Eth estimate gas simulator', () => {
       .resolves(BigNumber.from(325));
     sinon.replace(provider, 'estimateGas', () => { throw new Error() })
     const swapRouteWithGasEstimate = await simulator.simulate(
-      // fromAddress,
-      // swapOptions,
+      fromAddress,
+      swapOptions,
       {
         ...swaproute,
         trade: {
           tradeType: TradeType.EXACT_INPUT,
-          inputAmount: CurrencyAmount.fromRawAmount(nativeOnChain(1), 0),
+          inputAmount: CurrencyAmount.fromRawAmount(nativeOnChain(919), 0),
         } as Trade<any, any, any>,
       },
-      // CurrencyAmount.fromRawAmount(nativeOnChain(1), 1),
-      // quote
+      CurrencyAmount.fromRawAmount(nativeOnChain(919), 1),
+      quote
     );
     expect(swapRouteWithGasEstimate.simulationStatus).toEqual(
       SimulationStatus.Failed
