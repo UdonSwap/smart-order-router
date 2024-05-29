@@ -575,15 +575,15 @@ export const DAI_MODE = new Token(
   '0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3',
   18,
   'DAI',
-  'DAI_MODE'
+  'DAI'
 );
 
 
-export const USDC_MODE = new Token(ChainId.MODE, '0x22198B46C84Cf43831E65D32a9403A194D617a61', 8, 'USDC', 'USDC_MODE')
+export const USDC_MODE = new Token(ChainId.MODE, '0x22198B46C84Cf43831E65D32a9403A194D617a61', 8, 'USDC', 'USD Coin')
 
-export const USDT_MODE = new Token(ChainId.MODE, '0x4557D5f50828302DB39D9530F6d3648d48bEC04A', 18, 'USDT', 'USDT_MODE')
+export const USDT_MODE = new Token(ChainId.MODE, '0x4557D5f50828302DB39D9530F6d3648d48bEC04A', 18, 'USDT', 'Tether USD')
 
-export const WBTC_MODE = new Token(ChainId.MODE, "0x00D84e62a854e54Ba7289ab6506F95000Bb4B008", 8, 'WBTC', 'WBTC_MODE')
+export const WBTC_MODE = new Token(ChainId.MODE, "0x00D84e62a854e54Ba7289ab6506F95000Bb4B008", 8, 'WBTC', 'Wrapped Bitcoin')
 
 export const WETH = new Token(
   ChainId.MODE,
