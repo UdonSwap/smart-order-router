@@ -353,7 +353,7 @@ export const mockTokenList: TokenList = {
       name: 'USDT',
       address: '0x4557D5f50828302DB39D9530F6d3648d48bEC04A',
       symbol: 'USDT',
-      decimals: 6,
+      decimals: 18,
       chainId: 919,
       logoURI: '',
     },
