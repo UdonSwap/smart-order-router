@@ -79,7 +79,13 @@ describe('get candidate pools', () => {
     );
 
     mockV3SubgraphProvider.getPools.resolves(mockSubgraphPools);
-    mockV3PoolProvider.getPools.resolves(buildMockV3PoolAccessor(mockPools));
+
+    // Modify to return a promise and add logging
+    mockV3PoolProvider.getPools.callsFake(async (...args) => {
+      console.log('getPools called with:', JSON.stringify(args, null, 2));
+      return buildMockV3PoolAccessor(mockPools);
+    });
+
     mockV3PoolProvider.getPoolAddress.callsFake(
       (t1: Token, t2: Token, f: FeeAmount) => {
         return {
@@ -112,10 +118,13 @@ describe('get candidate pools', () => {
     });
 
     expect(
-      mockV3PoolProvider.getPools.calledWithExactly([
-        [USDC, WRAPPED_NATIVE_CURRENCY[919]!, FeeAmount.LOW],
-        [WRAPPED_NATIVE_CURRENCY[919]!, USDT, FeeAmount.LOW],
-      ], { blockNumber: undefined })
+      mockV3PoolProvider.getPools.calledWithExactly(
+        [
+          [USDC, WRAPPED_NATIVE_CURRENCY[919]!, FeeAmount.LOW],
+          [WRAPPED_NATIVE_CURRENCY[919]!, USDT, FeeAmount.LOW],
+        ],
+        { blockNumber: undefined }
+      )
     ).toBeTruthy();
   });
 
@@ -145,12 +154,14 @@ describe('get candidate pools', () => {
     //   ], { blockNumber: undefined })
     // ).toBeTruthy();
     expect(
-      mockV3PoolProvider.getPools.calledWithExactly([
-        [USDC, DAI, FeeAmount.LOW],
-        [USDC, DAI, FeeAmount.MEDIUM],
-      ], { blockNumber: undefined })
+      mockV3PoolProvider.getPools.calledWithExactly(
+        [
+          [USDC, DAI, FeeAmount.LOW],
+          [USDC, DAI, FeeAmount.MEDIUM],
+        ],
+        { blockNumber: undefined }
+      )
     ).toBeTruthy();
-
   });
 
   test('succeeds to get top pools involving token in or token out', async () => {
@@ -173,13 +184,14 @@ describe('get candidate pools', () => {
     });
 
     expect(
-      mockV3PoolProvider.getPools.calledWithExactly([
-        [USDC, WRAPPED_NATIVE_CURRENCY[919]!, FeeAmount.LOW],
-        [USDC, DAI, FeeAmount.LOW],   //[DAI, USDC, FeeAmount.LOW],
-      ], { blockNumber: undefined })
+      mockV3PoolProvider.getPools.calledWithExactly(
+        [
+          [USDC, WRAPPED_NATIVE_CURRENCY[919]!, FeeAmount.LOW],
+          [USDC, DAI, FeeAmount.LOW], //[DAI, USDC, FeeAmount.LOW],
+        ],
+        { blockNumber: undefined }
+      )
     ).toBeTruthy();
-
-
   });
 
   test('succeeds to get direct swap pools even if they dont exist in the subgraph', async () => {
@@ -202,7 +214,6 @@ describe('get candidate pools', () => {
     const DAI_WETH_LOW = new Pool(
       DAI,
       WRAPPED_NATIVE_CURRENCY[919]!,
-      // FeeAmount.LOW,
       FeeAmount.MEDIUM,
       encodeSqrtRatioX96(1, 1),
       10,
@@ -212,8 +223,6 @@ describe('get candidate pools', () => {
       buildMockV3PoolAccessor([...poolsOnSubgraph, DAI_WETH_LOW])
     );
 
-    // tokenIn: DAI,
-    // tokenOut: WRAPPED_NATIVE_CURRENCY[919]!, => just for try
     await getV3CandidatePools({
       tokenIn: WRAPPED_NATIVE_CURRENCY[919]!,
       tokenOut: DAI,
@@ -233,12 +242,15 @@ describe('get candidate pools', () => {
     });
 
     expect(
-      mockV3PoolProvider.getPools.calledWithExactly([
-        [DAI, WRAPPED_NATIVE_CURRENCY[919]!, FeeAmount.HIGH],
-        [DAI, WRAPPED_NATIVE_CURRENCY[919]!, FeeAmount.MEDIUM],
-        [DAI, WRAPPED_NATIVE_CURRENCY[919]!, FeeAmount.LOW],
-        [DAI, WRAPPED_NATIVE_CURRENCY[919]!, FeeAmount.LOWEST],
-      ], { blockNumber: undefined })
+      mockV3PoolProvider.getPools.calledWithExactly(
+        [
+          [WRAPPED_NATIVE_CURRENCY[919]!, DAI, FeeAmount.HIGH],
+          [WRAPPED_NATIVE_CURRENCY[919]!, DAI, FeeAmount.MEDIUM],
+          [WRAPPED_NATIVE_CURRENCY[919]!, DAI, FeeAmount.LOW],
+          [WRAPPED_NATIVE_CURRENCY[919]!, DAI, FeeAmount.LOWEST],
+        ],
+        { blockNumber: undefined }
+      )
     ).toBeTruthy();
   });
 });
