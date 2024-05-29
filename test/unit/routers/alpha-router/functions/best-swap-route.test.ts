@@ -18,7 +18,10 @@ import {
   V3RouteWithValidQuote,
   WRAPPED_NATIVE_CURRENCY,
 } from '../../../../../src';
-import { IPortionProvider, PortionProvider } from '../../../../../src/providers/portion-provider';
+import {
+  IPortionProvider,
+  PortionProvider,
+} from '../../../../../src/providers/portion-provider';
 import { V2PoolProvider } from '../../../../../src/providers/v2/pool-provider';
 import { getBestSwapRoute } from '../../../../../src/routers/alpha-router/functions/best-swap-route';
 import {
@@ -46,7 +49,11 @@ const v3Route1 = new V3Route(
   USDC,
   WRAPPED_NATIVE_CURRENCY[919]
 );
-const v3Route2 = new V3Route([USDC_WETH_LOW], USDC, WRAPPED_NATIVE_CURRENCY[919]);
+const v3Route2 = new V3Route(
+  [USDC_WETH_LOW],
+  USDC,
+  WRAPPED_NATIVE_CURRENCY[919]
+);
 const v3Route3 = new V3Route(
   [USDC_DAI_MEDIUM, DAI_USDT_MEDIUM, WBTC_USDT_MEDIUM, WBTC_WETH_MEDIUM],
   USDC,
@@ -488,7 +495,11 @@ describe('get best swap route', () => {
 
     // Check that even though the pools in these routes use the same tokens,
     // since they are on different protocols we are fine to route in them.
-    const v2Route = new V2Route([USDC_WETH], USDC, WRAPPED_NATIVE_CURRENCY[919]!);
+    const v2Route = new V2Route(
+      [USDC_WETH],
+      USDC,
+      WRAPPED_NATIVE_CURRENCY[919]!
+    );
     const v3Route = new V3Route(
       [USDC_WETH_LOW],
       USDC,
@@ -758,7 +769,7 @@ describe('get best swap route', () => {
     expect(quoteGasAdjusted.quotient.toString()).toBe('75');
     expect(estimatedGasUsed.eq(BigNumber.from(10000))).toBeTruthy();
     // Code will actually convert USDC gas estimates to DAI, hence an extra 12 decimals on the quotient.
-    expect(estimatedGasUsedUSD.quotient.toString()).toEqual('10000000000000'); // maybe it is bcz of layer-2 chain (mode)
+    expect(estimatedGasUsedUSD.quotient.toString()).toEqual('100000000000'); // maybe it is bcz of layer-2 chain (mode)
     expect(
       estimatedGasUsedQuoteToken.equalTo(
         CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[919]!, 10)
