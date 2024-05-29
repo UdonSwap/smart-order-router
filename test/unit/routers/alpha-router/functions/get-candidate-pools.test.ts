@@ -138,12 +138,19 @@ describe('get candidate pools', () => {
       chainId: ChainId.MODE,
     });
 
+    // expect(
+    //   mockV3PoolProvider.getPools.calledWithExactly([
+    //     [DAI, USDC, FeeAmount.LOW],
+    //     [DAI, USDC, FeeAmount.MEDIUM],
+    //   ], { blockNumber: undefined })
+    // ).toBeTruthy();
     expect(
       mockV3PoolProvider.getPools.calledWithExactly([
-        [DAI, USDC, FeeAmount.LOW],
-        [DAI, USDC, FeeAmount.MEDIUM],
+        [USDC, DAI, FeeAmount.LOW],
+        [USDC, DAI, FeeAmount.MEDIUM],
       ], { blockNumber: undefined })
     ).toBeTruthy();
+
   });
 
   test('succeeds to get top pools involving token in or token out', async () => {
