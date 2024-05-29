@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { BaseProvider, JsonRpcProvider } from '@ethersproject/providers';
-import DEFAULT_TOKEN_LIST from '@uniswap/default-token-list';
-import { TokenList } from '@uniswap/token-lists';
+import DEFAULT_TOKEN_LIST from 'udonswap-default-token-list';
+import { TokenList } from 'udonswap-token-lists';
 import retry from 'async-retry';
 import JSBI from 'jsbi';
 import _ from 'lodash';

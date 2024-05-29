@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { ChainId, Currency, ETHER, Token } from 'udonswap-core';
-import { TokenList } from '@uniswap/token-lists';
+import { TokenList } from 'udonswap-token-lists';
 import { Pair } from 'udonswap-v2-sdk';
 import { encodeSqrtRatioX96, FeeAmount, Pool } from 'udonswap-v3';
 import _ from 'lodash';

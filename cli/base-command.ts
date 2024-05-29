@@ -3,7 +3,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { Command, flags } from '@oclif/command';
 import { ParserOutput } from '@oclif/parser/lib/parse';
-import DEFAULT_TOKEN_LIST from '@uniswap/default-token-list';
+import DEFAULT_TOKEN_LIST from 'udonswap-default-token-list';
 import { ChainId, Currency, CurrencyAmount, Token } from 'udonswap-core';
 import { MethodParameters } from 'udonswap-v3';
 import bunyan, { default as Logger } from 'bunyan';
@@ -309,7 +309,7 @@ export abstract class BaseCommand extends Command {
         v3PoolProvider,
         provider,
         portionProvider,
-        { [ChainId.ARBITRUM_ONE]: 1 }
+        { [ChainId.MODE]: 1 }
       );
 
       const ethEstimateGasSimulator = new EthEstimateGasSimulator(
