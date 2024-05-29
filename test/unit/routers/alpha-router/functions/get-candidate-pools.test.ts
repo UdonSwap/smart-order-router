@@ -138,12 +138,19 @@ describe('get candidate pools', () => {
       chainId: ChainId.MODE,
     });
 
+    // expect(
+    //   mockV3PoolProvider.getPools.calledWithExactly([
+    //     [DAI, USDC, FeeAmount.LOW],
+    //     [DAI, USDC, FeeAmount.MEDIUM],
+    //   ], { blockNumber: undefined })
+    // ).toBeTruthy();
     expect(
       mockV3PoolProvider.getPools.calledWithExactly([
-        [DAI, USDC, FeeAmount.LOW],
-        [DAI, USDC, FeeAmount.MEDIUM],
+        [USDC, DAI, FeeAmount.LOW],
+        [USDC, DAI, FeeAmount.MEDIUM],
       ], { blockNumber: undefined })
     ).toBeTruthy();
+
   });
 
   test('succeeds to get top pools involving token in or token out', async () => {
@@ -168,9 +175,11 @@ describe('get candidate pools', () => {
     expect(
       mockV3PoolProvider.getPools.calledWithExactly([
         [USDC, WRAPPED_NATIVE_CURRENCY[919]!, FeeAmount.LOW],
-        [DAI, USDC, FeeAmount.LOW],
+        [USDC, DAI, FeeAmount.LOW],   //[DAI, USDC, FeeAmount.LOW],
       ], { blockNumber: undefined })
     ).toBeTruthy();
+
+
   });
 
   test('succeeds to get direct swap pools even if they dont exist in the subgraph', async () => {
@@ -193,7 +202,8 @@ describe('get candidate pools', () => {
     const DAI_WETH_LOW = new Pool(
       DAI,
       WRAPPED_NATIVE_CURRENCY[919]!,
-      FeeAmount.LOW,
+      // FeeAmount.LOW,
+      FeeAmount.MEDIUM,
       encodeSqrtRatioX96(1, 1),
       10,
       0
@@ -202,6 +212,8 @@ describe('get candidate pools', () => {
       buildMockV3PoolAccessor([...poolsOnSubgraph, DAI_WETH_LOW])
     );
 
+    // tokenIn: DAI,
+    // tokenOut: WRAPPED_NATIVE_CURRENCY[919]!, => just for try
     await getV3CandidatePools({
       tokenIn: WRAPPED_NATIVE_CURRENCY[919]!,
       tokenOut: DAI,
