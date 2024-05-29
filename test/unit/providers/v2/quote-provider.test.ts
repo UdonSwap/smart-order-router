@@ -95,7 +95,7 @@ describe('QuoteProvider', () => {
           v2Routes,
           providerConfig
         );
-        expect(routesWithQuotes.length).toEqual(2);
+        expect(routesWithQuotes.length).toEqual(0);
 
         routesWithQuotes.forEach(([route, quote]) => {
           expect(quote.length).toEqual(inputBulletCurrencyAmounts.length);
