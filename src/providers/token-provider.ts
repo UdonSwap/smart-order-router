@@ -572,18 +572,18 @@ export type TokenAccessor = {
 
 export const DAI_MODE = new Token(
   ChainId.MODE,
-  '0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3',
+  '0x0f117Da8c078B83AD4136f0cF2e5058dAddb1151',
   18,
   'DAI',
   'DAI'
 );
 
 
-export const USDC_MODE = new Token(ChainId.MODE, '0x22198B46C84Cf43831E65D32a9403A194D617a61', 8, 'USDC', 'USD Coin')
+export const USDC_MODE = new Token(ChainId.MODE, '0x4Cc496ca61683944f20a1C4796761273EE74FB62', 6, 'USDC', 'USD Coin')
 
-export const USDT_MODE = new Token(ChainId.MODE, '0x4557D5f50828302DB39D9530F6d3648d48bEC04A', 18, 'USDT', 'Tether USD')
+export const USDT_MODE = new Token(ChainId.MODE, '0x4E6E66560165771FE0E15435367f8318bA2748Ec', 6, 'USDT', 'Tether USD')
 
-export const WBTC_MODE = new Token(ChainId.MODE, "0x00D84e62a854e54Ba7289ab6506F95000Bb4B008", 8, 'WBTC', 'Wrapped Bitcoin')
+export const WBTC_MODE = new Token(ChainId.MODE, "0x2aB8A15f4E5B19882D6D1aDd1C0Ecf50b3deB8a6", 8, 'WBTC', 'Wrapped Bitcoin')
 
 export const WETH = new Token(
   ChainId.MODE,
