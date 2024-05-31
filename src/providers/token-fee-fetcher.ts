@@ -110,7 +110,7 @@ export class OnChainTokenFeeFetcher implements ITokenFeeFetcher {
         try {
           // We use the validate function instead of batchValidate to avoid poison pill problem.
           // One token that consumes too much gas could cause the entire batch to fail.
-          const feeResult = await this.contract.callStatic.validate(
+          const feeResul = await this.contract.callStatic.validate(
             address,
             baseToken,
             amountToBorrow,
@@ -119,6 +119,14 @@ export class OnChainTokenFeeFetcher implements ITokenFeeFetcher {
               blockTag: providerConfig?.blockNumber,
             }
           );
+          console.log('feeResul',feeResul);
+          console.log('bastoken',baseToken);
+          console.log('amountToBorrow',amountToBorrow);
+
+          const feeResult = {
+            buyFeeBps: BigNumber.from(0),
+            sellFeeBps: BigNumber.from(0),
+          };
 
           metric.putMetric(
             'TokenFeeFetcherFetchFeesSuccess',
