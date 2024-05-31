@@ -50,7 +50,7 @@ const FEE_DETECTOR_ADDRESS = (
     //   case ChainId.AVALANCHE:
     //     return '0xBF2B9F6A6eCc4541b31ab2dCF8156D33644Ca3F3';
     case ChainId.MODE:
-      return "0xE563CE8268b281cB3EeE85FCBD49D9e47dac64a0"
+      return "0x8a4e0cd13296d5081f133747f182ee171fb64410"
     default:
       // just default to mainnet contract
       return '0x19C97dc2a25845C7f9d1d519c8C2d4809c58b43f';
