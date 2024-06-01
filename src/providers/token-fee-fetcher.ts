@@ -2,8 +2,8 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { BaseProvider } from '@ethersproject/providers';
 import { ChainId } from 'udonswap-core';
 
-import { TokenFeeDetector__factory } from '../types/other/factories/TokenFeeDetector__factory';
 import { TokenFeeDetector } from '../types/other/TokenFeeDetector';
+import { TokenFeeDetector__factory } from '../types/other/factories/TokenFeeDetector__factory';
 import {
   log,
   metric,
@@ -119,9 +119,9 @@ export class OnChainTokenFeeFetcher implements ITokenFeeFetcher {
               blockTag: providerConfig?.blockNumber,
             }
           );
-          console.log('feeResul',feeResul);
-          console.log('bastoken',baseToken);
-          console.log('amountToBorrow',amountToBorrow);
+          console.log('feeResul', feeResul);
+          console.log('bastoken', baseToken);
+          console.log('amountToBorrow', amountToBorrow);
 
           const feeResult = {
             buyFeeBps: BigNumber.from(0),

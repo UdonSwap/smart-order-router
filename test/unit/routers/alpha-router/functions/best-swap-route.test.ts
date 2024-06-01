@@ -769,7 +769,7 @@ describe('get best swap route', () => {
     expect(quoteGasAdjusted.quotient.toString()).toBe('75');
     expect(estimatedGasUsed.eq(BigNumber.from(10000))).toBeTruthy();
     // Code will actually convert USDC gas estimates to DAI, hence an extra 12 decimals on the quotient.
-    expect(estimatedGasUsedUSD.quotient.toString()).toEqual('100000000000'); // maybe it is bcz of layer-2 chain (mode)
+    expect(estimatedGasUsedUSD.quotient.toString()).toEqual('10000000000000'); // maybe it is bcz of layer-2 chain (mode)
     expect(
       estimatedGasUsedQuoteToken.equalTo(
         CurrencyAmount.fromRawAmount(WRAPPED_NATIVE_CURRENCY[919]!, 10)

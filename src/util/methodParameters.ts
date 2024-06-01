@@ -1,26 +1,26 @@
+import _ from 'lodash';
+import { ChainId, Currency, TradeType } from 'udonswap-core';
 import {
   MixedRouteSDK,
   Protocol,
   SwapRouter as SwapRouter02,
   Trade,
 } from 'udonswap-router';
-import { ChainId, Currency, TradeType } from 'udonswap-core';
 import {
-  SwapRouter as UniversalRouter,
   UNIVERSAL_ROUTER_ADDRESS,
+  SwapRouter as UniversalRouter
 } from 'udonswap-sdk-universal-router';
 import { Route as V2RouteRaw } from 'udonswap-v2-sdk';
 import { Route as V3RouteRaw } from 'udonswap-v3';
-import _ from 'lodash';
 
 import {
   CurrencyAmount,
   MethodParameters,
   MixedRouteWithValidQuote,
   RouteWithValidQuote,
+  SWAP_ROUTER_02_ADDRESSES,
   SwapOptions,
   SwapType,
-  SWAP_ROUTER_02_ADDRESSES,
   V2RouteWithValidQuote,
   V3RouteWithValidQuote,
 } from '..';

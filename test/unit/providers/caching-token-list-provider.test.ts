@@ -25,7 +25,7 @@ describe('caching token list provider', () => {
 
   describe('get tokens by address', () => {
     test('succeeds to get token and updates cache', async () => {
-      const address = '0x22198B46C84Cf43831E65D32a9403A194D617a61';
+      const address = '0x4Cc496ca61683944f20a1C4796761273EE74FB62';
 
       const token = await cachingTokenListProvider.getTokenByAddress(address);
 
@@ -75,7 +75,7 @@ describe('caching token list provider', () => {
 
     test('succeeds and is non case sensistive', async () => {
       const address =
-        '0x22198B46C84Cf43831E65D32a9403A194D617a61'.toLowerCase();
+        '0x4Cc496ca61683944f20a1C4796761273EE74FB62'.toLowerCase();
 
       const token = await cachingTokenListProvider.getTokenByAddress(address);
 
@@ -90,7 +90,7 @@ describe('caching token list provider', () => {
     });
 
     test('succeeds to get token from cache', async () => {
-      const address = '0x22198B46C84Cf43831E65D32a9403A194D617a61';
+      const address = '0x4Cc496ca61683944f20a1C4796761273EE74FB62';
 
       mockCache.get
         .onFirstCall()

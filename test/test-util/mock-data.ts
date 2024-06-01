@@ -343,15 +343,15 @@ export const mockTokenList: TokenList = {
   tokens: [
     {
       name: 'USD Coin',
-      address: '0x22198B46C84Cf43831E65D32a9403A194D617a61',
+      address: '0x4Cc496ca61683944f20a1C4796761273EE74FB62',
       symbol: 'USDC',
-      decimals: 8,
+      decimals: 6,
       chainId: 919,
       logoURI: '',
     },
     {
       name: 'Tether USD',
-      address: '0x4557D5f50828302DB39D9530F6d3648d48bEC04A',
+      address: '0x4E6E66560165771FE0E15435367f8318bA2748Ec',
       symbol: 'USDT',
       decimals: 18,
       chainId: 919,
@@ -359,7 +359,7 @@ export const mockTokenList: TokenList = {
     },
     {
       name: 'DAI',
-      address: '0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3',
+      address: '0x0f117Da8c078B83AD4136f0cF2e5058dAddb1151',
       symbol: 'DAI',
       decimals: 18,
       chainId: 919,

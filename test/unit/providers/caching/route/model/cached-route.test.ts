@@ -54,7 +54,7 @@ describe('CachedRoute', () => {
       const cachedRoute = new CachedRoute({ route: route, percent: 100 });
 
       expect(cachedRoute.routePath).toEqual(
-        '[V3]0x22198B46C84Cf43831E65D32a9403A194D617a61/0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3/3000'
+        '[V3]0x4Cc496ca61683944f20a1C4796761273EE74FB62/0x0f117Da8c078B83AD4136f0cF2e5058dAddb1151/3000'
       );
     });
 
@@ -63,7 +63,7 @@ describe('CachedRoute', () => {
       const cachedRoute = new CachedRoute({ route: route, percent: 100 });
 
       expect(cachedRoute.routePath).toEqual(
-        '[V2]0x22198B46C84Cf43831E65D32a9403A194D617a61/0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3'
+        '[V2]0x4Cc496ca61683944f20a1C4796761273EE74FB62/0x0f117Da8c078B83AD4136f0cF2e5058dAddb1151'
       );
     });
 
@@ -76,7 +76,7 @@ describe('CachedRoute', () => {
       const cachedRoute = new CachedRoute({ route: route, percent: 100 });
 
       expect(cachedRoute.routePath).toEqual(
-        '[V3]0x22198B46C84Cf43831E65D32a9403A194D617a61/0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3/3000->[V2]0x4200000000000000000000000000000000000006/0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3'
+        '[V3]0x4Cc496ca61683944f20a1C4796761273EE74FB62/0x0f117Da8c078B83AD4136f0cF2e5058dAddb1151/3000->[V2]0x4200000000000000000000000000000000000006/0x0f117Da8c078B83AD4136f0cF2e5058dAddb1151'
       );
     });
   });
