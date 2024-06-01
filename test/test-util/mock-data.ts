@@ -353,7 +353,7 @@ export const mockTokenList: TokenList = {
       name: 'Tether USD',
       address: '0x4E6E66560165771FE0E15435367f8318bA2748Ec',
       symbol: 'USDT',
-      decimals: 18,
+      decimals: 6,
       chainId: 919,
       logoURI: '',
     },
