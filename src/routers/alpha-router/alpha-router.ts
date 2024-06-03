@@ -702,6 +702,7 @@ export class AlphaRouter
     this.portionProvider = portionProvider ?? new PortionProvider();
 
     const chainName = ID_TO_NETWORK_NAME(chainId);
+    console.log('chainName', chainName);
 
     // ipfs urls in the following format: `https://cloudflare-ipfs.com/ipns/api.uniswap.org/v1/pools/${protocol}/${chainName}.json`;
     if (v2SubgraphProvider) {
@@ -712,7 +713,7 @@ export class AlphaRouter
           chainId,
           new URISubgraphProvider(
             chainId,
-            `https://cloudflare-ipfs.com/ipns/api.uniswap.org/v1/pools/v2/${chainName}.json`,
+            `https://api.goldsky.com/api/public/project_clth71vucl2l701uu07ha0im7/subgraphs/udonswap/0.0.1/gn`,
             undefined,
             0
           ),
@@ -730,7 +731,7 @@ export class AlphaRouter
           chainId,
           new URISubgraphProvider(
             chainId,
-            `https://cloudflare-ipfs.com/ipns/api.uniswap.org/v1/pools/v3/${chainName}.json`,
+            `https://api.goldsky.com/api/public/project_clvqb3g2poub601xzgkzc9oxs/subgraphs/udonswap-v3/1/gn`,
             undefined,
             0
           ),
