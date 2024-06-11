@@ -1852,7 +1852,7 @@ export class AlphaRouter
       MetricLoggerUnit.Milliseconds
     );
 
-    return [v3GasModel/*, mixedRouteGasModel*/];
+    return [v3GasModel];
   }
 
   // Note multiplications here can result in a loss of precision in the amounts (e.g. taking 50% of 101)
