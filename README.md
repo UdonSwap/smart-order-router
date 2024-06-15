@@ -1,6 +1,6 @@
 # UdonSwap Smart Order Router
 
-This repository contains routing logic for the Uniswap V3 protocol.
+This repository contains routing logic for the Udonswap V3 protocol.
 
 It searches for the most efficient way to swap token A for token B, considering splitting swaps across multiple routes and gas costs.
 
@@ -53,7 +53,7 @@ JSON_RPC_PROVIDER_MODE = '<JSON_RPC_PROVIDER>'
 
 Then from the root directory you can execute the CLI.
 
-## BASE Mainnet
+## MODE
 
 ```
 ./bin/cli quote --tokenIn 0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA --tokenOut 0x4200000000000000000000000000000000000006 --amount 10 --exactIn --minSplits 1 --protocols v3 --router alpha --chainId 919

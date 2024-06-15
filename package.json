@@ -48,10 +48,10 @@
     "mnemonist": "^0.38.3",
     "node-cache": "^5.1.2",
     "stats-lite": "^2.2.0",
-    "udonswap-core": "1.2.0",
-    "udonswap-router": "1.2.0",
-    "udonswap-sdk-universal-router": "1.2.0",
-    "udonswap-v3": "1.2.0"
+    "udonswap-core": "1.2.3",
+    "udonswap-router": "1.2.1",
+    "udonswap-sdk-universal-router": "1.2.1",
+    "udonswap-v3": "1.2.1"
   },
   "devDependencies": {
     "@ethersproject/providers": "^5.4.0",

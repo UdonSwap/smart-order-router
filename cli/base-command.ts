@@ -42,7 +42,7 @@ import {
   TokenPropertiesProvider,
   TokenProvider,
   UniswapMulticallProvider,
-  V2PoolProvider,
+  // V2PoolProvider,
   V3PoolProvider,
   V3RouteWithValidQuote,
 } from '../src';
@@ -296,7 +296,7 @@ export abstract class BaseCommand extends Command {
         new NodeJSCache(new NodeCache({ stdTTL: 360, useClones: false })),
         tokenFeeFetcher
       )
-      const v2PoolProvider = new V2PoolProvider(chainId, multicall2Provider, tokenPropertiesProvider);
+      // const v2PoolProvider = new V2PoolProvider(chainId, multicall2Provider, tokenPropertiesProvider);
 
       const portionProvider = new PortionProvider();
       const tenderlySimulator = new TenderlySimulator(
@@ -305,17 +305,17 @@ export abstract class BaseCommand extends Command {
         process.env.TENDERLY_USER!,
         process.env.TENDERLY_PROJECT!,
         process.env.TENDERLY_ACCESS_KEY!,
-        v2PoolProvider,
+        // v2PoolProvider,
         v3PoolProvider,
         provider,
         portionProvider,
-        { [ChainId.ARBITRUM_ONE]: 1 }
+        { [ChainId.MODE]: 1 }
       );
 
       const ethEstimateGasSimulator = new EthEstimateGasSimulator(
         chainId,
         provider,
-        v2PoolProvider,
+        // v2PoolProvider,
         v3PoolProvider,
         portionProvider
       );
