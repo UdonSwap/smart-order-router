@@ -1031,7 +1031,7 @@ export class AlphaRouter
         tradeType,
         routingConfig,
         v3GasModel,
-        // gasPriceWei,
+        gasPriceWei,
         swapConfig
       );
     }
@@ -1048,7 +1048,7 @@ export class AlphaRouter
         tradeType,
         routingConfig,
         v3GasModel,
-        // gasPriceWei,
+        gasPriceWei,
         swapConfig
       );
     }
@@ -1337,7 +1337,7 @@ export class AlphaRouter
     tradeType: TradeType,
     routingConfig: AlphaRouterConfig,
     v3GasModel: IGasModel<V3RouteWithValidQuote>,
-    // gasPriceWei: BigNumber,
+    _gasPriceWei: BigNumber,
     swapConfig?: SwapOptions
   ): Promise<BestSwapRoute | null> {
     log.info(
@@ -1431,7 +1431,7 @@ export class AlphaRouter
     tradeType: TradeType,
     routingConfig: AlphaRouterConfig,
     v3GasModel: IGasModel<V3RouteWithValidQuote>,
-    // gasPriceWei: BigNumber,
+    _gasPriceWei: BigNumber,
     swapConfig?: SwapOptions
   ): Promise<BestSwapRoute | null> {
     // Generate our distribution of amounts, i.e. fractions of the input amount.
