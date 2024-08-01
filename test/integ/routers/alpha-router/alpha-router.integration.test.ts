@@ -3,7 +3,7 @@
  */
 
 import { JsonRpcProvider, JsonRpcSigner } from '@ethersproject/providers';
-import { AllowanceTransfer, PermitSingle } from 'udonswap-permit2';
+import { AllowanceTransfer, PermitSingle } from '@uniswap/permit2-sdk';
 import { Protocol } from 'lampros-router';
 import {
   ChainId,
