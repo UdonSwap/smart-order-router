@@ -304,6 +304,7 @@ export async function calculateGasUsed(
         v3PoolProvider,
         providerConfig
       ),
+      // getV2NativePool(quoteToken, v2PoolProvider, providerConfig),
     ]);
     const nativePool = nativePools.find((pool) => pool !== null);
 
@@ -436,7 +437,8 @@ export const calculateL1GasFeesHelper = async (
   usdPool: Pool,
   quoteToken: Token,
   nativePool: Pool | null,
-  provider: BaseProvider
+  provider: BaseProvider,
+  l2GasData?: ArbitrumGasData
 ): Promise<{
   gasUsedL1: BigNumber;
   gasUsedL1OnL2: BigNumber;
@@ -451,7 +453,7 @@ export const calculateL1GasFeesHelper = async (
   };
   let mainnetGasUsed = BigNumber.from(0);
   let mainnetFeeInWei = BigNumber.from(0);
-  const gasUsedL1OnL2 = BigNumber.from(0);
+  let gasUsedL1OnL2 = BigNumber.from(0);
   if (opStackChains.includes(chainId)) {
     [mainnetGasUsed, mainnetFeeInWei] = await calculateOptimismToL1SecurityFee(
       route,
@@ -459,6 +461,14 @@ export const calculateL1GasFeesHelper = async (
       chainId,
       provider
     );
+  } else if (chainId == ChainId.MODE) {
+    [mainnetGasUsed, mainnetFeeInWei, gasUsedL1OnL2] =
+      calculateArbitrumToL1SecurityFee(
+        route,
+        swapOptions,
+        l2GasData as ArbitrumGasData,
+        chainId
+      );
   }
 
   // wrap fee to native currency
@@ -534,5 +544,32 @@ export const calculateL1GasFeesHelper = async (
       provider
     );
     return [l1GasUsed, l1GasCost];
+  }
+
+  function calculateArbitrumToL1SecurityFee(
+    routes: RouteWithValidQuote[],
+    swapConfig: SwapOptionsUniversalRouter,
+    gasData: ArbitrumGasData,
+    chainId: ChainId
+  ): [BigNumber, BigNumber, BigNumber] {
+    const route: RouteWithValidQuote = routes[0]!;
+
+    const amountToken =
+      route.tradeType == TradeType.EXACT_INPUT
+        ? route.amount.currency
+        : route.quote.currency;
+    const outputToken =
+      route.tradeType == TradeType.EXACT_INPUT
+        ? route.quote.currency
+        : route.amount.currency;
+
+    // build trade for swap calldata
+    const trade = buildTrade(amountToken, outputToken, route.tradeType, routes);
+    const data = buildSwapMethodParameters(
+      trade,
+      swapConfig,
+      ChainId.MODE
+    ).calldata;
+    return calculateArbitrumToL1FeeFromCalldata(data, gasData, chainId);
   }
 };
