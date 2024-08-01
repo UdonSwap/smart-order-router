@@ -364,7 +364,9 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
     functionName: 'quoteExactInput' | 'quoteExactOutput',
     _providerConfig?: ProviderConfig
   ): Promise<OnChainQuotes<TRoute>> {
-    const useMixedRouteQuoter = false;
+    const useMixedRouteQuoter = routes.some(
+      (route) => route.protocol === Protocol.V3
+    );
 
     /// Validate that there are no incorrect routes / function combinations
     this.validateRoutes(routes, functionName, useMixedRouteQuoter);
