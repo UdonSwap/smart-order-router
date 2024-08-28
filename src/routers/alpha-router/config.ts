@@ -8,7 +8,6 @@ export const DEFAULT_ROUTING_CONFIG_BY_CHAIN = (
   switch (chainId) {
     // Optimism
     case ChainId.MODE:
-      // case ChainId.ROLLUX_TANENBAUM:
       return {
         v2PoolSelection: {
           topN: 3,

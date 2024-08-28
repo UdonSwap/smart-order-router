@@ -58,10 +58,15 @@ export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
     pools,
     amountToken,
     quoteToken,
+    l2GasDataProvider,
     providerConfig,
   }: BuildOnChainGasModelFactoryType): Promise<
     IGasModel<V3RouteWithValidQuote>
   > {
+    const l2GasData = l2GasDataProvider
+      ? await l2GasDataProvider.getGasData(providerConfig)
+      : undefined;
+
     const usdPool: Pool = pools.usdPool;
 
     const calculateL1GasFees = async (
@@ -78,7 +83,8 @@ export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
         usdPool,
         quoteToken,
         pools.nativeAndQuoteTokenV3Pool,
-        this.provider
+        this.provider,
+        l2GasData,
       );
     };
 
