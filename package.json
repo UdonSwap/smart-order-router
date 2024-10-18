@@ -12,10 +12,11 @@
   "license": "GPL",
   "keywords": [],
   "scripts": {
-    "compile-v3-types": "npx typechain --target ethers-v5 --out-dir src/types/v3 './node_modules/@uniswap/?(v3-core|v3-periphery)/artifacts/contracts/**/*.json'",
+    "compile-v3-core-types": "npx typechain --target ethers-v5 --out-dir src/types/v3 './node_modules/@uniswap/v3-core/artifacts/contracts/**/*.json'",
+    "compile-v3-periphery-types": "npx typechain --target ethers-v5 --out-dir src/types/v3 './node_modules/@uniswap/v3-periphery/artifacts/contracts/**/*.json'",
     "compile-router": "npx typechain --target ethers-v5 --out-dir src/types/other './node_modules/@uniswap/swap-router-contracts/artifacts/contracts/**/*.json'",
     "compile-external-types": "npx typechain --target ethers-v5 --out-dir src/types/other 'src/abis/**/*.json'",
-    "build": "run-p compile-v3-types compile-router compile-external-types && run-p build:*",
+    "build": "run-p compile-v3-core-types compile-v3-periphery-types compile-router compile-external-types && run-p build:*",
     "build:main": "tsc -p tsconfig.json",
     "build:module": "tsc -p tsconfig.module.json",
     "fix": "run-s fix:*",

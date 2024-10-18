@@ -189,7 +189,7 @@ export class V3SubgraphProvider implements IV3SubgraphProvider {
       },
       {
         retries: this.retries,
-        onRetry: (err, retry) => {
+        onRetry: (err:any, retry) => {
           retries += 1;
           if (
             this.rollback &&
