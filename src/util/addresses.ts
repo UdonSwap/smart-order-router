@@ -1,50 +1,73 @@
-import { ChainId, Token } from 'lampros-core';
+import {
+  ChainId,
+  CHAIN_TO_ADDRESSES_MAP,
+  SWAP_ROUTER_02_ADDRESSES as SWAP_ROUTER_02_ADDRESSES_HELPER,
+  Token,
+} from 'lampros-core';
+
+// import { NETWORKS_WITH_SAME_UNISWAP_ADDRESSES } from './chains';
+
+export const MODE_TICK_LENS_ADDRESS =
+  CHAIN_TO_ADDRESSES_MAP[ChainId.MODE].tickLensAddress;
+
+export const MODE_NONFUNGIBLE_POSITION_MANAGER_ADDRESS =
+  CHAIN_TO_ADDRESSES_MAP[ChainId.MODE].nonfungiblePositionManagerAddress;
+
+export const MODE_SWAP_ROUTER_02_ADDRESS =
+  CHAIN_TO_ADDRESSES_MAP[ChainId.MODE].swapRouter02Address!;
+
+export const MODE_V3_MIGRATOR_ADDRESS =
+  CHAIN_TO_ADDRESSES_MAP[ChainId.MODE].v3MigratorAddress;
 
 export const V3_CORE_FACTORY_ADDRESSES: AddressMap = {
-  [ChainId.MODE]: '0x5091730383fE325040813281231D323049Eeaf8b',
+  [ChainId.MODE]: CHAIN_TO_ADDRESSES_MAP[ChainId.MODE].v3CoreFactoryAddress,
 };
 
 export const QUOTER_V2_ADDRESSES: AddressMap = {
-  [ChainId.MODE]: '0x9613da2D81495589CCe112CC4C7fC650A5eC2610',
+  [ChainId.MODE]: CHAIN_TO_ADDRESSES_MAP[ChainId.MODE].quoterAddress,
 };
 
 // export const NEW_QUOTER_V2_ADDRESSES: AddressMap = {
 //   [ChainId.MODE]: '0x5e55C9e631FAE526cd4B0526C4818D6e0a9eF0e3',
+
+// };
+
+// export const MIXED_ROUTE_QUOTER_V1_ADDRESSES: AddressMap = {
+//   [ChainId.MAINNET]:
+//     CHAIN_TO_ADDRESSES_MAP[ChainId.MAINNET].mixedRouteQuoterV1Address,
+//   [ChainId.GOERLI]:
+//     CHAIN_TO_ADDRESSES_MAP[ChainId.GOERLI].mixedRouteQuoterV1Address,
 // };
 
 export const UNISWAP_MULTICALL_ADDRESSES: AddressMap = {
-  [ChainId.MODE]: '0xcd9845c3233Dbd3274Be6054f21CE26C79e5a65E',
+  [ChainId.MODE]: CHAIN_TO_ADDRESSES_MAP[ChainId.MODE].multicallAddress,
 };
 
-export const SWAP_ROUTER_02_ADDRESSES = (_chainId: number): string => {
-  return '0x22dc8CA232debF877eFF0628FF9215519e8083f4';
+export const SWAP_ROUTER_02_ADDRESSES = (chainId: number): string => {
+  return (
+    SWAP_ROUTER_02_ADDRESSES_HELPER(chainId) ??
+    '0x22dc8CA232debF877eFF0628FF9215519e8083f4'
+  );
 };
 
 export const OVM_GASPRICE_ADDRESS =
   '0x420000000000000000000000000000000000000F';
 export const ARB_GASINFO_ADDRESS = '0x000000000000000000000000000000000000006C';
-export const TICK_LENS_ADDRESS = '0xE5a7A29FF8D7F6EEc07377b791F4F9db7f3FFDBC';
+
+export const TICK_LENS_ADDRESS =
+  CHAIN_TO_ADDRESSES_MAP[ChainId.MODE].tickLensAddress;
+
 export const NONFUNGIBLE_POSITION_MANAGER_ADDRESS =
-  '0xEF3e32154B5Fb96D56D339e655A5edf5f5661Af8';
-export const V3_MIGRATOR_ADDRESS = '0x2a8cC9911201FD188fDD641df81044C9a6F76B01';
+  CHAIN_TO_ADDRESSES_MAP[ChainId.MODE].nonfungiblePositionManagerAddress;
+
+export const V3_MIGRATOR_ADDRESS =
+  CHAIN_TO_ADDRESSES_MAP[ChainId.MODE].v3MigratorAddress;
+
 export const MULTICALL2_ADDRESS = '0x338d2F65468A2Ac6D51Af94BE3A45858a21e6615';
 
 export type AddressMap = { [chainId: number]: string | undefined };
 
-export function constructSameAddressMap<T extends string>(
-  address: T,
-  additionalNetworks: ChainId[] = []
-): { [chainId: number]: T } {
-  return additionalNetworks.reduce<{
-    [chainId: number]: T;
-  }>((memo, chainId) => {
-    memo[chainId] = address;
-    return memo;
-  }, {});
-}
-
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const WETH9: {} = {
+export const WETH9 = {
   [ChainId.MODE]: new Token(
     ChainId.MODE,
     '0x4200000000000000000000000000000000000006',
@@ -53,3 +76,6 @@ export const WETH9: {} = {
     'Wrapped Ether'
   ),
 };
+
+// export const BEACON_CHAIN_DEPOSIT_ADDRESS =
+//   '0x00000000219ab540356cBB839Cbe05303d7705Fa';

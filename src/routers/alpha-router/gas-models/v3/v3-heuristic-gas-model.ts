@@ -84,7 +84,7 @@ export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
         quoteToken,
         pools.nativeAndQuoteTokenV3Pool,
         this.provider,
-        l2GasData,
+        l2GasData
       );
     };
 
@@ -162,7 +162,7 @@ export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
           nativeAndQuoteTokenPool
         );
       }
-      // We may have a nativeAmountPool, but not a nativePool
+      // We may have a nativeAmouPool, but not a nativePool
       else {
         log.info(
           `Unable to find ${nativeCurrency.symbol} pool with the quote token, ${quoteToken.symbol} to produce gas adjusted costs. Using amountToken to calculate gas costs.`
@@ -276,7 +276,7 @@ export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
     // Some tokens have extremely expensive transferFrom functions, which causes
     // us to underestimate them by a large amount. For known tokens, we apply an
     // adjustment.
-    const tokenOverhead = TOKEN_OVERHEAD(chainId, routeWithValidQuote.route);
+    const tokenOverhead = TOKEN_OVERHEAD();
 
     const tickGasUse = COST_PER_INIT_TICK(chainId).mul(
       totalInitializedTicksCrossed

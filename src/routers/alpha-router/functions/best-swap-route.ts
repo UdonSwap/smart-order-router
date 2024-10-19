@@ -15,6 +15,7 @@ import { routeAmountsToString, routeToString } from '../../../util/routes';
 import { SwapOptions } from '../../router';
 import { AlphaRouterConfig } from '../alpha-router';
 import { IGasModel, L1ToL2GasCosts, usdGasTokensByChain } from '../gas-models';
+import { ProviderConfig } from '../../../providers/provider';
 
 import {
   RouteWithValidQuote,
@@ -40,7 +41,8 @@ export async function getBestSwapRoute(
   routingConfig: AlphaRouterConfig,
   portionProvider: IPortionProvider,
   v3GasModel?: IGasModel<V3RouteWithValidQuote>,
-  swapConfig?: SwapOptions
+  swapConfig?: SwapOptions,
+  providerConfig?: ProviderConfig
 ): Promise<BestSwapRoute | null> {
   const now = Date.now();
 
@@ -88,7 +90,8 @@ export async function getBestSwapRoute(
     routingConfig,
     portionProvider,
     v3GasModel,
-    swapConfig
+    swapConfig,
+    providerConfig
   );
 
   // It is possible we were unable to find any valid route given the quotes.
@@ -152,7 +155,8 @@ export async function getBestSwapRouteBy(
   routingConfig: AlphaRouterConfig,
   portionProvider: IPortionProvider,
   v3GasModel?: IGasModel<V3RouteWithValidQuote>,
-  swapConfig?: SwapOptions
+  swapConfig?: SwapOptions,
+  providerConfig?: ProviderConfig
 ): Promise<BestSwapRoute | undefined> {
   // Build a map of percentage to sorted list of quotes, with the biggest quote being first in the list.
   const percentToSortedQuotes = _.mapValues(
@@ -357,6 +361,7 @@ export async function getBestSwapRouteBy(
             if (v3GasModel == undefined) {
               throw new Error("Can't compute L1 gas fees.");
             } else {
+
               const v3Routes = curRoutesNew.filter(
                 (routes) => routes.protocol === Protocol.V3
               );
@@ -459,11 +464,7 @@ export async function getBestSwapRouteBy(
     if (v3GasModel == undefined) {
       throw new Error("Can't compute L1 gas fees.");
     } else {
-      // Before v2 deploy everywhere, a quote on L2 can only go through v3 protocol,
-      // so a split between v2 and v3 is not possible.
-      // After v2 deploy everywhere, a quote on L2 can go through v2 AND v3 protocol.
-      // Since a split is possible now, the gas cost will be the summation of both v2 and v3 gas models.
-      // So as long as any route contains v2/v3 protocol, we will calculate the gas cost accumulatively.
+
       const v3Routes = bestSwap.filter(
         (routes) => routes.protocol === Protocol.V3
       );
@@ -528,6 +529,13 @@ export async function getBestSwapRouteBy(
           routeWithValidQuote.gasCostInUSD.quotient
         );
       }
+
+      // if (decimalsDiff < 0 && chainId === 324) {
+      //   log.error(`Decimals diff is negative for ZkSync. This should not happen.
+      //     usdTokenDecimals ${usdTokenDecimals} routeWithValidQuote.gasCostInUSD.currency.decimals
+      //     ${routeWithValidQuote.gasCostInUSD.currency.decimals
+      //     } ${JSON.stringify(routeWithValidQuote)}`);
+      // }
 
       return CurrencyAmount.fromRawAmount(
         usdToken,
@@ -637,7 +645,8 @@ export async function getBestSwapRouteBy(
     routes: portionProvider.getRouteWithQuotePortionAdjusted(
       routeType,
       routeWithQuotes,
-      swapConfig
+      swapConfig,
+      providerConfig
     ),
   };
 }

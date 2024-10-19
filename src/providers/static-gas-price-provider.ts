@@ -4,7 +4,7 @@ import { BigNumber } from 'ethers';
 import { GasPrice, IGasPriceProvider } from './gas-price-provider';
 
 export class StaticGasPriceProvider implements IGasPriceProvider {
-  constructor(private gasPriceWei: BigNumber) {}
+  constructor(private gasPriceWei: BigNumber) { }
 
   async getGasPrice(
     _latestBlockNumber: number,

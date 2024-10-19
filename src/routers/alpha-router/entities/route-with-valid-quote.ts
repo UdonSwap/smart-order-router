@@ -17,7 +17,9 @@ import { IGasModel } from '../gas-models/gas-model';
  * @interface IRouteWithValidQuote
  * @template Route
  */
-export interface IRouteWithValidQuote<Route extends V3Route> {
+export interface IRouteWithValidQuote<
+  Route extends V3Route
+> {
   amount: CurrencyAmount;
   percent: number;
   // If exact in, this is (quote - gasCostInToken). If exact out, this is (quote + gasCostInToken).
@@ -34,13 +36,24 @@ export interface IRouteWithValidQuote<Route extends V3Route> {
   tokenPath: Token[];
 }
 
-// Discriminated unions on protocol field to narrow types.
+
 export type IV3RouteWithValidQuote = {
   protocol: Protocol.V3;
 } & IRouteWithValidQuote<V3Route>;
 
-export type RouteWithValidQuote = V3RouteWithValidQuote;
 
+export type RouteWithValidQuote =
+  | V3RouteWithValidQuote
+
+
+/**
+ * Represents a quote for swapping on a V2 only route. Contains all information
+ * such as the route used, the amount specified by the user, the type of quote
+ * (exact in or exact out), the quote itself, and gas estimates.
+ *
+ * @export
+ * @class V2RouteWithValidQuote
+ */
 export type V3RouteWithValidQuoteParams = {
   amount: CurrencyAmount;
   rawQuote: BigNumber;

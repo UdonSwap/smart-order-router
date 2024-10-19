@@ -101,6 +101,8 @@ export type IGasModel<TRouteWithValidQuote extends RouteWithValidQuote> = {
   calculateL1GasFees?(routes: TRouteWithValidQuote[]): Promise<L1ToL2GasCosts>;
 };
 
+
+
 /**
  * Factory for building gas models that can be used with any route to generate
  * gas estimates.

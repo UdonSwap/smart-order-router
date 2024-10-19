@@ -206,8 +206,7 @@ export class Quote extends BaseCommand {
 
     if (!swapRoutes) {
       log.error(
-        `Could not find route. ${
-          debug ? '' : 'Run in debug mode for more info'
+        `Could not find route. ${debug ? '' : 'Run in debug mode for more info'
         }.`
       );
       return;

@@ -2,8 +2,7 @@ import { parseUnits } from '@ethersproject/units';
 import JSBI from 'jsbi';
 import { Currency, CurrencyAmount as CurrencyAmountRaw } from 'lampros-core';
 import { FeeAmount } from 'lampros-v3';
-
-export class CurrencyAmount extends CurrencyAmountRaw<Currency> {}
+export class CurrencyAmount extends CurrencyAmountRaw<Currency> { }
 
 export const MAX_UINT160 = '0xffffffffffffffffffffffffffffffffffffffff';
 

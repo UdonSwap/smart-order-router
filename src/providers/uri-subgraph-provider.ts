@@ -22,7 +22,7 @@ export class URISubgraphProvider<TSubgraphPool extends V3SubgraphPool> {
     private uri: string,
     private timeout = 6000,
     private retries = 2
-  ) {}
+  ) { }
 
   public async getPools(): Promise<TSubgraphPool[]> {
     log.info(

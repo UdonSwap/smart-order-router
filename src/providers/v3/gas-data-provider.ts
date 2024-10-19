@@ -32,8 +32,7 @@ export type ArbitrumGasData = {
 };
 
 export class ArbitrumGasDataProvider
-  implements IL2GasDataProvider<ArbitrumGasData>
-{
+  implements IL2GasDataProvider<ArbitrumGasData> {
   protected gasFeesAddress: string;
   protected blockNumberOverride: number | Promise<number> | undefined;
 

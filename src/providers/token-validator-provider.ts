@@ -96,8 +96,7 @@ export class TokenValidatorProvider implements ITokenValidatorProvider {
           ))!;
 
         metric.putMetric(
-          `TokenValidatorProviderValidateCacheHitResult${
-            tokenToResult[address.toLowerCase()]
+          `TokenValidatorProviderValidateCacheHitResult${tokenToResult[address.toLowerCase()]
           }`,
           1,
           MetricLoggerUnit.Count
@@ -108,8 +107,7 @@ export class TokenValidatorProvider implements ITokenValidatorProvider {
     }
 
     log.info(
-      `Got token validation results for ${
-        addressesRaw.length - addresses.length
+      `Got token validation results for ${addressesRaw.length - addresses.length
       } tokens from cache. Getting ${addresses.length} on-chain.`
     );
 

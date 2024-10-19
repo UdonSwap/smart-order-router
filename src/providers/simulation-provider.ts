@@ -14,7 +14,6 @@ import { Permit2__factory } from '../types/other/factories/Permit2__factory';
 import { CurrencyAmount, log, SWAP_ROUTER_02_ADDRESSES } from '../util';
 
 import { IPortionProvider } from './portion-provider';
-
 export type SimulationResult = {
   transaction: {
     hash: string;
@@ -67,6 +66,7 @@ export abstract class Simulator {
     const neededBalance =
       swapRoute.trade.tradeType == TradeType.EXACT_INPUT ? amount : quote;
     if (
+      // we assume we always have enough eth mainnet balance because we use beacon address later
       (neededBalance.currency.isNative && this.chainId == ChainId.MODE) ||
       (await this.userHasSufficientBalance(
         fromAddress,

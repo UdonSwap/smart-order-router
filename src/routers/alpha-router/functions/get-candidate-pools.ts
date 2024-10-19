@@ -24,7 +24,7 @@ import { log } from '../../../util/log';
 import { metric, MetricLoggerUnit } from '../../../util/metric';
 import { AlphaRouterConfig } from '../alpha-router';
 
-export type PoolId = { id: string };
+export type SubgraphPool = V3SubgraphPool;
 export type CandidatePoolsBySelectionCriteria = {
   protocol: Protocol;
   selections: CandidatePoolsSelections;
@@ -32,15 +32,15 @@ export type CandidatePoolsBySelectionCriteria = {
 
 /// Utility type for allowing us to use `keyof CandidatePoolsSelections` to map
 export type CandidatePoolsSelections = {
-  topByBaseWithTokenIn: PoolId[];
-  topByBaseWithTokenOut: PoolId[];
-  topByDirectSwapPool: PoolId[];
-  topByEthQuoteTokenPool: PoolId[];
-  topByTVL: PoolId[];
-  topByTVLUsingTokenIn: PoolId[];
-  topByTVLUsingTokenOut: PoolId[];
-  topByTVLUsingTokenInSecondHops: PoolId[];
-  topByTVLUsingTokenOutSecondHops: PoolId[];
+  topByBaseWithTokenIn: SubgraphPool[];
+  topByBaseWithTokenOut: SubgraphPool[];
+  topByDirectSwapPool: SubgraphPool[];
+  topByEthQuoteTokenPool: SubgraphPool[];
+  topByTVL: SubgraphPool[];
+  topByTVLUsingTokenIn: SubgraphPool[];
+  topByTVLUsingTokenOut: SubgraphPool[];
+  topByTVLUsingTokenInSecondHops: SubgraphPool[];
+  topByTVLUsingTokenOutSecondHops: SubgraphPool[];
 };
 
 export type V3GetCandidatePoolsParams = {
@@ -55,24 +55,6 @@ export type V3GetCandidatePoolsParams = {
   chainId: ChainId;
 };
 
-export type V2GetCandidatePoolsParams = {
-  tokenIn: Token;
-  tokenOut: Token;
-  routeType: TradeType;
-  routingConfig: AlphaRouterConfig;
-  tokenProvider: ITokenProvider;
-  blockedTokenListProvider?: ITokenListProvider;
-  chainId: ChainId;
-};
-
-export type MixedRouteGetCandidatePoolsParams = {
-  v3CandidatePools: V3CandidatePools;
-  routingConfig: AlphaRouterConfig;
-  tokenProvider: ITokenProvider;
-  v3poolProvider: IV3PoolProvider;
-  blockedTokenListProvider?: ITokenListProvider;
-  chainId: ChainId;
-};
 
 const baseTokensByChain: { [chainId in ChainId]?: Token[] } = {
   [ChainId.MODE]: [USDC_MODE, USDT_MODE, DAI_MODE],
@@ -263,11 +245,11 @@ export async function getV3CandidatePools({
   // theres no need to add more.
   let top2EthQuoteTokenPool: V3SubgraphPool[] = [];
   if (
-    WRAPPED_NATIVE_CURRENCY[chainId]?.symbol ==
+    (WRAPPED_NATIVE_CURRENCY[chainId]?.symbol ==
       WRAPPED_NATIVE_CURRENCY[ChainId.MODE]?.symbol &&
-    tokenOut.symbol != 'WETH' &&
-    tokenOut.symbol != 'WETH9' &&
-    tokenOut.symbol != 'ETH'
+      tokenOut.symbol != 'WETH' &&
+      tokenOut.symbol != 'WETH9' &&
+      tokenOut.symbol != 'ETH')
   ) {
     top2EthQuoteTokenPool = _(subgraphPoolsSorted)
       .filter((subgraphPool) => {
@@ -412,8 +394,7 @@ export async function getV3CandidatePools({
   });
 
   const printV3SubgraphPool = (s: V3SubgraphPool) =>
-    `${tokenAccessor.getTokenByAddress(s.token0.id)?.symbol ?? s.token0.id}/${
-      tokenAccessor.getTokenByAddress(s.token1.id)?.symbol ?? s.token1.id
+    `${tokenAccessor.getTokenByAddress(s.token0.id)?.symbol ?? s.token0.id}/${tokenAccessor.getTokenByAddress(s.token1.id)?.symbol ?? s.token1.id
     }/${s.feeTier}`;
 
   log.info(
@@ -452,10 +433,8 @@ export async function getV3CandidatePools({
 
     if (!tokenA || !tokenB) {
       log.info(
-        `Dropping candidate pool for ${subgraphPool.token0.id}/${
-          subgraphPool.token1.id
-        }/${fee} because ${
-          tokenA ? subgraphPool.token1.id : subgraphPool.token0.id
+        `Dropping candidate pool for ${subgraphPool.token0.id}/${subgraphPool.token1.id
+        }/${fee} because ${tokenA ? subgraphPool.token1.id : subgraphPool.token0.id
         } not found by token provider`
       );
       return undefined;

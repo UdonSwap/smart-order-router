@@ -151,20 +151,22 @@ export class V3Quoter extends BaseQuoter<V3CandidatePools, V3Route> {
     const quoteFn =
       tradeType == TradeType.EXACT_INPUT
         ? this.onChainQuoteProvider.getQuotesManyExactIn.bind(
-            this.onChainQuoteProvider
-          )
+          this.onChainQuoteProvider
+        )
         : this.onChainQuoteProvider.getQuotesManyExactOut.bind(
-            this.onChainQuoteProvider
-          );
+          this.onChainQuoteProvider
+        );
 
     const beforeQuotes = Date.now();
     log.info(
       `Getting quotes for V3 for ${routes.length} routes with ${amounts.length} amounts per route.`
     );
 
-    const { routesWithQuotes } = await quoteFn<V3Route>(amounts, routes, {
-      blockNumber: routingConfig.blockNumber,
-    });
+    const { routesWithQuotes } = await quoteFn<V3Route>(
+      amounts,
+      routes,
+      routingConfig
+    );
 
     metric.putMetric(
       'V3QuotesLoad',

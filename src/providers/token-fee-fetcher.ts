@@ -27,6 +27,9 @@ type Address = string;
 export type TokenFeeResult = {
   buyFeeBps?: BigNumber;
   sellFeeBps?: BigNumber;
+  feeTakenOnTransfer?: boolean;
+  externalTransferFailed?: boolean;
+  sellReverted?: boolean;
 };
 export type TokenFeeMap = Record<Address, TokenFeeResult>;
 
@@ -37,7 +40,7 @@ const FEE_DETECTOR_ADDRESS = (chainId: ChainId) => {
       return '0x8A4e0cD13296d5081F133747f182ee171fb64410';
     default:
       // just default to mainnet contract
-      return '0x19C97dc2a25845C7f9d1d519c8C2d4809c58b43f';
+      return '0x8A4e0cD13296d5081F133747f182ee171fb64410';
   }
 };
 
@@ -126,16 +129,38 @@ export class OnChainTokenFeeFetcher implements ITokenFeeFetcher {
           // in case of FOT token fee fetch failure, we return null
           // so that they won't get returned from the token-fee-fetcher
           // and thus no fee will be applied, and the cache won't cache on FOT tokens with failed fee fetching
-          return { address, buyFeeBps: undefined, sellFeeBps: undefined };
+          return {
+            address,
+            buyFeeBps: undefined,
+            sellFeeBps: undefined,
+            feeTakenOnTransfer: false,
+            externalTransferFailed: false,
+            sellReverted: false,
+          };
         }
       })
     );
 
-    results.forEach(({ address, buyFeeBps, sellFeeBps }) => {
-      if (buyFeeBps || sellFeeBps) {
-        tokenToResult[address] = { buyFeeBps, sellFeeBps };
+    results.forEach(
+      ({
+        address,
+        buyFeeBps,
+        sellFeeBps,
+        feeTakenOnTransfer,
+        externalTransferFailed,
+        sellReverted,
+      }) => {
+        if (buyFeeBps || sellFeeBps) {
+          tokenToResult[address] = {
+            buyFeeBps,
+            sellFeeBps,
+            feeTakenOnTransfer,
+            externalTransferFailed,
+            sellReverted,
+          };
+        }
       }
-    });
+    );
 
     return tokenToResult;
   }

@@ -36,6 +36,7 @@ export type TokenAccessor = {
   getAllTokens: () => Token[];
 };
 
+
 // Some well known tokens on each chain for seeding cache / testing.
 export const USDC_MODE = new Token(
   ChainId.MODE,
@@ -53,7 +54,7 @@ export const USDT_MODE = new Token(
 );
 export const DAI_MODE = new Token(
   ChainId.MODE,
-  '0x0f117Da8c078B83AD4136f0cF2e5058dAddb1151',
+  '0x38cb1619c3AfaeA2E259b1B264f550e7f69AC912',
   18,
   'DAI',
   'DAI'
@@ -70,7 +71,7 @@ export class TokenProvider implements ITokenProvider {
   constructor(
     private chainId: ChainId,
     protected multicall2Provider: IMulticallProvider
-  ) {}
+  ) { }
 
   private async getTokenSymbol(
     addresses: string[],
@@ -160,6 +161,7 @@ export class TokenProvider implements ITokenProvider {
     });
   }
 
+
   public async getTokens(
     _addresses: string[],
     providerConfig?: ProviderConfig
@@ -215,10 +217,8 @@ export class TokenProvider implements ITokenProvider {
       }
 
       log.info(
-        `Got token symbol and decimals for ${
-          Object.values(addressToToken).length
-        } out of ${addresses.length} tokens on-chain ${
-          providerConfig ? `as of: ${providerConfig?.blockNumber}` : ''
+        `Got token symbol and decimals for ${Object.values(addressToToken).length
+        } out of ${addresses.length} tokens on-chain ${providerConfig ? `as of: ${providerConfig?.blockNumber}` : ''
         }`
       );
     }

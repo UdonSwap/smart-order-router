@@ -6,6 +6,7 @@ import { LegacyGasPriceProvider } from './legacy-gas-price-provider';
 
 const DEFAULT_EIP_1559_SUPPORTED_CHAINS = [ChainId.MODE];
 
+
 /**
  * Gets gas prices on chain. If the chain supports EIP-1559 and has the feeHistory API,
  * uses the EIP1559 provider. Otherwise it will use a legacy provider that uses eth_gasPrice

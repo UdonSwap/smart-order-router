@@ -90,6 +90,7 @@ import {
   SwapToRatioResponse,
   SwapToRatioStatus,
   V3Route,
+  SwapType,
 } from '../router';
 
 import {
@@ -105,7 +106,7 @@ import { calculateRatioAmountIn } from './functions/calculate-ratio-amount-in';
 import {
   CandidatePoolsBySelectionCriteria,
   getV3CandidatePools,
-  PoolId,
+  SubgraphPool,
   V3CandidatePools,
 } from './functions/get-candidate-pools';
 import {
@@ -118,6 +119,19 @@ import {
 import { NATIVE_OVERHEAD } from './gas-models/v3/gas-costs';
 import { V3HeuristicGasModelFactory } from './gas-models/v3/v3-heuristic-gas-model';
 import { GetQuotesResult, V3Quoter } from './quoters';
+import {
+  // BATCH_PARAMS,
+  // BLOCK_NUMBER_CONFIGS,
+  DEFAULT_BATCH_PARAMS,
+  DEFAULT_BLOCK_NUMBER_CONFIGS,
+  DEFAULT_GAS_ERROR_FAILURE_OVERRIDES,
+  DEFAULT_RETRY_OPTIONS,
+  DEFAULT_SUCCESS_RATE_FAILURE_OVERRIDES,
+  // GAS_ERROR_FAILURE_OVERRIDES,
+  // RETRY_OPTIONS,
+  // SUCCESS_RATE_FAILURE_OVERRIDES,
+} from '../../util/onchainQuoteProviderConfigs';
+import { ProviderConfig } from '../../providers/provider';
 
 export type AlphaRouterParams = {
   /**
@@ -147,19 +161,6 @@ export type AlphaRouterParams = {
    */
   onChainQuoteProvider?: IOnChainQuoteProvider;
   /**
-   * The provider for getting all pools that exist on V2 from the Subgraph. The pools
-   * from this provider are filtered during the algorithm to a set of candidate pools.
-   */
-  // v2SubgraphProvider?: IV2SubgraphProvider;
-  /**
-   * The provider for getting data about V2 pools.
-   */
-  // v2PoolProvider?: IV2PoolProvider;
-  /**
-   * The provider for getting V3 quotes.
-   */
-  // v2QuoteProvider?: IV2QuoteProvider;
-  /**
    * The provider for getting data about Tokens.
    */
   tokenProvider?: ITokenProvider;
@@ -173,11 +174,6 @@ export type AlphaRouterParams = {
    * V3 routes.
    */
   v3GasModelFactory?: IOnChainGasModelFactory;
-  /**
-   * A factory for generating a gas model that is used when estimating the gas used by
-   * V2 routes.
-   */
-  // v2GasModelFactory?: IV2GasModelFactory;
   /**
    * A factory for generating a gas model that is used when estimating the gas used by
    * V3 routes.
@@ -396,11 +392,11 @@ export type AlphaRouterConfig = {
   gasToken?: string;
 };
 
+
 export class AlphaRouter
   implements
-    IRouter<AlphaRouterConfig>,
-    ISwapToRatio<AlphaRouterConfig, SwapAndAddConfig>
-{
+  IRouter<AlphaRouterConfig>,
+  ISwapToRatio<AlphaRouterConfig, SwapAndAddConfig> {
   protected chainId: ChainId;
   protected provider: BaseProvider;
   protected multicall2Provider: UniswapMulticallProvider;
@@ -470,26 +466,20 @@ export class AlphaRouter
               minTimeout: 100,
               maxTimeout: 1000,
             },
-            {
-              multicallChunk: 110,
-              gasLimitPerCall: 1_200_000,
-              quoteMinSuccessRate: 0.1,
+            (_) => {
+              return {
+                multicallChunk: 10,
+                gasLimitPerCall: 12_000_000,
+                quoteMinSuccessRate: 0.1,
+              };
             },
             {
-              gasLimitOverride: 3_000_000,
-              multicallChunk: 45,
+              gasLimitOverride: 30_000_000,
+              multicallChunk: 6,
             },
             {
-              gasLimitOverride: 3_000_000,
-              multicallChunk: 45,
-            },
-            {
-              baseBlockOffset: -10,
-              rollback: {
-                enabled: true,
-                attemptsBeforeRollback: 1,
-                rollbackBlockOffset: -10,
-              },
+              gasLimitOverride: 30_000_000,
+              multicallChunk: 6,
             }
           );
           break;
@@ -498,20 +488,11 @@ export class AlphaRouter
             chainId,
             provider,
             this.multicall2Provider,
-            {
-              retries: 2,
-              minTimeout: 100,
-              maxTimeout: 1000,
-            },
-            {
-              multicallChunk: 210,
-              gasLimitPerCall: 705_000,
-              quoteMinSuccessRate: 0.15,
-            },
-            {
-              gasLimitOverride: 2_000_000,
-              multicallChunk: 70,
-            }
+            DEFAULT_RETRY_OPTIONS,
+            (_) => DEFAULT_BATCH_PARAMS,
+            DEFAULT_GAS_ERROR_FAILURE_OVERRIDES,
+            DEFAULT_SUCCESS_RATE_FAILURE_OVERRIDES,
+            DEFAULT_BLOCK_NUMBER_CONFIGS
           );
           break;
       }
@@ -839,16 +820,54 @@ export class AlphaRouter
         [tokenOut],
         partialRoutingConfig
       );
-    const buyFeeBps =
+
+    const feeTakenOnTransfer =
       tokenOutProperties[tokenOut.address.toLowerCase()]?.tokenFeeResult
-        ?.buyFeeBps;
-    const tokenOutHasFot = buyFeeBps && buyFeeBps.gt(0);
+        ?.feeTakenOnTransfer;
+    const externalTransferFailed =
+      tokenOutProperties[tokenOut.address.toLowerCase()]?.tokenFeeResult
+        ?.externalTransferFailed;
+
+    // We want to log the fee on transfer output tokens that we are taking fee or not
+    // Ideally the trade size (normalized in USD) would be ideal to log here, but we don't have spot price of output tokens here.
+    // We have to make sure token out is FOT with either buy/sell fee bps > 0
+    if (tokenOutProperties[tokenOut.address.toLowerCase()]?.tokenFeeResult?.buyFeeBps?.gt(0) ||
+      tokenOutProperties[tokenOut.address.toLowerCase()]?.tokenFeeResult?.sellFeeBps?.gt(0)) {
+      if (feeTakenOnTransfer || externalTransferFailed) {
+        // also to be extra safe, in case of FOT with feeTakenOnTransfer or externalTransferFailed,
+        // we nullify the fee and flat fee to avoid any potential issues.
+        // although neither web nor wallet should use the calldata returned from routing/SOR
+        if (swapConfig?.type === SwapType.UNIVERSAL_ROUTER) {
+          swapConfig.fee = undefined;
+          swapConfig.flatFee = undefined;
+        }
+
+        metric.putMetric(
+          'TokenOutFeeOnTransferNotTakingFee',
+          1,
+          MetricLoggerUnit.Count
+        );
+      } else {
+        metric.putMetric(
+          'TokenOutFeeOnTransferTakingFee',
+          1,
+          MetricLoggerUnit.Count
+        );
+      }
+    }
+
+
+    // const buyFeeBps =
+    //   tokenOutProperties[tokenOut.address.toLowerCase()]?.tokenFeeResult
+    //     ?.buyFeeBps;
+    // const tokenOutHasFot = buyFeeBps && buyFeeBps.gt(0);
 
     if (tradeType === TradeType.EXACT_OUTPUT) {
       const portionAmount = this.portionProvider.getPortionAmount(
         amount,
         tradeType,
-        tokenOutHasFot,
+        feeTakenOnTransfer,
+        externalTransferFailed,
         swapConfig
       );
       if (portionAmount && portionAmount.greaterThan(ZERO)) {
@@ -907,8 +926,8 @@ export class AlphaRouter
     // const gasTokenAccessor = await this.tokenProvider.getTokens([routingConfig.gasToken!]);
     const gasToken = routingConfig.gasToken
       ? (
-          await this.tokenProvider.getTokens([routingConfig.gasToken])
-        ).getTokenByAddress(routingConfig.gasToken)
+        await this.tokenProvider.getTokens([routingConfig.gasToken])
+      ).getTokenByAddress(routingConfig.gasToken)
       : undefined;
 
     const providerConfig: GasModelProviderConfig = {
@@ -920,6 +939,8 @@ export class AlphaRouter
         quoteCurrency
       ),
       gasToken,
+      externalTransferFailed,
+      feeTakenOnTransfer,
     };
 
     const { v3GasModel: v3GasModel } = await this.getGasModels(
@@ -1031,8 +1052,8 @@ export class AlphaRouter
         tradeType,
         routingConfig,
         v3GasModel,
-        gasPriceWei,
-        swapConfig
+        swapConfig,
+        providerConfig
       );
     }
 
@@ -1049,7 +1070,8 @@ export class AlphaRouter
         routingConfig,
         v3GasModel,
         gasPriceWei,
-        swapConfig
+        swapConfig,
+        providerConfig
       );
     }
 
@@ -1243,7 +1265,8 @@ export class AlphaRouter
     const portionAmount = this.portionProvider.getPortionAmount(
       tokenOutAmount,
       tradeType,
-      tokenOutHasFot,
+      feeTakenOnTransfer,
+      externalTransferFailed,
       swapConfig
     );
     const portionQuoteAmount = this.portionProvider.getPortionQuoteAmount(
@@ -1329,6 +1352,7 @@ export class AlphaRouter
     return swapRoute;
   }
 
+
   private async getSwapRouteFromCache(
     cachedRoutes: CachedRoutes,
     blockNumber: number,
@@ -1337,8 +1361,8 @@ export class AlphaRouter
     tradeType: TradeType,
     routingConfig: AlphaRouterConfig,
     v3GasModel: IGasModel<V3RouteWithValidQuote>,
-    _gasPriceWei: BigNumber,
-    swapConfig?: SwapOptions
+    swapConfig?: SwapOptions,
+    providerConfig?: ProviderConfig
   ): Promise<BestSwapRoute | null> {
     log.info(
       {
@@ -1354,6 +1378,7 @@ export class AlphaRouter
     const v3Routes = cachedRoutes.routes.filter(
       (route) => route.protocol === Protocol.V3
     );
+
 
     let percents: number[];
     let amounts: CurrencyAmount[];
@@ -1403,6 +1428,10 @@ export class AlphaRouter
       );
     }
 
+
+
+
+
     const getQuotesResults = await Promise.all(quotePromises);
     const allRoutesWithValidQuotes = _.flatMap(
       getQuotesResults,
@@ -1418,7 +1447,8 @@ export class AlphaRouter
       routingConfig,
       this.portionProvider,
       v3GasModel,
-      swapConfig
+      swapConfig,
+      providerConfig
     );
   }
 
@@ -1432,7 +1462,8 @@ export class AlphaRouter
     routingConfig: AlphaRouterConfig,
     v3GasModel: IGasModel<V3RouteWithValidQuote>,
     _gasPriceWei: BigNumber,
-    swapConfig?: SwapOptions
+    swapConfig?: SwapOptions,
+    providerConfig?: ProviderConfig
   ): Promise<BestSwapRoute | null> {
     // Generate our distribution of amounts, i.e. fractions of the input amount.
     // We will get quotes for fractions of the input amount for different routes, then
@@ -1449,6 +1480,7 @@ export class AlphaRouter
 
     let v3CandidatePoolsPromise: Promise<V3CandidatePools | undefined> =
       Promise.resolve(undefined);
+
     if (v3ProtocolSpecified || noProtocolsSpecified) {
       v3CandidatePoolsPromise = getV3CandidatePools({
         tokenIn,
@@ -1537,7 +1569,7 @@ export class AlphaRouter
       routingConfig,
       this.portionProvider,
       v3GasModel,
-      swapConfig
+      swapConfig, providerConfig
     );
 
     if (bestSwapRoute) {
@@ -1617,31 +1649,31 @@ export class AlphaRouter
     const nativeCurrency = WRAPPED_NATIVE_CURRENCY[this.chainId];
     const nativeAndQuoteTokenV3PoolPromise = !quoteToken.equals(nativeCurrency)
       ? getHighestLiquidityV3NativePool(
-          quoteToken,
-          this.v3PoolProvider,
-          providerConfig
-        )
+        quoteToken,
+        this.v3PoolProvider,
+        providerConfig
+      )
       : Promise.resolve(null);
     const nativeAndAmountTokenV3PoolPromise = !amountToken.equals(
       nativeCurrency
     )
       ? getHighestLiquidityV3NativePool(
-          amountToken,
-          this.v3PoolProvider,
-          providerConfig
-        )
+        amountToken,
+        this.v3PoolProvider,
+        providerConfig
+      )
       : Promise.resolve(null);
 
     // If a specific gas token is specified in the provider config
     // fetch the highest liq V3 pool with it and the native currency
     const nativeAndSpecifiedGasTokenV3PoolPromise =
       providerConfig?.gasToken &&
-      !providerConfig?.gasToken.equals(nativeCurrency)
+        !providerConfig?.gasToken.equals(nativeCurrency)
         ? getHighestLiquidityV3NativePool(
-            providerConfig?.gasToken,
-            this.v3PoolProvider,
-            providerConfig
-          )
+          providerConfig?.gasToken,
+          this.v3PoolProvider,
+          providerConfig
+        )
         : Promise.resolve(null);
 
     const [
@@ -1780,7 +1812,7 @@ export class AlphaRouter
       const { protocol } = poolsBySelection;
       _.forIn(
         poolsBySelection.selections,
-        (pools: PoolId[], topNSelection: string) => {
+        (pools: SubgraphPool[], topNSelection: string) => {
           const topNUsed =
             _.findLastIndex(pools, (pool) =>
               poolAddressesUsed.has(pool.id.toLowerCase())
@@ -1880,7 +1912,6 @@ export class AlphaRouter
       return false;
     }
   }
-
   private absoluteValue(fraction: Fraction): Fraction {
     const numeratorAbs = JSBI.lessThan(fraction.numerator, JSBI.BigInt(0))
       ? JSBI.unaryMinus(fraction.numerator)

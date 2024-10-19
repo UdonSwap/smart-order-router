@@ -1,7 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { ChainId, Currency } from 'lampros-core';
 
-import { V3Route } from '../../../router';
 
 // Cost for crossing an uninitialized tick.
 export const COST_PER_UNINIT_TICK = BigNumber.from(0);
@@ -31,8 +30,8 @@ export const SINGLE_HOP_OVERHEAD = (_id: ChainId): BigNumber => {
   return BigNumber.from(15000);
 };
 
-export const TOKEN_OVERHEAD = (_id: ChainId, _route: V3Route): BigNumber => {
-  const overhead = BigNumber.from(0);
+export const TOKEN_OVERHEAD = (): BigNumber => {
+  let overhead = BigNumber.from(0);
 
   return overhead;
 };

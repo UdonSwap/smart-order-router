@@ -6,7 +6,6 @@ import _ from 'lodash';
 
 import { log, metric } from '../../util';
 import { ProviderConfig } from '../provider';
-
 export interface V3SubgraphPool {
   id: string;
   feeTier: string;
@@ -35,6 +34,7 @@ type RawV3SubgraphPool = {
   };
   totalValueLockedUSD: string;
   totalValueLockedETH: string;
+  totalValueLockedUSDUntracked: string;
 };
 
 export const printV3SubgraphPool = (s: V3SubgraphPool) =>
@@ -69,6 +69,8 @@ export class V3SubgraphProvider implements IV3SubgraphProvider {
     private retries = 2,
     private timeout = 30000,
     private rollback = true,
+    private trackedEthThreshold = 0.01,
+    private untrackedUsdThreshold = Number.MAX_VALUE,
     private subgraphUrlOverride?: string
   ) {
     const subgraphUrl =
@@ -109,6 +111,7 @@ export class V3SubgraphProvider implements IV3SubgraphProvider {
           liquidity
           totalValueLockedUSD
           totalValueLockedETH
+          totalValueLockedUSDUntracked
         }
       }
     `;
@@ -116,10 +119,9 @@ export class V3SubgraphProvider implements IV3SubgraphProvider {
     let pools: RawV3SubgraphPool[] = [];
 
     log.info(
-      `Getting V3 pools from the subgraph with page size ${PAGE_SIZE}${
-        providerConfig?.blockNumber
-          ? ` as of block ${providerConfig?.blockNumber}`
-          : ''
+      `Getting V3 pools from the subgraph with page size ${PAGE_SIZE}${providerConfig?.blockNumber
+        ? ` as of block ${providerConfig?.blockNumber}`
+        : ''
       }.`
     );
 
@@ -170,7 +172,6 @@ export class V3SubgraphProvider implements IV3SubgraphProvider {
           return pools;
         };
 
-        /* eslint-disable no-useless-catch */
         try {
           const getPoolsPromise = getPools();
           const timerPromise = timeout.set(this.timeout).then(() => {
@@ -181,19 +182,19 @@ export class V3SubgraphProvider implements IV3SubgraphProvider {
           pools = await Promise.race([getPoolsPromise, timerPromise]);
           return;
         } catch (err) {
+          log.error({ err }, 'Error fetching V3 Subgraph Pools.');
           throw err;
         } finally {
           timeout.clear();
         }
-        /* eslint-enable no-useless-catch */
       },
       {
         retries: this.retries,
-        onRetry: (err, retry) => {
+        onRetry: (err: unknown, retry) => {
           retries += 1;
           if (
             this.rollback &&
-            blockNumber &&
+            blockNumber && err instanceof Error &&
             _.includes(err.message, 'indexed up to')
           ) {
             metric.putMetric(
@@ -223,25 +224,42 @@ export class V3SubgraphProvider implements IV3SubgraphProvider {
       retries
     );
 
+    const untrackedPools = pools.filter(
+      (pool) =>
+        parseInt(pool.liquidity) > 0 ||
+        parseFloat(pool.totalValueLockedETH) > this.trackedEthThreshold ||
+        parseFloat(pool.totalValueLockedUSDUntracked) >
+        this.untrackedUsdThreshold
+    );
+    metric.putMetric(
+      `V3SubgraphProvider.chain_${this.chainId}.getPools.untracked.length`,
+      untrackedPools.length
+    );
+    metric.putMetric(
+      `V3SubgraphProvider.chain_${this.chainId}.getPools.untracked.percent`,
+      (untrackedPools.length / pools.length) * 100
+    );
+
     const beforeFilter = Date.now();
     const poolsSanitized = pools
       .filter(
         (pool) =>
           parseInt(pool.liquidity) > 0 ||
-          parseFloat(pool.totalValueLockedETH) > 0.01
+          parseFloat(pool.totalValueLockedETH) > this.trackedEthThreshold
       )
       .map((pool) => {
-        const { totalValueLockedETH, totalValueLockedUSD, ...rest } = pool;
+        const { totalValueLockedETH, totalValueLockedUSD } = pool;
 
         return {
-          ...rest,
           id: pool.id.toLowerCase(),
+          feeTier: pool.feeTier,
           token0: {
             id: pool.token0.id.toLowerCase(),
           },
           token1: {
             id: pool.token1.id.toLowerCase(),
           },
+          liquidity: pool.liquidity,
           tvlETH: parseFloat(totalValueLockedETH),
           tvlUSD: parseFloat(totalValueLockedUSD),
         };
@@ -251,7 +269,14 @@ export class V3SubgraphProvider implements IV3SubgraphProvider {
       `V3SubgraphProvider.chain_${this.chainId}.getPools.filter.latency`,
       Date.now() - beforeFilter
     );
-
+    metric.putMetric(
+      `V3SubgraphProvider.chain_${this.chainId}.getPools.filter.length`,
+      poolsSanitized.length
+    );
+    metric.putMetric(
+      `V3SubgraphProvider.chain_${this.chainId}.getPools.filter.percent`,
+      (poolsSanitized.length / pools.length) * 100
+    );
     metric.putMetric(`V3SubgraphProvider.chain_${this.chainId}.getPools`, 1);
     metric.putMetric(
       `V3SubgraphProvider.chain_${this.chainId}.getPools.latency`,

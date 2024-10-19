@@ -47,6 +47,7 @@ export class EthEstimateGasSimulator extends Simulator {
     const currencyIn = route.trade.inputAmount.currency;
     let estimatedGasUsed: BigNumber;
     if (swapOptions.type == SwapType.UNIVERSAL_ROUTER) {
+
       log.info(
         { addr: fromAddress, methodParameters: route.methodParameters },
         'Simulating using eth_estimateGas on Universal Router'
@@ -120,7 +121,8 @@ export class EthEstimateGasSimulator extends Simulator {
         estimatedGasUsedQuoteToken,
         estimatedGasUsedUSD,
         swapOptions,
-        estimatedGasUsedGasToken
+        estimatedGasUsedGasToken,
+        providerConfig
       ),
       simulationStatus: SimulationStatus.Succeeded,
     };

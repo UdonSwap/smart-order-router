@@ -22,7 +22,12 @@ export function computeAllV3Routes(
   );
 }
 
-export function computeAllRoutes<TPool extends Pool, TRoute extends V3Route>(
+
+
+export function computeAllRoutes<
+  TPool extends Pool,
+  TRoute extends V3Route
+>(
   tokenIn: Token,
   tokenOut: Token,
   buildRoute: (route: TPool[], tokenIn: Token, tokenOut: Token) => TRoute,
