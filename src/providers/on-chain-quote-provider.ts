@@ -304,10 +304,10 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
       chainId: ChainId,
       useMixedRouteQuoter: boolean
     ) => string = (chainId, useMixedRouteQuoter) =>
-      useMixedRouteQuoter
-        ? `ChainId_${chainId}_MixedQuoter`
-        : `ChainId_${chainId}_V3Quoter`
-  ) {}
+        useMixedRouteQuoter
+          ? `ChainId_${chainId}_MixedQuoter`
+          : `ChainId_${chainId}_V3Quoter`
+  ) { }
 
   private getQuoterAddress(useMixedRouteQuoter: boolean): string {
     if (this.quoterAddressOverride) {
@@ -386,14 +386,14 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
         const encodedRoute =
           route.protocol === Protocol.V3
             ? encodeRouteToPath(
-                route,
-                functionName == 'quoteExactOutput' // For exactOut must be true to ensure the routes are reversed.
-              )
+              route,
+              functionName == 'quoteExactOutput' // For exactOut must be true to ensure the routes are reversed.
+            )
             : encodeMixedRouteToPath(
-                route instanceof V3Route
-                  ? new MixedRouteSDK(route.pools, route.input, route.output)
-                  : route
-              );
+              route instanceof V3Route
+                ? new MixedRouteSDK(route.pools, route.input, route.output)
+                : route
+            );
         const routeInputs: [string, string][] = amounts.map((amount) => [
           encodedRoute,
           `0x${amount.quotient.toString(16)}`,
@@ -408,21 +408,19 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
     const inputsChunked = _.chunk(inputs, normalizedChunk);
     let quoteStates: QuoteBatchState[] = _.map(inputsChunked, (inputChunk) => {
       return {
-        status: 'pending',
+        status: 'pending' as const,
         inputs: inputChunk,
       };
     });
 
     log.info(
-      `About to get ${
-        inputs.length
+      `About to get ${inputs.length
       } quotes in chunks of ${normalizedChunk} [${_.map(
         inputsChunked,
         (i) => i.length
-      ).join(',')}] ${
-        gasLimitOverride
-          ? `with a gas limit override of ${gasLimitOverride}`
-          : ''
+      ).join(',')}] ${gasLimitOverride
+        ? `with a gas limit override of ${gasLimitOverride}`
+        : ''
       } and block number: ${await providerConfig.blockNumber} [Original before offset: ${originalBlockNumber}].`
     );
 
@@ -540,8 +538,7 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
                     status: 'failed',
                     inputs,
                     reason: new ProviderTimeoutError(
-                      `Req ${idx}/${quoteStates.length}. Request had ${
-                        inputs.length
+                      `Req ${idx}/${quoteStates.length}. Request had ${inputs.length
                       } inputs. ${err.message.slice(0, 500)}`
                     ),
                   } as QuoteBatchFailed;
@@ -649,14 +646,13 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
                   !blockHeaderRolledBack
                 ) {
                   log.info(
-                    `Attempt ${attemptNumber}. Have failed due to block header ${
-                      blockHeaderRetryAttemptNumber - 1
+                    `Attempt ${attemptNumber}. Have failed due to block header ${blockHeaderRetryAttemptNumber - 1
                     } times. Rolling back block number by ${rollbackBlockOffset} for next retry`
                   );
                   providerConfig.blockNumber = providerConfig.blockNumber
                     ? (await providerConfig.blockNumber) + rollbackBlockOffset
                     : (await this.provider.getBlockNumber()) +
-                      rollbackBlockOffset;
+                    rollbackBlockOffset;
 
                   retryAll = true;
                   blockHeaderRolledBack = true;
@@ -736,7 +732,7 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
           const inputsChunked = _.chunk(inputs, normalizedChunk);
           quoteStates = _.map(inputsChunked, (inputChunk) => {
             return {
-              status: 'pending',
+              status: 'pending' as const,
               inputs: inputChunk,
             };
           });
@@ -827,10 +823,8 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
       .value();
 
     log.info(
-      `Got ${successfulQuotes.length} successful quotes, ${
-        failedQuotes.length
-      } failed quotes. Took ${
-        finalAttemptNumber - 1
+      `Got ${successfulQuotes.length} successful quotes, ${failedQuotes.length
+      } failed quotes. Took ${finalAttemptNumber - 1
       } attempt loops. Total calls made to provider: ${totalCallsMade}. Have retried for timeout: ${haveRetriedForTimeout}`
     );
 
