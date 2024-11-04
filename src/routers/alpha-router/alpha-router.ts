@@ -55,7 +55,7 @@ import {
 } from '../../providers/token-validator-provider';
 import {
   ArbitrumGasData,
-  ArbitrumGasDataProvider,
+  // ArbitrumGasDataProvider,
   IL2GasDataProvider,
 } from '../../providers/v3/gas-data-provider';
 import {
@@ -398,9 +398,8 @@ export type AlphaRouterConfig = {
 
 export class AlphaRouter
   implements
-    IRouter<AlphaRouterConfig>,
-    ISwapToRatio<AlphaRouterConfig, SwapAndAddConfig>
-{
+  IRouter<AlphaRouterConfig>,
+  ISwapToRatio<AlphaRouterConfig, SwapAndAddConfig> {
   protected chainId: ChainId;
   protected provider: BaseProvider;
   protected multicall2Provider: UniswapMulticallProvider;
@@ -434,7 +433,7 @@ export class AlphaRouter
     v3GasModelFactory,
     swapRouterProvider,
     tokenValidatorProvider,
-    arbitrumGasDataProvider,
+    // arbitrumGasDataProvider,
     simulator,
     routeCachingProvider,
     tokenPropertiesProvider,
@@ -604,11 +603,11 @@ export class AlphaRouter
       swapRouterProvider ??
       new SwapRouterProvider(this.multicall2Provider, this.chainId);
 
-    if (chainId === ChainId.MODE) {
-      this.l2GasDataProvider =
-        arbitrumGasDataProvider ??
-        new ArbitrumGasDataProvider(chainId, this.provider);
-    }
+    // if (chainId === ChainId.MODE) {
+    //   this.l2GasDataProvider =
+    //     arbitrumGasDataProvider ??
+    //     new ArbitrumGasDataProvider(chainId, this.provider);
+    // }
 
     // Initialize the Quoters.
     // Quoters are an abstraction encapsulating the business logic of fetching routes and quotes.
@@ -907,8 +906,8 @@ export class AlphaRouter
     // const gasTokenAccessor = await this.tokenProvider.getTokens([routingConfig.gasToken!]);
     const gasToken = routingConfig.gasToken
       ? (
-          await this.tokenProvider.getTokens([routingConfig.gasToken])
-        ).getTokenByAddress(routingConfig.gasToken)
+        await this.tokenProvider.getTokens([routingConfig.gasToken])
+      ).getTokenByAddress(routingConfig.gasToken)
       : undefined;
 
     const providerConfig: GasModelProviderConfig = {
@@ -1617,31 +1616,31 @@ export class AlphaRouter
     const nativeCurrency = WRAPPED_NATIVE_CURRENCY[this.chainId];
     const nativeAndQuoteTokenV3PoolPromise = !quoteToken.equals(nativeCurrency)
       ? getHighestLiquidityV3NativePool(
-          quoteToken,
-          this.v3PoolProvider,
-          providerConfig
-        )
+        quoteToken,
+        this.v3PoolProvider,
+        providerConfig
+      )
       : Promise.resolve(null);
     const nativeAndAmountTokenV3PoolPromise = !amountToken.equals(
       nativeCurrency
     )
       ? getHighestLiquidityV3NativePool(
-          amountToken,
-          this.v3PoolProvider,
-          providerConfig
-        )
+        amountToken,
+        this.v3PoolProvider,
+        providerConfig
+      )
       : Promise.resolve(null);
 
     // If a specific gas token is specified in the provider config
     // fetch the highest liq V3 pool with it and the native currency
     const nativeAndSpecifiedGasTokenV3PoolPromise =
       providerConfig?.gasToken &&
-      !providerConfig?.gasToken.equals(nativeCurrency)
+        !providerConfig?.gasToken.equals(nativeCurrency)
         ? getHighestLiquidityV3NativePool(
-            providerConfig?.gasToken,
-            this.v3PoolProvider,
-            providerConfig
-          )
+          providerConfig?.gasToken,
+          this.v3PoolProvider,
+          providerConfig
+        )
         : Promise.resolve(null);
 
     const [
